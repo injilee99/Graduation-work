@@ -35,4 +35,12 @@
       "last 1 safari version"
     ]
   }
+  {
+  "homepage": "https://Genu99.github.io/Graduation-work",
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  }
+}
+
 }
