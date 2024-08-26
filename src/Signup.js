@@ -29,7 +29,7 @@ function SignUp() {
       }
     } catch (error) {
       console.error('Error:', error);
-      alert('서버와의 통신 중 오류가 발생했습니다.');
+      alert('서버가 연결이 되어있지 않습니다..');
     }
   };
 
@@ -48,7 +48,6 @@ function SignUp() {
           <button type="button">인증 확인</button>
         </div>
       )}
-      {/* 추가적인 회원가입 폼 필드들 */}
     </div>
   );
 }
