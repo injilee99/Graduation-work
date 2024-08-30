@@ -1,4 +1,4 @@
-/* 기본 스타일 */
+/* 기본 */
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -12,7 +12,7 @@ h2 {
     color: #333;
 }
 
-/* 헤더 스타일 */
+/* 헤더 */
 header {
     background-color: #333;
 }
@@ -61,7 +61,7 @@ header {
     background-color: #34a853;
 }
 
-/* 서브메뉴 스타일 */
+/* 서브메뉴 */
 .sub-nav {
     background-color: #444;
     padding: 10px 30px;
@@ -80,7 +80,7 @@ header {
     cursor: pointer;
 }
 
-/* 상점 배너 스타일 */
+/* 상점 배너 */
 .store-banner {
     width: 100%;
     text-align: center;
@@ -92,7 +92,7 @@ header {
     height: auto;
 }
 
-/* 추천 제품 스타일 */
+/* 추천 제품 */
 .store-featured {
     padding: 20px 30px;
     background-color: #fff;
@@ -128,7 +128,7 @@ header {
     color: #333;
 }
 
-/* 카테고리별 제품 스타일 */
+/* 카테고리별 제품 */
 .store-categories {
     padding: 20px 30px;
     background-color: #fff;
@@ -164,7 +164,7 @@ header {
     color: #333;
 }
 
-/* 푸터 스타일 */
+/* 하단 */
 footer {
     background-color: #333;
     color: white;
