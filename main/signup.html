@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <style>
+        /* 기본 스타일 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="email"], input[type="password"], input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:disabled {
+            background-color: #cccccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>회원가입</h2>
+        <form id="signup-form">
+            <!-- 이메일 입력 및 중복 확인 -->
+            <div class="form-group">
+                <label for="email">이메일</label>
+                <input type="email" id="email" required>
+                <button type="button" class="btn" id="check-email-btn">중복 확인</button>
+            </div>
+
+            <!-- 인증번호 입력 -->
+            <div class="form-group" id="verification-group" style="display: none;">
+                <label for="verification-code">인증번호</label>
+                <input type="text" id="verification-code">
+                <button type="button" class="btn" id="verify-code-btn">인증</button>
+            </div>
+
+            <!-- 비밀번호 입력 및 확인 -->
+            <div class="form-group" id="password-group" style="display: none;">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" required>
+            </div>
+            <div class="form-group" id="confirm-password-group" style="display: none;">
+                <label for="confirm-password">비밀번호 확인</label>
+                <input type="password" id="confirm-password" required>
+            </div>
+
+            <!-- 이름 입력 -->
+            <div class="form-group">
+                <label for="name">이름</label>
+                <input type="text" id="name" required>
+            </div>
+
+            <!-- 성별 선택 -->
+            <div class="form-group">
+                <label>성별</label>
+                <input type="radio" id="male" name="gender" value="male" required> 남성
+                <input type="radio" id="female" name="gender" value="female" required> 여성
+                <input type="radio" id="other" name="gender" value="other" required> 기타
+            </div>
+
+            <!-- 생년월일 입력 -->
+            <div class="form-group">
+                <label for="birthdate">생년월일</label>
+                <input type="date" id="birthdate" required>
+            </div>
+
+            <!-- 회원가입 버튼 -->
+            <div class="form-group">
+                <button type="submit" class="btn">회원가입</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // 이메일 중복 확인 및 인증번호 요청
+        document.getElementById('check-email-btn').addEventListener('click', function() {
+            const email = document.getElementById('email').value;
+            console.log('Checking email:', email); // 디버깅용 로그
+
+            // 이메일 중복 확인 및 인증번호 요청 API 호출
+            fetch('http://43.203.198.147:8080/api/email/verify', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: email }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response data:', data); // 디버깅용 로그
+                if (data.success) {
+                    alert('인증번호가 전송되었습니다.');
+                    document.getElementById('verification-group').style.display = 'block';
+                } else {
+                    alert('이메일이 이미 존재합니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        // 인증번호 확인
+        document.getElementById('verify-code-btn').addEventListener('click', function() {
+            const email = document.getElementById('email').value;
+            const verificationCode = document.getElementById('verification-code').value;
+            console.log('Verifying code for email:', email); // 디버깅용 로그
+
+            // 인증번호 확인 API 호출
+            fetch('http://43.203.198.147:8080/api/email/confirm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: email, code: verificationCode }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Verification response data:', data); // 디버깅용 로그
+                if (data.success) {
+                    alert('인증이 완료되었습니다.');
+                    document.getElementById('password-group').style.display = 'block';
+                    document.getElementById('confirm-password-group').style.display = 'block';
+                } else {
+                    alert('인증번호가 틀렸습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+
+        // 회원가입 처리
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const name = document.getElementById('name').value;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const birthdate = document.getElementById('birthdate').value;
+
+            if (password !== confirmPassword) {
+                alert('비밀번호가 일치하지 않습니다.');
+                return;
+            }
+
+            console.log('Submitting signup form'); // 디버깅용 로그
+
+            // 회원가입 API 호출
+            fetch('http://43.203.198.147:8080/api/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                    name: name,
+                    gender: gender,
+                    birthdate: birthdate
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Signup response data:', data); // 디버깅용 로그
+                if (data.success) {
+                    alert('회원가입이 완료되었습니다.');
+                } else {
+                    alert('회원가입에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

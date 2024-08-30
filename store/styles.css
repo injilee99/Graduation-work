@@ -1,0 +1,176 @@
+/* 기본 스타일 */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* 헤더 스타일 */
+header {
+    background-color: #333;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    color: white;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.main-menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.main-menu li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.auth-buttons a {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    background-color: #1a73e8;
+}
+
+.auth-buttons .signup-btn {
+    background-color: #34a853;
+}
+
+/* 서브메뉴 스타일 */
+.sub-nav {
+    background-color: #444;
+    padding: 10px 30px;
+}
+
+.submenu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.submenu li {
+    color: white;
+    cursor: pointer;
+}
+
+/* 상점 배너 스타일 */
+.store-banner {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.banner-image {
+    width: 100%;
+    height: auto;
+}
+
+/* 추천 제품 스타일 */
+.store-featured {
+    padding: 20px 30px;
+    background-color: #fff;
+    margin-bottom: 40px;
+}
+
+.featured-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.featured-item {
+    background-color: #f0f0f0;
+    padding: 10px;
+    text-align: center;
+    border-radius: 10px;
+    transition: transform 0.3s;
+}
+
+.featured-item:hover {
+    transform: scale(1.05);
+}
+
+.featured-item img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.featured-item p {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+/* 카테고리별 제품 스타일 */
+.store-categories {
+    padding: 20px 30px;
+    background-color: #fff;
+    margin-bottom: 40px;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.category-item {
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    transition: transform 0.3s;
+}
+
+.category-item:hover {
+    transform: scale(1.05);
+}
+
+.category-item img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.category-item p {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+/* 푸터 스타일 */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
