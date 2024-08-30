@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>회원가입</title>
+    <link rel="stylesheet" href="signup.css" />
+  </head>
+  <body>
+    <div class="signup-container">
+      <h2 class="signup-title">회원가입</h2>
+      <form class="signup-form">
+        <div class="input-group">
+          <label for="fullname">이름</label>
+          <input type="text" id="fullname" placeholder="홍길동" required />
+        </div>
+        <div class="input-group">
+          <label for="email">이메일</label>
+          <div class="email-container">
+            <input type="text" id="email_id" placeholder="아이디 입력" />
+            <h3>@</h3>
+            <input type="text" id="email_domain" placeholder="도메인" />
+            <select id="email_select">
+              <option value="">선택해주세요</option>
+              <option value="naver.com">naver.com</option>
+              <option value="gmail.com">gmail.com</option>
+              <option value="nate.com">nate.com</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="password">비밀번호</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="••••••••"
+            required
+          />
+        </div>
+        <div class="input-group">
+          <label for="gender">성별</label>
+        </div>
+        <div class="gender-options">
+          <input type="radio" id="male" name="gender" value="male" required />
+          <label for="male">남성</label>
+          <input
+            type="radio"
+            id="female"
+            name="gender"
+            value="female"
+            required
+          />
+          <label for="female">여성</label>
+          <input type="radio" id="other" name="gender" value="other" required />
+          <label for="other">기타</label>
+        </div>
+        <div class="input-group">
+          <label for="date">생년월일</label>
+          <input type="date" id="date-input" name="date-input" required />
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="updates" />
+          <label for="updates"
+            >이메일을 통해 새로운 정보를 얻기를 원합니다.</label
+          >
+        </div>
+        <button type="submit" class="signup-button">회원가입</button>
+        <div class="signin-link">
+          이미 계정이 있으십니까? <a href="#">로그인</a>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      document
+        .getElementById("email_select")
+        .addEventListener("change", function () {
+          var domainInput = document.getElementById("email_domain");
+          domainInput.value = this.value;
+        });
+    </script>
+  </body>
+</html>
