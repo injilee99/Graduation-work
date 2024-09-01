@@ -1,0 +1,208 @@
+/* 기본 스타일 */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1b2838;
+    color: #c7d5e0;
+}
+
+h1, h3 {
+    color: #fff;
+}
+
+p, ul, li {
+    color: #c7d5e0;
+}
+
+/* 헤더 스타일 */
+header {
+    background-color: #171a21;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    color: white;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.main-menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.main-menu li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.auth-buttons a {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    background-color: #1a73e8;
+}
+
+.auth-buttons .signup-btn {
+    background-color: #34a853;
+}
+
+/* 서브메뉴 스타일 */
+.sub-nav {
+    background-color: #2a475e;
+    padding: 10px 30px;
+}
+
+.submenu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.submenu li {
+    color: white;
+    cursor: pointer;
+}
+
+/* 게임 헤더 스타일 */
+.game-header {
+    padding: 20px 30px;
+    background-color: #101820;
+    border-bottom: 1px solid #283142;
+}
+
+.game-title h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.game-title p {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+}
+
+/* 게임 콘텐츠 스타일 */
+.game-content {
+    display: flex;
+    padding: 20px 30px;
+}
+
+.game-left {
+    flex: 3;
+    margin-right: 20px;
+}
+
+.game-right {
+    flex: 1;
+    background-color: #1c2a35;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.game-screenshots img {
+    width: 100%;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.game-description {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.game-info {
+    margin-bottom: 20px;
+}
+
+.btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 10px;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #1a73e8;
+}
+
+.btn-secondary {
+    background-color: #34a853;
+}
+
+.game-specs {
+    margin-top: 20px;
+}
+
+.game-specs ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.game-specs ul li {
+    margin-bottom: 10px;
+}
+
+/* 리뷰 섹션 스타일 */
+.reviews {
+    padding: 20px 30px;
+    background-color: #1c2a35;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.review-form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #283142;
+    background-color: #283142;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.review-list {
+    margin-top: 20px;
+}
+
+.review-item {
+    background-color: #2a475e;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+/* 푸터 스타일 */
+footer {
+    background-color: #171a21;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

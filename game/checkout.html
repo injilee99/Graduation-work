@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게임 결제 - game forge</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 결제 페이지 전용 스타일 */
+        .checkout-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #1b2838;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+            color: #c7d5e0;
+        }
+
+        .checkout-container h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .checkout-item {
+            background-color: #2a475e;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #c7d5e0;
+        }
+
+        .checkout-item img {
+            width: 100px;
+            height: 60px;
+            border-radius: 5px;
+            margin-right: 20px;
+        }
+
+        .checkout-item-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .checkout-item-title {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+
+        .checkout-item-price {
+            font-size: 16px;
+            color: #1abc9c;
+        }
+
+        .checkout-form {
+            margin-top: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            color: #ffffff;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #34495e;
+            background-color: #283142;
+            color: #ffffff;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #1a73e8;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background-color: #0c5bb5;
+        }
+
+        .cart-summary {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .cart-summary h3 {
+            color: #ffffff;
+            font-size: 22px;
+        }
+
+        .cart-summary #total-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1abc9c;
+        }
+
+        .checkout-items {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="top-nav">
+            <div class="logo">Game Forge</div>
+            <nav>
+                <ul class="main-menu">
+                    <li><a href="store.html">상점</a></li>
+                    <li><a href="library.html">라이브러리</a></li>
+                    <li><a href="notice.html">공지사항</a></li>
+                    <li><a href="community.html">자유게시판</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons" id="auth-buttons">
+                <a href="login.html" class="login-btn">로그인</a>
+                <a href="signup.html" class="signup-btn">회원가입</a>
+            </div>
+        </div>
+        <div class="sub-nav">
+            <ul class="submenu">
+                <li>내 상점</li>
+                <li>신규 및 특집</li>
+                <li>카테고리</li>
+                <li>포인트 상점</li>
+                <li>뉴스</li>
+                <li>실험실</li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <section class="checkout-container">
+            <h2>게임 결제</h2>
+            <div class="checkout-items" id="checkout-items"></div>
+
+            <form class="checkout-form">
+                <div class="form-group">
+                    <label for="name">이름</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">이메일</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="payment-method">결제 방법</label>
+                    <select id="payment-method" name="payment-method" required>
+                        <option value="kakaopay">카카오페이</option>
+                        <option value="toss">토스</option>
+                        <option value="bank_transfer">계좌이체</option>
+                    </select>
+                </div>
+
+                <div class="cart-summary">
+                    <h3>총 결제 금액: <span id="total-price">0</span>원</h3>
+                </div>
+
+                <button type="button" class="checkout-btn" onclick="completePayment()">결제하기</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 대진대학교 벤처 졸업작품.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCheckoutItems();
+        });
+
+        function loadCheckoutItems() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const checkoutItemsContainer = document.getElementById('checkout-items');
+            const totalPriceEl = document.getElementById('total-price');
+            let totalPrice = 0;
+
+            checkoutItemsContainer.innerHTML = '';
+
+            cart.forEach((item) => {
+                const checkoutItem = document.createElement('div');
+                checkoutItem.classList.add('checkout-item');
+                checkoutItem.innerHTML = `
+                    <div class="checkout-item-info">
+                        <div class="checkout-item-title">${item.title}</div>
+                        <div class="checkout-item-price">${item.price}원</div>
+                    </div>
+                `;
+                checkoutItemsContainer.appendChild(checkoutItem);
+                totalPrice += item.price;
+            });
+
+            totalPriceEl.textContent = totalPrice;
+        }
+
+        function completePayment() {
+            const paymentMethod = document.getElementById('payment-method').value;
+            alert(`결제가 완료되었습니다. 결제 수단: ${paymentMethod}`);
+            localStorage.removeItem('cart'); // 결제 완료 후 장바구니 비우기
+            window.location.href = 'store.html'; // 결제 후 상점으로 이동
+        }
+    </script>
+</body>
+</html>
