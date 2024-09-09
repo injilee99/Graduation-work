@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>게임 결제 - game forge</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="top-nav">
+        <div class="logo">Game Forge</div>
+        <nav>
+          <ul class="main-menu">
+            <li><a href="store.html">상점</a></li>
+            <li><a href="library.html">라이브러리</a></li>
+            <li><a href="notice.html">공지사항</a></li>
+            <li><a href="community.html">자유게시판</a></li>
+          </ul>
+        </nav>
+        <div class="auth-buttons" id="auth-buttons">
+          <a href="login.html" class="login-btn">로그인</a>
+        </div>
+      </div>
+      <div class="sub-nav">
+        <ul class="submenu">
+          <li>내 상점</li>
+          <li>신규 및 특집</li>
+          <li>카테고리</li>
+          <li>포인트 상점</li>
+          <li>뉴스</li>
+          <li>실험실</li>
+        </ul>
+      </div>
+    </header>
+
+    <main>
+      <section class="checkout-container">
+        <h2>게임 결제</h2>
+        <div class="checkout-items" id="checkout-items"></div>
+
+        <form class="checkout-form">
+          <div class="form-group">
+            <label for="name">이름</label>
+            <input type="text" id="name" name="name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="email">이메일</label>
+            <input type="email" id="email" name="email" required />
+          </div>
+
+          <div class="form-group">
+            <label for="payment-method">결제 방법</label>
+            <select id="payment-method" name="payment-method" required>
+              <option value="kakaopay">카카오페이</option>
+              <option value="toss">토스</option>
+              <option value="bank_transfer">계좌이체</option>
+            </select>
+          </div>
+
+          <div class="cart-summary">
+            <h3>총 결제 금액:</h3>
+            <span class="total-price">₩</span>
+          </div>
+          <div class="agree-check">
+            <input type="checkbox" id="checkbox1" />
+            <label for="checkbox1"
+              >약관을 모두 확인하였으며 이에 모두 동의합니다.</label
+            >
+            <p>
+              <input type="checkbox" id="checkbox2" />
+              <label for="checkbox2">환불 정책을 확인하였습니다.</label>
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="checkout-btn"
+            onclick="completePayment()"
+          >
+            결제하기
+          </button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 대진대학교 벤처 졸업작품.</p>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        loadCheckoutItems();
+      });
+
+      function loadCheckoutItems() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const checkoutItemsContainer =
+          document.getElementById("checkout-items");
+        const totalPriceEl = document.getElementById("total-price");
+        let totalPrice = 0;
+
+        checkoutItemsContainer.innerHTML = "";
+
+        cart.forEach((item) => {
+          const checkoutItem = document.createElement("div");
+          checkoutItem.classList.add("checkout-item");
+          checkoutItem.innerHTML = `
+                    <div class="checkout-item-info">
+                        <div class="checkout-item-title">${item.title}</div>
+                        <div class="checkout-item-price">${item.price}원</div>
+                    </div>
+                `;
+          checkoutItemsContainer.appendChild(checkoutItem);
+          totalPrice += item.price;
+        });
+
+        totalPriceEl.textContent = totalPrice;
+      }
+
+      function completePayment() {
+        const paymentMethod = document.getElementById("payment-method").value;
+        alert(`결제가 완료되었습니다. 결제 수단: ${paymentMethod}`);
+        localStorage.removeItem("cart"); // 결제 완료 후 장바구니 비우기
+        window.location.href = "store.html"; // 결제 후 상점으로 이동
+      }
+    </script>
+  </body>
+</html>
