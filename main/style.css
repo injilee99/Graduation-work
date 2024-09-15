@@ -1,0 +1,265 @@
+/* 기본 */
+body {
+    font-family: 'Poppins',"Noto Sans KR" ,sans-serif;
+
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    color: #333;
+}
+
+/* 헤더 */
+header {
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #333;
+  }
+  
+  .top-nav {
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    color: #333;
+  }
+  
+  .logo {
+    margin-left: 150px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .main-menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 30px; /* 링크 간격 조정 */
+    justify-content: center; /* 중앙 정렬 */
+    flex: 1; /* 중간 네비게이션 바가 가로로 더 많은 공간을 차지하도록 설정 */
+  }
+  
+  .main-menu li a {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    
+    padding: 5px 10px; /* 여백 추가 */
+    
+    font-weight: 500;
+    font-style: normal;
+  }
+  
+  .auth-buttons {
+    display: flex;
+    gap: 10px;
+    margin-right: 150px;
+}
+
+.auth-buttons a {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    background-color: #889491;
+}
+
+  
+
+/* 서브메뉴 */
+.sub-nav {
+    background-color: #889491;  
+    margin: 0 150px ;
+    padding: 15px 45px;
+    border-radius: 30px; 
+}
+
+.submenu {
+    list-style-type: none;
+    margin: 0 10px;
+    padding: 0;
+    display: flex;
+    gap: 30px;  
+}
+
+.submenu li {
+    color: white;
+    cursor: pointer;
+    padding: 5px 10px;
+     
+    border-radius: 15px;  
+    transition: background-color 0.3s, color 0.3s; 
+}
+
+.submenu li:hover {
+    background-color: #777; 
+    color: #fff; 
+}
+
+
+/* 배너 슬라이더 */
+.banner-slider {
+    position: relative;
+    width: 100%; 
+    height: 80vh; 
+    margin: 0 auto; 
+    
+    
+    overflow: hidden;
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out; 
+    width: 100%;
+    height: 100%;
+}
+
+.slide {
+    min-width: 100%; 
+    height: 100%; 
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    overflow: hidden;
+}
+
+.slide img {
+    width: 78%;
+    height: auto; 
+    object-fit: cover; 
+    border-radius: 30px;
+}
+
+.controls {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.material-symbols-outlined {
+    cursor: pointer;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 36px; 
+    
+    margin: 180px;
+    border-radius: 50%;
+    user-select: none; 
+}
+
+.material-symbols-outlined:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* 메인 */
+main {
+    display: flex;
+    padding: 20px 30px;
+}
+
+.content {
+    width: 100%;
+    padding: 20px;
+}
+.search{
+    font-style: "Noto Sans KR" ;
+    font-weight: 500;
+    font-style: normal;
+    color: #333;
+}
+.search-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    margin-left: 110px;
+    margin-right: 110px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+}
+
+.search-btn {
+    padding: 10px 20px;
+    background-color: #889491;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 제품 그리드 */
+/* 이달의 추천 게임, 이달의 할인 게임 */
+.featured-games, .discounted-games {
+    margin-bottom: 40px;
+}
+
+.featured-games h2, .discounted-games h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #333;
+    padding-left: 110px;
+}
+
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding-left: 110px;
+    padding-right: 110px;
+}
+
+.game-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.game-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.game-card p {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.game-card:hover {
+    transform: translateY(-10px); 
+}
+
+
+/* 하단 */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

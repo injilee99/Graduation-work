@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로그인</title>
+    <link rel="stylesheet" href="login.css" />
+    <style>
+      /* 로고 스타일 */
+      .logo {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .logo a {
+        text-decoration: none;
+        color: #000; /* 로고의 기본 색상 */
+      }
+
+      .login-container {
+        margin-top: 100px; /* 로고와 겹치지 않도록 간격을 줌 */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .login-title {
+        margin-bottom: 20px;
+      }
+
+      .login-form {
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .input-group {
+        margin-bottom: 15px;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      .options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .login-button {
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .login-button:hover {
+        background-color: #0056b3;
+      }
+
+      .links a {
+        text-decoration: none;
+        color: #007bff;
+      }
+
+      .links a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <!-- 왼쪽 상단에 로고 추가 -->
+      <div class="logo">
+        <a href="main.html">Game Forge</a>
+      </div>
+    </header>
+
+    <div class="login-container">
+      <h2 class="login-title">로그인</h2>
+      <form class="login-form">
+        <div class="input-group">
+          <input type="text" placeholder="이메일을 입력해주세요" required />
+        </div>
+        <div class="input-group">
+          <input
+            type="password"
+            placeholder="비밀번호를 입력해주세요"
+            required
+          />
+        </div>
+        <div class="options">
+          <label> <input type="checkbox" /> 아이디 저장 </label>
+          <div class="links">
+            <a href="#">이메일 찾기</a> | <a href="#">비밀번호 찾기</a> |
+            <a href="#">회원가입</a>
+          </div>
+        </div>
+        <button type="submit" class="login-button">로그인</button>
+      </form>
+    </div>
+  </body>
+</html>
