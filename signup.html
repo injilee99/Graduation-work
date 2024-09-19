@@ -13,7 +13,7 @@
             <div class="form-group">
                 <label for="email">아이디 (이메일)</label>
                 <input type="email" id="email" required>
-                <button type="button" onclick="checkEmail()">중복 확인</button>
+                <button type="button" onclick="checkEmail()">중복 확인 및 이메일 인증</button>
                 <p id="email-status"></p>
             </div>
 
@@ -94,8 +94,16 @@
                     document.getElementById('email-verification-group').style.display = 'block';
 
                     startTimer(3 * 60);  // 3분 타이머 시작
-                } 
+                } else {
+                    emailStatus.innerText = '이메일 전송에 실패했습니다.';
+                    emailStatus.style.color = 'red';
+                }
             })
+            .catch(error => {
+                console.error('Error:', error);
+                emailStatus.innerText = `이메일 전송 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
+                emailStatus.style.color = 'red';
+            });
         }
 
         // 인증번호 확인
