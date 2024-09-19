@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입 - game forge</title>
-    <link rel="stylesheet" href="signup.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="signup-container">
@@ -13,11 +13,17 @@
             <div class="form-group">
                 <label for="email">아이디 (이메일)</label>
                 <input type="email" id="email" required>
-                <button type="button" onclick="checkEmail()">중복 확인 및 이메일 인증</button>
+                <button type="button" id="check-email-btn" onclick="checkEmail()">중복 확인</button>
                 <p id="email-status"></p>
             </div>
 
-            <!-- 이 부분은 처음엔 숨겨져 있다가, 이메일 인증 버튼을 눌렀을 때 보여지는 화면 -->
+            <!-- 이메일 인증 버튼, 중복 확인 성공 후에만 보임 -->
+            <div class="form-group" id="email-auth-btn-group" style="display: none;">
+                <button type="button" id="send-verification-btn" onclick="sendEmailVerification()">이메일 인증 번호 전송</button>
+                <p id="verification-status"></p>
+            </div>
+
+            <!-- 이메일 인증 입력란, 인증 번호 전송 후에 보임 -->
             <div class="form-group" id="email-verification-group" style="display: none;">
                 <label for="verification-code">이메일로 발송된 인증번호</label>
                 <input type="text" id="verification-code" required>
@@ -42,6 +48,11 @@
             </div>
 
             <div class="form-group">
+                <label for="nickname">닉네임</label>
+                <input type="text" id="nickname" required>
+            </div>
+
+            <div class="form-group">
                 <label for="gender">성별</label>
                 <select id="gender" required>
                     <option value="남">남</option>
@@ -62,21 +73,59 @@
         let verificationCode = ''; // 서버에서 받은 인증번호
         let timer; // 타이머
         let isEmailVerified = false; // 이메일 인증 여부
+        let isEmailChecked = false; // 이메일 중복 확인 여부
 
-        // 이메일 중복 확인 및 인증번호 요청
+        // 이메일 중복 확인
         function checkEmail() {
             const email = document.getElementById('email').value;
             const emailStatus = document.getElementById('email-status');
 
             emailStatus.innerText = '이메일 중복 확인 중...';
 
-            // HTTP로 API 요청을 보내도록 URL 수정
-            fetch('http://43.203.198.147:8080/api/user/auth/email-check?email=admin', {
+            fetch(`http://43.203.198.147:8080/api/user/auth/email-check?email=${email}`, {
+                method: 'GET'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success && !data.isDuplicate) {
+                    emailStatus.innerText = '사용 가능한 이메일입니다.';
+                    emailStatus.style.color = 'green';
+                    document.getElementById('email').readOnly = true;
+                    document.getElementById('check-email-btn').disabled = true;
+                    isEmailChecked = true;
+
+                    // 이메일 인증 버튼 표시
+                    document.getElementById('email-auth-btn-group').style.display = 'block';
+                } else {
+                    emailStatus.innerText = '이미 사용 중인 이메일입니다.';
+                    emailStatus.style.color = 'red';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                emailStatus.innerText = `중복 확인 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
+                emailStatus.style.color = 'red';
+            });
+        }
+
+        // 이메일 인증 번호 전송
+        function sendEmailVerification() {
+            const email = document.getElementById('email').value;
+            const emailStatus = document.getElementById('email-status');
+
+            emailStatus.innerText = '이메일 인증 번호 전송 중...';
+
+            fetch('http://43.203.198.147:8080/api/user/auth/email-authentication', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email: email }) // 서버에 이메일 정보 전송
+                body: JSON.stringify({ email: email })
             })
             .then(response => {
                 if (!response.ok) {
@@ -86,13 +135,12 @@
             })
             .then(data => {
                 if (data.success) {
-                    verificationCode = data.verificationCode; // 서버에서 받은 인증번호 저장
-                    emailStatus.innerText = '이메일로 인증번호를 전송했습니다. 인증번호를 입력하세요.';
+                    verificationCode = data.verificationCode;
+                    emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                     emailStatus.style.color = 'green';
 
-                    // 이메일 인증번호 입력란 보여주기
+                    // 이메일 인증 입력란 표시
                     document.getElementById('email-verification-group').style.display = 'block';
-
                     startTimer(3 * 60);  // 3분 타이머 시작
                 } else {
                     emailStatus.innerText = '이메일 전송에 실패했습니다.';
@@ -112,13 +160,12 @@
             const email = document.getElementById('email').value;
             const verificationStatus = document.getElementById('verification-status');
 
-            // HTTP로 API 요청을 보내도록 URL 수정
             fetch('http://43.203.198.147:8080/api/user/auth/check-authentication', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email: email, authenticationCode: inputCode }) // 이메일과 인증번호 전송
+                body: JSON.stringify({ email: email, authenticationCode: inputCode })
             })
             .then(response => {
                 if (!response.ok) {
@@ -130,7 +177,7 @@
                 if (data.success) {
                     clearTimeout(timer);
                     isEmailVerified = true;
-                    verificationStatus.innerText = '인증 완료되었습니다.';
+                    verificationStatus.innerText = '인증이 완료되었습니다.';
                     verificationStatus.style.color = 'green';
                 } else {
                     verificationStatus.innerText = '잘못된 인증번호입니다.';
@@ -171,6 +218,7 @@
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
             const name = document.getElementById('name').value;
+            const nickname = document.getElementById('nickname').value;
             const gender = document.getElementById('gender').value;
             const birthdate = document.getElementById('birthdate').value;
 
@@ -179,7 +227,6 @@
                 return false;
             }
 
-            // HTTP로 API 요청을 보내도록 URL 수정
             fetch('http://43.203.198.147:8080/api/user/auth/join', {
                 method: 'POST',
                 headers: {
@@ -189,6 +236,7 @@
                     email: email,
                     password: password,
                     name: name,
+                    nickname: nickname,
                     gender: gender,
                     birthdate: birthdate
                 })
