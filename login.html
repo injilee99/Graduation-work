@@ -62,7 +62,7 @@
     </div>
 
     <script>
-        // 로그인 성공 후 추가 정보 페이지로 리다이렉트 (예시)
+        // 로그인 성공 후 추가 정보 페이지로 리다이렉트
         function redirectToAdditionalInfoPage() {
             // 로그인 후 서버에서 새로 고침 또는 추가 정보 페이지로 리다이렉트할 수 있도록 구현
             document.getElementById("additional-info").style.display = "block";  // 추가 정보 페이지 표시
@@ -76,7 +76,6 @@
 
         // 페이지 초기화 시 추가 정보 입력이 필요한 경우에 대한 처리
         window.onload = function() {
-            // 예시로 페이지 로드 시 onLoginSuccess 함수 호출
             // 실제로는 서버에서 로그인 성공 여부를 받아서 처리
             // onLoginSuccess();  // 사용자가 로그인 후 추가 정보 입력 페이지로 리다이렉트할 때 호출
         }
