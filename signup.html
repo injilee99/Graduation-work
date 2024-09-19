@@ -82,7 +82,7 @@
 
             emailStatus.innerText = '이메일 중복 확인 중...';
 
-            fetch(`http://43.203.198.147:8080/api/user/auth/email-check?email=${email}`, {
+            fetch(`https://43.203.198.147:8080/api/user/auth/email-check?email=${email}`, {
                 method: 'GET'
             })
             .then(response => {
@@ -120,7 +120,7 @@
 
             emailStatus.innerText = '이메일 인증 번호 전송 중...';
 
-            fetch('http://43.203.198.147:8080/api/user/auth/email-authentication', {
+            fetch('https://43.203.198.147:8080/api/user/auth/email-authentication', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -160,7 +160,7 @@
             const email = document.getElementById('email').value;
             const verificationStatus = document.getElementById('verification-status');
 
-            fetch('http://43.203.198.147:8080/api/user/auth/check-authentication', {
+            fetch('https://43.203.198.147:8080/api/user/auth/check-authentication', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -227,7 +227,7 @@
                 return false;
             }
 
-            fetch('http://43.203.198.147:8080/api/user/auth/join', {
+            fetch('https://43.203.198.147:8080/api/user/auth/join', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
