@@ -71,7 +71,7 @@
             emailStatus.innerText = '이메일 중복 확인 중...';
 
             // HTTP로 API 요청을 보내도록 URL 수정
-            fetch('http://43.203.198.147:8080/api/user/auth/email-authentication', {
+            fetch('http://43.203.198.147:8080/api/user/auth/email-check?email=admin', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
