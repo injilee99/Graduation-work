@@ -99,11 +99,6 @@
                     emailStatus.style.color = 'red';
                 }
             })
-            .catch(error => {
-                console.error('Error:', error);
-                emailStatus.innerText = `이메일 전송 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
-                emailStatus.style.color = 'red';
-            });
         }
 
         // 인증번호 확인
