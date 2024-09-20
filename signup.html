@@ -9,7 +9,6 @@
     <div class="signup-container">
         <h2>회원가입</h2>
         <form id="signup-form" onsubmit="return handleSignup(event)">
-            <!-- 이메일 입력 및 중복 확인 -->
             <div class="form-group">
                 <label for="email">아이디 (이메일)</label>
                 <input type="email" id="email" required>
@@ -17,13 +16,11 @@
                 <p id="email-status"></p>
             </div>
 
-            <!-- 이메일 인증 버튼 -->
             <div class="form-group" id="email-auth-btn-group" style="display: none;">
                 <button type="button" id="send-verification-btn" onclick="sendEmailVerification()">이메일 인증 번호 전송</button>
                 <p id="verification-status"></p>
             </div>
 
-            <!-- 이메일 인증 입력란 -->
             <div class="form-group" id="email-verification-group" style="display: none;">
                 <label for="verification-code">이메일로 발송된 인증번호</label>
                 <input type="text" id="verification-code" required>
@@ -31,7 +28,6 @@
                 <p id="verification-status"></p>
             </div>
 
-            <!-- 비밀번호 입력 -->
             <div class="form-group">
                 <label for="password">비밀번호</label>
                 <input type="password" id="password" required>
@@ -43,29 +39,20 @@
                 <p id="password-status"></p>
             </div>
 
-            <!-- 이름 입력 -->
-            <div class="form-group">
-                <label for="name">이름</label>
-                <input type="text" id="name" required>
-            </div>
-
-            <!-- 닉네임 입력 및 중복 확인 -->
             <div class="form-group">
                 <label for="nickname">닉네임</label>
                 <input type="text" id="nickname" required>
-                <button type="button" id="check-nickname-btn" onclick="checkNickname()">중복 확인</button>
+                <button type="button" onclick="checkNickname()">중복 확인</button>
                 <p id="nickname-status"></p>
             </div>
 
-            <!-- 전화번호 입력 및 중복 확인 -->
             <div class="form-group">
                 <label for="phone">전화번호</label>
-                <input type="tel" id="phone" required>
-                <button type="button" id="check-phone-btn" onclick="checkPhone()">중복 확인</button>
+                <input type="text" id="phone" required>
+                <button type="button" onclick="checkPhone()">중복 확인</button>
                 <p id="phone-status"></p>
             </div>
 
-            <!-- 성별 선택 -->
             <div class="form-group">
                 <label for="gender">성별</label>
                 <select id="gender" required>
@@ -74,23 +61,18 @@
                 </select>
             </div>
 
-            <!-- 생년월일 입력 -->
             <div class="form-group">
                 <label for="birthdate">생년월일</label>
                 <input type="date" id="birthdate" required>
             </div>
 
-            <!-- 회원가입 버튼 -->
             <button type="submit">회원가입</button>
         </form>
     </div>
 
     <script>
-        let verificationCode = ''; // 서버에서 받은 인증번호
-        let isEmailVerified = false; // 이메일 인증 여부
-        let isEmailChecked = false; // 이메일 중복 확인 여부
-        let isNicknameChecked = false; // 닉네임 중복 확인 여부
-        let isPhoneChecked = false; // 전화번호 중복 확인 여부
+        let verificationCode = '';
+        let isEmailVerified = false;
 
         // 이메일 중복 확인
         function checkEmail() {
@@ -100,23 +82,25 @@
             emailStatus.innerText = '이메일 중복 확인 중...';
 
             fetch(`https://ludorium.store/api/user/auth/email-check?email=${email}`, {
-                method: 'GET',
+                method: 'GET'
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
+                if (data.code === 'DUPLICATE_EMAIL') {
+                    emailStatus.innerText = '이미 사용 중인 이메일입니다.';
+                    emailStatus.style.color = 'red';
+                } else {
                     emailStatus.innerText = '사용 가능한 이메일입니다.';
                     emailStatus.style.color = 'green';
                     document.getElementById('email').readOnly = true;
                     document.getElementById('check-email-btn').disabled = true;
-                    isEmailChecked = true;
+
+                    // 이메일 인증 버튼 표시
                     document.getElementById('email-auth-btn-group').style.display = 'block';
-                } else {
-                    throw new Error(data.message || '이메일 중복 확인에 실패했습니다.');
                 }
             })
             .catch(error => {
-                emailStatus.innerText = error.message;
+                emailStatus.innerText = `오류 발생: ${error.message}`;
                 emailStatus.style.color = 'red';
             });
         }
@@ -137,127 +121,51 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    verificationCode = data.verificationCode;
+                if (data.code === 200 || data.code === 'SUCCESS') {
                     emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                     emailStatus.style.color = 'green';
+
+                    // 이메일 인증 입력란 표시
                     document.getElementById('email-verification-group').style.display = 'block';
                 } else {
-                    throw new Error(data.message || '이메일 전송에 실패했습니다.');
+                    emailStatus.innerText = '이메일 전송에 실패했습니다.';
+                    emailStatus.style.color = 'red';
                 }
             })
             .catch(error => {
-                emailStatus.innerText = `이메일 전송 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
+                emailStatus.innerText = `오류 발생: ${error.message}`;
                 emailStatus.style.color = 'red';
             });
         }
 
-        // 닉네임 중복 확인
-        function checkNickname() {
-            const nickname = document.getElementById('nickname').value;
-            const nicknameStatus = document.getElementById('nickname-status');
+        // 인증번호 확인
+        function verifyCode() {
+            const inputCode = document.getElementById('verification-code').value;
+            const verificationStatus = document.getElementById('verification-status');
 
-            nicknameStatus.innerText = '닉네임 중복 확인 중...';
-
-            fetch(`https://ludorium.store/api/user/auth/nickname-check?nickname=${nickname}`, {
-                method: 'GET',
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    nicknameStatus.innerText = '사용 가능한 닉네임입니다.';
-                    nicknameStatus.style.color = 'green';
-                    document.getElementById('nickname').readOnly = true;
-                    document.getElementById('check-nickname-btn').disabled = true;
-                    isNicknameChecked = true;
-                } else {
-                    throw new Error(data.message || '닉네임 중복 확인에 실패했습니다.');
-                }
-            })
-            .catch(error => {
-                nicknameStatus.innerText = error.message;
-                nicknameStatus.style.color = 'red';
-            });
-        }
-
-        // 전화번호 중복 확인
-        function checkPhone() {
-            const phone = document.getElementById('phone').value;
-            const phoneStatus = document.getElementById('phone-status');
-
-            phoneStatus.innerText = '전화번호 중복 확인 중...';
-
-            fetch(`https://ludorium.store/api/user/auth/phone-check?phone=${phone}`, {
-                method: 'GET',
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    phoneStatus.innerText = '사용 가능한 전화번호입니다.';
-                    phoneStatus.style.color = 'green';
-                    document.getElementById('phone').readOnly = true;
-                    document.getElementById('check-phone-btn').disabled = true;
-                    isPhoneChecked = true;
-                } else {
-                    throw new Error(data.message || '전화번호 중복 확인에 실패했습니다.');
-                }
-            })
-            .catch(error => {
-                phoneStatus.innerText = error.message;
-                phoneStatus.style.color = 'red';
-            });
-        }
-
-        // 회원가입 처리
-        function handleSignup(event) {
-            event.preventDefault();
-
-            if (!isEmailVerified) {
-                alert('이메일 인증을 완료해주세요.');
-                return false;
-            }
-
-            if (!isNicknameChecked || !isPhoneChecked) {
-                alert('닉네임과 전화번호 중복 확인을 완료해주세요.');
-                return false;
-            }
-
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const name = document.getElementById('name').value;
-            const nickname = document.getElementById('nickname').value;
-            const phone = document.getElementById('phone').value;
-            const gender = document.getElementById('gender').value;
-            const birthdate = document.getElementById('birthdate').value;
-
-            fetch('https://ludorium.store/api/user/auth/join', {
+            fetch('https://ludorium.store/api/user/auth/check-authentication', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    email: email,
-                    password: password,
-                    name: name,
-                    nickname: nickname,
-                    phone: phone,
-                    gender: gender,
-                    birthdate: birthdate
-                })
+                body: JSON.stringify({ email: document.getElementById('email').value, authenticationCode: inputCode })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('회원가입이 완료되었습니다.');
+                    verificationStatus.innerText = '인증이 완료되었습니다.';
+                    verificationStatus.style.color = 'green';
+                    isEmailVerified = true;
                 } else {
-                    alert('회원가입에 실패했습니다.');
+                    verificationStatus.innerText = '잘못된 인증번호입니다.';
+                    verificationStatus.style.color = 'red';
                 }
             })
             .catch(error => {
-                alert(`회원가입 중 오류가 발생했습니다. 오류 메시지: ${error.message}`);
+                verificationStatus.innerText = `오류 발생: ${error.message}`;
+                verificationStatus.style.color = 'red';
             });
         }
-
     </script>
 </body>
 </html>
