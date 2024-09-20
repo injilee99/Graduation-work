@@ -9,6 +9,7 @@
     <div class="signup-container">
         <h2>회원가입</h2>
         <form id="signup-form" onsubmit="return handleSignup(event)">
+            <!-- 이메일 입력 및 중복 확인 -->
             <div class="form-group">
                 <label for="email">아이디 (이메일)</label>
                 <input type="email" id="email" required>
@@ -16,11 +17,13 @@
                 <p id="email-status"></p>
             </div>
 
+            <!-- 이메일 인증 버튼 -->
             <div class="form-group" id="email-auth-btn-group" style="display: none;">
                 <button type="button" id="send-verification-btn" onclick="sendEmailVerification()">이메일 인증 번호 전송</button>
                 <p id="verification-status"></p>
             </div>
 
+            <!-- 이메일 인증 입력란 -->
             <div class="form-group" id="email-verification-group" style="display: none;">
                 <label for="verification-code">이메일로 발송된 인증번호</label>
                 <input type="text" id="verification-code" required>
@@ -28,6 +31,7 @@
                 <p id="verification-status"></p>
             </div>
 
+            <!-- 비밀번호 입력 -->
             <div class="form-group">
                 <label for="password">비밀번호</label>
                 <input type="password" id="password" required>
@@ -39,11 +43,13 @@
                 <p id="password-status"></p>
             </div>
 
+            <!-- 이름 입력 -->
             <div class="form-group">
                 <label for="name">이름</label>
                 <input type="text" id="name" required>
             </div>
 
+            <!-- 닉네임 입력 및 중복 확인 -->
             <div class="form-group">
                 <label for="nickname">닉네임</label>
                 <input type="text" id="nickname" required>
@@ -51,13 +57,15 @@
                 <p id="nickname-status"></p>
             </div>
 
+            <!-- 전화번호 입력 및 중복 확인 -->
             <div class="form-group">
-                <label for="tel">전화번호</label>
-                <input type="text" id="tel" required>
-                <button type="button" id="check-tel-btn" onclick="checkTel()">중복 확인</button>
-                <p id="tel-status"></p>
+                <label for="phone">전화번호</label>
+                <input type="tel" id="phone" required>
+                <button type="button" id="check-phone-btn" onclick="checkPhone()">중복 확인</button>
+                <p id="phone-status"></p>
             </div>
 
+            <!-- 성별 선택 -->
             <div class="form-group">
                 <label for="gender">성별</label>
                 <select id="gender" required>
@@ -66,11 +74,13 @@
                 </select>
             </div>
 
+            <!-- 생년월일 입력 -->
             <div class="form-group">
                 <label for="birthdate">생년월일</label>
                 <input type="date" id="birthdate" required>
             </div>
 
+            <!-- 회원가입 버튼 -->
             <button type="submit">회원가입</button>
         </form>
     </div>
@@ -80,7 +90,7 @@
         let isEmailVerified = false; // 이메일 인증 여부
         let isEmailChecked = false; // 이메일 중복 확인 여부
         let isNicknameChecked = false; // 닉네임 중복 확인 여부
-        let isTelChecked = false; // 전화번호 중복 확인 여부
+        let isPhoneChecked = false; // 전화번호 중복 확인 여부
 
         // 이메일 중복 확인
         function checkEmail() {
@@ -90,23 +100,20 @@
             emailStatus.innerText = '이메일 중복 확인 중...';
 
             fetch(`https://ludorium.store/api/user/auth/email-check?email=${email}`, {
-                method: 'GET'
+                method: 'GET',
             })
-            .then(response => {
-                if (response.status === 409) {
-                    throw new Error('이미 사용 중인 이메일입니다.');
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                emailStatus.innerText = '사용 가능한 이메일입니다.';
-                emailStatus.style.color = 'green';
-                document.getElementById('email').readOnly = true;
-                document.getElementById('check-email-btn').disabled = true;
-                isEmailChecked = true;
-
-                // 이메일 인증 버튼 표시
-                document.getElementById('email-auth-btn-group').style.display = 'block';
+                if (data.success) {
+                    emailStatus.innerText = '사용 가능한 이메일입니다.';
+                    emailStatus.style.color = 'green';
+                    document.getElementById('email').readOnly = true;
+                    document.getElementById('check-email-btn').disabled = true;
+                    isEmailChecked = true;
+                    document.getElementById('email-auth-btn-group').style.display = 'block';
+                } else {
+                    throw new Error(data.message || '이메일 중복 확인에 실패했습니다.');
+                }
             })
             .catch(error => {
                 emailStatus.innerText = error.message;
@@ -128,57 +135,76 @@
                 },
                 body: JSON.stringify({ email: email })
             })
-            .then(response => response.json()) // 응답 JSON으로 변환
+            .then(response => response.json())
             .then(data => {
-                console.log('서버 응답 데이터:', data);  // 응답 데이터 로그로 출력
-
                 if (data.success) {
                     verificationCode = data.verificationCode;
                     emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                     emailStatus.style.color = 'green';
-
-                    // 인증번호 입력란 표시
                     document.getElementById('email-verification-group').style.display = 'block';
                 } else {
-                    emailStatus.innerText = '이메일 전송에 실패했습니다.';
-                    emailStatus.style.color = 'red';
+                    throw new Error(data.message || '이메일 전송에 실패했습니다.');
                 }
             })
             .catch(error => {
-                console.error('Error:', error);  // 에러 로그로 출력
                 emailStatus.innerText = `이메일 전송 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
                 emailStatus.style.color = 'red';
             });
         }
 
-        // 인증번호 확인
-        function verifyCode() {
-            const inputCode = document.getElementById('verification-code').value;
-            const email = document.getElementById('email').value;
-            const verificationStatus = document.getElementById('verification-status');
+        // 닉네임 중복 확인
+        function checkNickname() {
+            const nickname = document.getElementById('nickname').value;
+            const nicknameStatus = document.getElementById('nickname-status');
 
-            fetch('https://ludorium.store/api/user/auth/check-authentication', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email: email, authenticationCode: inputCode })
+            nicknameStatus.innerText = '닉네임 중복 확인 중...';
+
+            fetch(`https://ludorium.store/api/user/auth/nickname-check?nickname=${nickname}`, {
+                method: 'GET',
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    isEmailVerified = true;
-                    verificationStatus.innerText = '인증이 완료되었습니다.';
-                    verificationStatus.style.color = 'green';
+                    nicknameStatus.innerText = '사용 가능한 닉네임입니다.';
+                    nicknameStatus.style.color = 'green';
+                    document.getElementById('nickname').readOnly = true;
+                    document.getElementById('check-nickname-btn').disabled = true;
+                    isNicknameChecked = true;
                 } else {
-                    verificationStatus.innerText = '잘못된 인증번호입니다.';
-                    verificationStatus.style.color = 'red';
+                    throw new Error(data.message || '닉네임 중복 확인에 실패했습니다.');
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
-                verificationStatus.innerText = `인증 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
-                verificationStatus.style.color = 'red';
+                nicknameStatus.innerText = error.message;
+                nicknameStatus.style.color = 'red';
+            });
+        }
+
+        // 전화번호 중복 확인
+        function checkPhone() {
+            const phone = document.getElementById('phone').value;
+            const phoneStatus = document.getElementById('phone-status');
+
+            phoneStatus.innerText = '전화번호 중복 확인 중...';
+
+            fetch(`https://ludorium.store/api/user/auth/phone-check?phone=${phone}`, {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    phoneStatus.innerText = '사용 가능한 전화번호입니다.';
+                    phoneStatus.style.color = 'green';
+                    document.getElementById('phone').readOnly = true;
+                    document.getElementById('check-phone-btn').disabled = true;
+                    isPhoneChecked = true;
+                } else {
+                    throw new Error(data.message || '전화번호 중복 확인에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                phoneStatus.innerText = error.message;
+                phoneStatus.style.color = 'red';
             });
         }
 
@@ -191,19 +217,18 @@
                 return false;
             }
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-            const name = document.getElementById('name').value;
-            const nickname = document.getElementById('nickname').value;
-            const tel = document.getElementById('tel').value;
-            const gender = document.getElementById('gender').value;
-            const birthdate = document.getElementById('birthdate').value;
-
-            if (password !== confirmPassword) {
-                alert('비밀번호가 일치하지 않습니다.');
+            if (!isNicknameChecked || !isPhoneChecked) {
+                alert('닉네임과 전화번호 중복 확인을 완료해주세요.');
                 return false;
             }
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const name = document.getElementById('name').value;
+            const nickname = document.getElementById('nickname').value;
+            const phone = document.getElementById('phone').value;
+            const gender = document.getElementById('gender').value;
+            const birthdate = document.getElementById('birthdate').value;
 
             fetch('https://ludorium.store/api/user/auth/join', {
                 method: 'POST',
@@ -215,7 +240,7 @@
                     password: password,
                     name: name,
                     nickname: nickname,
-                    tel: tel,
+                    phone: phone,
                     gender: gender,
                     birthdate: birthdate
                 })
@@ -229,12 +254,10 @@
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
                 alert(`회원가입 중 오류가 발생했습니다. 오류 메시지: ${error.message}`);
             });
-
-            return true;
         }
+
     </script>
 </body>
 </html>
