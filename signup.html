@@ -114,64 +114,6 @@
             });
         }
 
-        // 닉네임 중복 확인
-        function checkNickname() {
-            const nickname = document.getElementById('nickname').value;
-            const nicknameStatus = document.getElementById('nickname-status');
-
-            nicknameStatus.innerText = '닉네임 중복 확인 중...';
-
-            fetch(`https://ludorium.store/api/user/auth/check-nickname?nickname=${nickname}`, {
-                method: 'GET'
-            })
-            .then(response => {
-                if (response.status === 409) {
-                    throw new Error('이미 사용 중인 닉네임입니다.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                nicknameStatus.innerText = '사용 가능한 닉네임입니다.';
-                nicknameStatus.style.color = 'green';
-                document.getElementById('nickname').readOnly = true;
-                document.getElementById('check-nickname-btn').disabled = true;
-                isNicknameChecked = true;
-            })
-            .catch(error => {
-                nicknameStatus.innerText = error.message;
-                nicknameStatus.style.color = 'red';
-            });
-        }
-
-        // 전화번호 중복 확인
-        function checkTel() {
-            const tel = document.getElementById('tel').value;
-            const telStatus = document.getElementById('tel-status');
-
-            telStatus.innerText = '전화번호 중복 확인 중...';
-
-            fetch(`https://ludorium.store/api/user/auth/check-tel?tel=${tel}`, {
-                method: 'GET'
-            })
-            .then(response => {
-                if (response.status === 409) {
-                    throw new Error('이미 사용 중인 전화번호입니다.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                telStatus.innerText = '사용 가능한 전화번호입니다.';
-                telStatus.style.color = 'green';
-                document.getElementById('tel').readOnly = true;
-                document.getElementById('check-tel-btn').disabled = true;
-                isTelChecked = true;
-            })
-            .catch(error => {
-                telStatus.innerText = error.message;
-                telStatus.style.color = 'red';
-            });
-        }
-
         // 이메일 인증 번호 전송
         function sendEmailVerification() {
             const email = document.getElementById('email').value;
@@ -186,20 +128,24 @@
                 },
                 body: JSON.stringify({ email: email })
             })
-            .then(response => response.json()) // 상태 코드에 상관없이 JSON 변환 시도
+            .then(response => response.json()) // 응답 JSON으로 변환
             .then(data => {
+                console.log('서버 응답 데이터:', data);  // 응답 데이터 로그로 출력
+
                 if (data.success) {
                     verificationCode = data.verificationCode;
                     emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                     emailStatus.style.color = 'green';
 
+                    // 인증번호 입력란 표시
                     document.getElementById('email-verification-group').style.display = 'block';
                 } else {
-                    throw new Error('이메일 전송에 실패했습니다.');
+                    emailStatus.innerText = '이메일 전송에 실패했습니다.';
+                    emailStatus.style.color = 'red';
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Error:', error);  // 에러 로그로 출력
                 emailStatus.innerText = `이메일 전송 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
                 emailStatus.style.color = 'red';
             });
@@ -235,20 +181,6 @@
                 verificationStatus.style.color = 'red';
             });
         }
-
-        // 비밀번호 확인
-        document.getElementById('confirm-password').addEventListener('input', function () {
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-            const passwordStatus = document.getElementById('password-status');
-
-            if (password !== confirmPassword) {
-                passwordStatus.innerText = '비밀번호가 일치하지 않습니다.';
-                passwordStatus.style.color = 'red';
-            } else {
-                passwordStatus.innerText = '';
-            }
-        });
 
         // 회원가입 처리
         function handleSignup(event) {
