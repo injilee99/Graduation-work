@@ -16,11 +16,13 @@
                 <p id="email-status"></p>
             </div>
 
+            <!-- 이메일 인증 버튼, 중복 확인 성공 후에만 보임 -->
             <div class="form-group" id="email-auth-btn-group" style="display: none;">
                 <button type="button" id="send-verification-btn" onclick="sendEmailVerification()">이메일 인증 번호 전송</button>
                 <p id="verification-status"></p>
             </div>
 
+            <!-- 이메일 인증 입력란, 인증 번호 전송 후에 보임 -->
             <div class="form-group" id="email-verification-group" style="display: none;">
                 <label for="verification-code">이메일로 발송된 인증번호</label>
                 <input type="text" id="verification-code" required>
