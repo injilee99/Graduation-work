@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입 - game forge</title>
-    <link rel="stylesheet" href="styles.css">
+    <!-- CSS는 필요할 경우 추가하세요 -->
 </head>
 <body>
     <div class="signup-container">
@@ -70,10 +70,44 @@
     </div>
 
     <script>
+        let authToken = ''; // JWT 토큰 저장 변수
         let verificationCode = ''; // 서버에서 받은 인증번호
         let timer; // 타이머
         let isEmailVerified = false; // 이메일 인증 여부
         let isEmailChecked = false; // 이메일 중복 확인 여부
+
+        // 로그인 후 JWT 토큰을 받아오기 위한 함수
+        function loginAndGetToken() {
+            const loginData = {
+                email: 'your-login-email@example.com',  // 여기에 로그인에 사용할 이메일 입력
+                password: 'your-password'  // 여기에 로그인에 사용할 비밀번호 입력
+            };
+
+            return fetch('https://ludorium.store/api/user/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(loginData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`로그인 실패: HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success && data.token) {
+                    authToken = `Bearer ${data.token}`;  // 발급된 토큰 저장
+                    console.log('로그인 성공, 토큰:', authToken);
+                } else {
+                    throw new Error('로그인 실패');
+                }
+            })
+            .catch(error => {
+                console.error('로그인 오류:', error);
+            });
+        }
 
         // 이메일 중복 확인
         function checkEmail() {
@@ -82,33 +116,30 @@
 
             emailStatus.innerText = '이메일 중복 확인 중...';
 
-            fetch(`https://43.203.198.147:8080/api/user/auth/email-check?email=${email}`, {
-                method: 'GET'
+            fetch(`https://ludorium.store/api/user/auth/email-check?email=${email}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': authToken,  // 인증 헤더 추가
+                    'Content-Type': 'application/json'
+                }
             })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                if (response.status === 409) {
+                    throw new Error('이미 사용 중인 이메일입니다.');
                 }
                 return response.json();
             })
             .then(data => {
-                if (data.success && !data.isDuplicate) {
-                    emailStatus.innerText = '사용 가능한 이메일입니다.';
-                    emailStatus.style.color = 'green';
-                    document.getElementById('email').readOnly = true;
-                    document.getElementById('check-email-btn').disabled = true;
-                    isEmailChecked = true;
+                emailStatus.innerText = '사용 가능한 이메일입니다.';
+                emailStatus.style.color = 'green';
+                document.getElementById('email').readOnly = true;
+                document.getElementById('check-email-btn').disabled = true;
+                isEmailChecked = true;
 
-                    // 이메일 인증 버튼 표시
-                    document.getElementById('email-auth-btn-group').style.display = 'block';
-                } else {
-                    emailStatus.innerText = '이미 사용 중인 이메일입니다.';
-                    emailStatus.style.color = 'red';
-                }
+                document.getElementById('email-auth-btn-group').style.display = 'block';
             })
             .catch(error => {
-                console.error('Error:', error);
-                emailStatus.innerText = `중복 확인 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
+                emailStatus.innerText = error.message;
                 emailStatus.style.color = 'red';
             });
         }
@@ -120,9 +151,10 @@
 
             emailStatus.innerText = '이메일 인증 번호 전송 중...';
 
-            fetch('https://43.203.198.147:8080/api/user/auth/email-authentication', {
+            fetch('https://ludorium.store/api/user/auth/email-authentication', {
                 method: 'POST',
                 headers: {
+                    'Authorization': authToken,  // 인증 헤더 추가
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ email: email })
@@ -138,8 +170,6 @@
                     verificationCode = data.verificationCode;
                     emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                     emailStatus.style.color = 'green';
-
-                    // 이메일 인증 입력란 표시
                     document.getElementById('email-verification-group').style.display = 'block';
                     startTimer(3 * 60);  // 3분 타이머 시작
                 } else {
@@ -160,9 +190,10 @@
             const email = document.getElementById('email').value;
             const verificationStatus = document.getElementById('verification-status');
 
-            fetch('https://43.203.198.147:8080/api/user/auth/check-authentication', {
+            fetch('https://ludorium.store/api/user/auth/check-authentication', {
                 method: 'POST',
                 headers: {
+                    'Authorization': authToken,  // 인증 헤더 추가
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ email: email, authenticationCode: inputCode })
@@ -227,9 +258,10 @@
                 return false;
             }
 
-            fetch('https://43.203.198.147:8080/api/user/auth/join', {
+            fetch('https://ludorium.store/api/user/auth/join', {
                 method: 'POST',
                 headers: {
+                    'Authorization': authToken,  // 인증 헤더 추가
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -278,6 +310,11 @@
                 }
             }, 1000);
         }
+
+        // 페이지 로드 시 로그인해서 JWT 토큰 가져오기
+        window.onload = () => {
+            loginAndGetToken();
+        };
     </script>
 </body>
 </html>
