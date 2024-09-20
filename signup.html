@@ -186,12 +186,7 @@
                 },
                 body: JSON.stringify({ email: email })
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
+            .then(response => response.json()) // 상태 코드에 상관없이 JSON 변환 시도
             .then(data => {
                 if (data.success) {
                     verificationCode = data.verificationCode;
@@ -200,8 +195,7 @@
 
                     document.getElementById('email-verification-group').style.display = 'block';
                 } else {
-                    emailStatus.innerText = '이메일 전송에 실패했습니다.';
-                    emailStatus.style.color = 'red';
+                    throw new Error('이메일 전송에 실패했습니다.');
                 }
             })
             .catch(error => {
@@ -224,12 +218,7 @@
                 },
                 body: JSON.stringify({ email: email, authenticationCode: inputCode })
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     isEmailVerified = true;
@@ -246,6 +235,20 @@
                 verificationStatus.style.color = 'red';
             });
         }
+
+        // 비밀번호 확인
+        document.getElementById('confirm-password').addEventListener('input', function () {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const passwordStatus = document.getElementById('password-status');
+
+            if (password !== confirmPassword) {
+                passwordStatus.innerText = '비밀번호가 일치하지 않습니다.';
+                passwordStatus.style.color = 'red';
+            } else {
+                passwordStatus.innerText = '';
+            }
+        });
 
         // 회원가입 처리
         function handleSignup(event) {
@@ -285,12 +288,7 @@
                     birthdate: birthdate
                 })
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     alert('회원가입이 완료되었습니다.');
