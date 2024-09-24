@@ -122,7 +122,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log("서버 응답 데이터:", data);  // 서버 응답 데이터를 콘솔에 출력
+                console.log("서버 응답 데이터 (이메일 전송):", data);  // 서버 응답 데이터를 콘솔에 출력
 
                 if (data && (data.code === 200 || data.message === '성공')) {
                     emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
@@ -136,7 +136,7 @@
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Error (이메일 전송):', error);
                 emailStatus.innerText = `이메일 전송 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
                 emailStatus.style.color = 'red';
             });
@@ -160,8 +160,12 @@
                     authenticationCode: verificationCode  // 인증코드 전송
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log("인증번호 확인 요청 응답 상태:", response.status);  // 상태 코드 확인
+                return response.json();
+            })
             .then(data => {
+                console.log("서버 응답 데이터 (인증번호 확인):", data);  // 서버 응답 데이터를 콘솔에 출력
                 if (data.code === 200 && data.message === 'SUCCESS') {
                     verificationStatus.innerText = '인증 성공!';
                     verificationStatus.style.color = 'green';
@@ -171,7 +175,7 @@
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Error (인증번호 확인):', error);
                 verificationStatus.innerText = `인증 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
                 verificationStatus.style.color = 'red';
             });
