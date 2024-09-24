@@ -124,8 +124,7 @@
             .then(data => {
                 console.log("서버 응답 데이터:", data);  // 서버 응답 데이터를 콘솔에 출력
 
-                // 서버 응답에 따라 성공 여부 확인
-                if (data && (data.code === 200 || data.message === '성공')) {  // 서버 응답 메시지에 맞춰 조건 수정
+                if (data && (data.code === 200 || data.message === '성공')) {
                     emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                     emailStatus.style.color = 'green';
 
@@ -143,19 +142,23 @@
             });
         }
 
-        // 이메일 인증번호 확인
+        // 이메일 인증번호 확인 (올바른 API 경로 사용)
         function verifyCode() {
             const verificationCode = document.getElementById('verification-code').value;
+            const email = document.getElementById('email').value;  // 이메일 값을 같이 전송
             const verificationStatus = document.getElementById('verification-status');
 
             verificationStatus.innerText = '인증번호 확인 중...';
 
-            fetch(`${API_BASE_URL}/user/auth/verify-code`, {
+            fetch(`${API_BASE_URL}/user/auth/check-authentication`, {  // 올바른 API 경로
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ code: verificationCode })
+                body: JSON.stringify({
+                    email: email,
+                    authenticationCode: verificationCode  // 인증코드 전송
+                })
             })
             .then(response => response.json())
             .then(data => {
