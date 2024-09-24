@@ -156,15 +156,13 @@
                 body: JSON.stringify({ email: email })
             })
             .then(response => {
-                if (!response.ok) {  // HTTP 상태코드가 200이 아닐 경우 에러 처리
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
+                console.log("HTTP 응답 상태코드:", response.status); // 응답 상태 코드 로그
+                return response.json();  // JSON으로 변환
             })
             .then(data => {
-                console.log("Email verification response data:", data);
+                console.log("서버에서 받은 데이터:", data);  // 서버 응답 데이터 전체를 로그로 기록
 
-                // HTTP 상태코드 200일 경우 성공으로 처리
+                // 성공 여부 처리 (기본적으로 HTTP 상태 코드 200 확인)
                 if (data.code === 200 || data.message === 'SUCCESS') {
                     emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                     emailStatus.style.color = 'green';
@@ -177,7 +175,7 @@
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Error:', error);  // 에러 로그 확인
                 emailStatus.innerText = `이메일 전송 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
                 emailStatus.style.color = 'red';
             });
