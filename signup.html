@@ -78,7 +78,7 @@
                 password: 'password'  // 로그인할 비밀번호
             };
 
-            return fetch('http://ludorium.store/api/user/auth/login', {
+            return fetch('https://ludorium.store/api/user/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -111,7 +111,7 @@
 
             emailStatus.innerText = '이메일 중복 확인 중...';
 
-            fetch(`http://ludorium.store/api/user/auth/email-check?email=${email}`, {
+            fetch(`https://ludorium.store/api/user/auth/email-check?email=${email}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': authToken,  // 인증 헤더 추가
@@ -146,7 +146,7 @@
 
             emailStatus.innerText = '이메일 인증 번호 전송 중...';
 
-            fetch('http://ludorium.store/api/user/auth/email-authentication', {
+            fetch('https://ludorium.store/api/user/auth/email-authentication', {
                 method: 'POST',
                 headers: {
                     'Authorization': authToken,  // 인증 헤더 추가
@@ -187,7 +187,7 @@
 
             verificationStatus.innerText = '인증번호 확인 중...';
 
-            fetch('http://ludorium.store/api/user/auth/check-authentication', {
+            fetch('https://ludorium.store/api/user/auth/check-authentication', {
                 method: 'POST',
                 headers: {
                     'Authorization': authToken,  // 인증 헤더 추가 (필요한 경우)
@@ -195,7 +195,7 @@
                 },
                 body: JSON.stringify({
                     email: email,
-                    authenticationCode: authCode
+                    authenticationCode: authCode  // 인증번호를 문자열로 전송
                 })
             })
             .then(response => {
