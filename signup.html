@@ -71,7 +71,7 @@
     <script>
         const API_BASE_URL = 'https://ludorium.store/api'; // 원격 서버 주소
 
-        // 이메일 중복 확인 (GET → POST 변경)
+        // 이메일 중복 확인
         function checkEmail() {
             const email = document.getElementById('email').value;
             const emailStatus = document.getElementById('email-status');
@@ -79,11 +79,11 @@
             emailStatus.innerText = '이메일 중복 확인 중...';
 
             fetch(`${API_BASE_URL}/user/auth/email-check`, {
-                method: 'POST',  // POST 방식으로 변경
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email: email })  // POST로 이메일 데이터를 전송
+                body: JSON.stringify({ email: email })
             })
             .then(response => {
                 if (response.status === 409) {
@@ -118,13 +118,14 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email: email })  // JSON 형식으로 이메일 전송
+                body: JSON.stringify({ email: email })
             })
-            .then(response => {
-                return response.json();  // JSON으로 변환
-            })
+            .then(response => response.json())
             .then(data => {
-                if (data.code === 200 || data.message === 'SUCCESS') {
+                console.log("서버 응답 데이터:", data);  // 서버 응답 데이터를 콘솔에 출력
+
+                // 서버 응답에 따라 성공 여부 확인
+                if (data && data.message === '성공') {  // 서버 응답 메시지에 맞춰 조건 수정
                     emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                     emailStatus.style.color = 'green';
 
