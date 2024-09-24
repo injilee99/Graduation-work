@@ -197,7 +197,7 @@
             const gender = document.getElementById('gender').value;
             const birthdate = document.getElementById('birthdate').value;
             const verificationCode = document.getElementById('verification-code').value;
-            const tel = document.getElementById('tel').value;
+            const tel = document.getElementById('tel').value.replace(/[^0-9]/g, ''); // 숫자만 남기기
 
             if (password !== confirmPassword) {
                 alert('비밀번호가 일치하지 않습니다.');
