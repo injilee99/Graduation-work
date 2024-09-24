@@ -166,6 +166,13 @@
             })
             .then(data => {
                 console.log("서버 응답 데이터 (인증번호 확인):", data);  // 서버 응답 데이터를 콘솔에 출력
+
+                // 응답 데이터 확인을 위한 로그
+                if (data) {
+                    console.log("data.code:", data.code);
+                    console.log("data.message:", data.message);
+                }
+                
                 // 응답을 문자열로 처리
                 if (data.code === "200" && data.message === "SUCCESS") {  // 문자열 비교로 수정
                     verificationStatus.innerText = '인증 성공!';
