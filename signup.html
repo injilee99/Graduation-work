@@ -122,13 +122,12 @@
                 },
                 body: JSON.stringify({ email: email })
             })
-            .then(response => {
-                console.log("Email verification response status:", response.status);  // 응답 상태 로그
-                return response.json();
-            })
+            .then(response => response.json()) // JSON 응답 받기
             .then(data => {
                 console.log("Email verification response data:", data);  // 응답 데이터 로그
-                if (response.status === 200) {  // 성공 여부는 상태 코드로 처리
+
+                // 서버의 응답에서 성공 메시지를 처리
+                if (data.code === 200 && data.message === 'SUCCESS') {
                     emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                     emailStatus.style.color = 'green';
 
@@ -146,7 +145,38 @@
             });
         }
 
-        // 페이지 로드 시 더 이상 로그인 토큰 불필요
+        // 이메일 인증번호 확인
+        function verifyCode() {
+            const verificationCode = document.getElementById('verification-code').value;
+            const verificationStatus = document.getElementById('verification-status');
+
+            verificationStatus.innerText = '인증번호 확인 중...';
+
+            fetch('https://ludorium.store/api/user/auth/verify-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: verificationCode })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Verification response data:", data);
+                if (data.code === 200 && data.message === 'SUCCESS') {
+                    verificationStatus.innerText = '인증 성공!';
+                    verificationStatus.style.color = 'green';
+                } else {
+                    verificationStatus.innerText = '인증 실패. 다시 시도해주세요.';
+                    verificationStatus.style.color = 'red';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                verificationStatus.innerText = `인증 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
+                verificationStatus.style.color = 'red';
+            });
+        }
+
     </script>
 </body>
 </html>
