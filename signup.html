@@ -124,7 +124,7 @@
             .then(data => {
                 console.log("서버 응답 데이터 (이메일 전송):", data);  // 서버 응답 데이터를 콘솔에 출력
 
-                if (data && (data.code === 200 || data.message === '성공')) {
+                if (data && (data.code === "200" || data.message === "성공")) {  // 문자열 비교로 수정
                     emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                     emailStatus.style.color = 'green';
 
@@ -166,7 +166,8 @@
             })
             .then(data => {
                 console.log("서버 응답 데이터 (인증번호 확인):", data);  // 서버 응답 데이터를 콘솔에 출력
-                if (data.code === 200 && data.message === 'SUCCESS') {
+                // 응답을 문자열로 처리
+                if (data.code === "200" && data.message === "SUCCESS") {  // 문자열 비교로 수정
                     verificationStatus.innerText = '인증 성공!';
                     verificationStatus.style.color = 'green';
                 } else {
