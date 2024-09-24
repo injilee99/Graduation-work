@@ -128,8 +128,7 @@
             })
             .then(data => {
                 console.log("Email verification response data:", data);  // 응답 데이터 로그
-                // 서버에서 성공 메시지를 보냈는지 확인하는 조건 수정
-                if (data.code === 200 && data.message === 'SUCCESS') {  // 성공 여부 확인 조건 수정
+                if (response.status === 200) {  // 성공 여부는 상태 코드로 처리
                     emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                     emailStatus.style.color = 'green';
 
