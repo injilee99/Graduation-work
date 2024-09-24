@@ -106,7 +106,7 @@
             });
         }
 
-        // 이메일 인증 번호 전송 (데이터를 문자열로 전송)
+        // 이메일 인증 번호 전송 (JSON 객체로 이메일 전송)
         function sendEmailVerification() {
             const email = document.getElementById('email').value;
             const emailStatus = document.getElementById('email-status');
@@ -118,7 +118,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: `"${email}"`  // 이메일 데이터를 문자열로 전송
+                body: JSON.stringify({ email: email })  // JSON 형식으로 이메일 전송
             })
             .then(response => {
                 return response.json();  // JSON으로 변환
