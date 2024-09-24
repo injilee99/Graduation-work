@@ -174,7 +174,7 @@
                 }
                 
                 // 응답을 문자열로 처리
-                if (data.code === "200" && data.message === "SUCCESS") {  // 문자열 비교로 수정
+                if (data.code === "SUCCESS" && data.message === "성공") {  // 문자열 비교로 수정
                     verificationStatus.innerText = '인증 성공!';
                     verificationStatus.style.color = 'green';
                 } else {
