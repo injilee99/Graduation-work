@@ -144,7 +144,7 @@
 
         // 이메일 인증번호 확인 (올바른 API 경로 사용)
         function verifyCode() {
-            const verificationCode = document.getElementById('verification-code').value;
+            const verificationCode = document.getElementById('verification-code').value.trim();  // 공백 제거
             const email = document.getElementById('email').value;  // 이메일 값을 같이 전송
             const verificationStatus = document.getElementById('verification-status');
 
