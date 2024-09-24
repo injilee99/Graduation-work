@@ -64,26 +64,12 @@
                 <input type="date" id="birthdate" name="birthdate" required>
             </div>
 
-            <!-- 전화번호 입력 필드 -->
-            <div class="form-group">
-                <label for="tel">전화번호</label>
-                <input type="tel" id="tel" name="tel" placeholder="01012345678" required>
-                <small>형식: 01012345678 또는 0101234567</small>
-                <p id="tel-status" style="color: red; display: none;">전화번호 형식이 올바르지 않습니다.</p>
-            </div>
-
             <button type="submit">회원가입</button>
         </form>
     </div>
 
     <script>
         const API_BASE_URL = 'https://ludorium.store/api'; // 원격 서버 주소
-
-        // 전화번호 유효성 검사
-        function validatePhoneNumber(tel) {
-            const phonePattern = /^\d{10,11}$/;
-            return phonePattern.test(tel);
-        }
 
         // 이메일 중복 확인
         function checkEmail() {
@@ -204,7 +190,6 @@
             const gender = document.getElementById('gender').value;
             const birthdate = document.getElementById('birthdate').value;
             const verificationCode = document.getElementById('verification-code').value;
-            const tel = document.getElementById('tel').value.replace(/[^0-9]/g, ''); // 숫자만 남기기
 
             // 전송할 데이터를 콘솔에 출력하여 확인
             console.log({
@@ -215,18 +200,8 @@
                 name: name,
                 nickname: nickname,
                 gender: gender,
-                birthdate: birthdate,
-                tel: tel
+                birthdate: birthdate
             });
-
-            // 전화번호 유효성 검사
-            const telStatus = document.getElementById('tel-status');
-            if (!validatePhoneNumber(tel)) {
-                telStatus.style.display = 'block';
-                return;
-            } else {
-                telStatus.style.display = 'none';
-            }
 
             if (password !== confirmPassword) {
                 alert("비밀번호가 일치하지 않습니다.");
@@ -247,8 +222,7 @@
                     name: name,
                     nickname: nickname,
                     gender: gender,
-                    birthdate: birthdate,
-                    tel: tel
+                    birthdate: birthdate
                 }),
             })
             .then(response => response.json())
