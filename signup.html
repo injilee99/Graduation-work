@@ -125,7 +125,7 @@
                 console.log("서버 응답 데이터:", data);  // 서버 응답 데이터를 콘솔에 출력
 
                 // 서버 응답에 따라 성공 여부 확인
-                if (data && data.message === '성공') {  // 서버 응답 메시지에 맞춰 조건 수정
+                if (data && (data.code === 200 || data.message === '성공')) {  // 서버 응답 메시지에 맞춰 조건 수정
                     emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                     emailStatus.style.color = 'green';
 
