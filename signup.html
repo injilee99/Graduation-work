@@ -67,8 +67,8 @@
             <!-- 전화번호 입력 필드 추가 -->
             <div class="form-group">
                 <label for="tel">전화번호</label>
-                <input type="tel" id="tel" name="tel" placeholder="010-0000-0000" pattern="\d{3}-\d{4}-\d{4}" required>
-                <small>형식: 010-0000-0000</small>
+                <input type="tel" id="tel" name="tel" placeholder="010-0000-0000" pattern="^\d{2,3}-\d{3,4}-\d{4}$" required>
+                <small>형식: 010-0000-0000 또는 02-123-4567</small>
             </div>
 
             <button type="submit">회원가입</button>
