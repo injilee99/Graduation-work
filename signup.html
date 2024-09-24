@@ -206,6 +206,19 @@
             const verificationCode = document.getElementById('verification-code').value;
             const tel = document.getElementById('tel').value.replace(/[^0-9]/g, ''); // 숫자만 남기기
 
+            // 전송할 데이터를 콘솔에 출력하여 확인
+            console.log({
+                email: email,
+                authenticationCode: verificationCode,
+                password: password,
+                checkPassword: confirmPassword,
+                name: name,
+                nickname: nickname,
+                gender: gender,
+                birthdate: birthdate,
+                tel: tel
+            });
+
             // 전화번호 유효성 검사
             const telStatus = document.getElementById('tel-status');
             if (!validatePhoneNumber(tel)) {
