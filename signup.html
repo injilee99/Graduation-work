@@ -140,44 +140,45 @@
         }
 
         // 이메일 인증 번호 전송
-        function sendEmailVerification() {
-            const email = document.getElementById('email').value;
-            const emailStatus = document.getElementById('email-status');
+function sendEmailVerification() {
+    const email = document.getElementById('email').value;
+    const emailStatus = document.getElementById('email-status');
 
-            emailStatus.innerText = '이메일 인증 번호 전송 중...';
+    emailStatus.innerText = '이메일 인증 번호 전송 중...';
 
-            fetch('https://ludorium.store/api/user/auth/email-authentication', {
-                method: 'POST',
-                headers: {
-                    'Authorization': authToken,  // 인증 헤더 추가
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email: email })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success) {
-                    emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
-                    emailStatus.style.color = 'green';
+    fetch('https://ludorium.store/api/user/auth/email-authentication', {
+        method: 'POST',
+        headers: {
+            'Authorization': authToken,  // 인증 헤더 추가
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
+    })
+    .then(response => {
+        console.log("Response Status:", response.status);  // 응답 상태 코드 출력
+        return response.json();
+    })
+    .then(data => {
+        console.log("Response Data:", data);  // 응답 데이터 출력
 
-                    // 이메일 인증 입력란 표시
-                    document.getElementById('email-verification-group').style.display = 'block';
-                } else {
-                    emailStatus.innerText = '이메일 전송에 실패했습니다.';
-                    emailStatus.style.color = 'red';
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                emailStatus.innerText = `이메일 전송 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
-                emailStatus.style.color = 'red';
-            });
+        if (data.success) {
+            emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
+            emailStatus.style.color = 'green';
+
+            // 이메일 인증 입력란 표시
+            document.getElementById('email-verification-group').style.display = 'block';
+        } else {
+            emailStatus.innerText = '이메일 전송에 실패했습니다.';
+            emailStatus.style.color = 'red';
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        emailStatus.innerText = `이메일 전송 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
+        emailStatus.style.color = 'red';
+    });
+}
+
 
         // 인증번호 확인 함수
         function verifyCode() {
