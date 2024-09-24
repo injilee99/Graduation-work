@@ -54,14 +54,21 @@
             <div class="form-group">
                 <label for="gender">성별</label>
                 <select id="gender" name="gender" required>
-                    <option value="남">남</option>
-                    <option value="여">여</option>
+                    <option value="M">남</option>
+                    <option value="F">여</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="birthdate">생년월일</label>
                 <input type="date" id="birthdate" name="birthdate" required>
+            </div>
+
+            <!-- 전화번호 입력 필드 추가 -->
+            <div class="form-group">
+                <label for="tel">전화번호</label>
+                <input type="tel" id="tel" name="tel" placeholder="010-0000-0000" pattern="\d{3}-\d{4}-\d{4}" required>
+                <small>형식: 010-0000-0000</small>
             </div>
 
             <button type="submit">회원가입</button>
@@ -122,9 +129,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log("서버 응답 데이터 (이메일 전송):", data);  // 서버 응답 데이터를 콘솔에 출력
-
-                if (data && (data.code === "200" || data.message === "성공")) {  // 문자열 비교로 수정
+                if (data && (data.code === "200" || data.message === "성공")) {
                     emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                     emailStatus.style.color = 'green';
 
@@ -144,40 +149,28 @@
 
         // 이메일 인증번호 확인 (올바른 API 경로 사용)
         function verifyCode() {
-            const verificationCode = document.getElementById('verification-code').value.trim();  // 공백 제거
-            const email = document.getElementById('email').value;  // 이메일 값을 같이 전송
+            const verificationCode = document.getElementById('verification-code').value.trim();
+            const email = document.getElementById('email').value;
             const verificationStatus = document.getElementById('verification-status');
 
             verificationStatus.innerText = '인증번호 확인 중...';
 
-            fetch(`${API_BASE_URL}/user/auth/check-authentication`, {  // 올바른 API 경로
+            fetch(`${API_BASE_URL}/user/auth/check-authentication`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     email: email,
-                    authenticationCode: verificationCode  // 인증코드 전송
+                    authenticationCode: verificationCode
                 })
             })
-            .then(response => {
-                console.log("인증번호 확인 요청 응답 상태:", response.status);  // 상태 코드 확인
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log("서버 응답 데이터 (인증번호 확인):", data);  // 서버 응답 데이터를 콘솔에 출력
-
-                // 응답 데이터 확인을 위한 로그
-                if (data) {
-                    console.log("data.code:", data.code);
-                    console.log("data.message:", data.message);
-                }
-                
-                // 응답을 문자열로 처리
-                if (data.message === "성공") {  // 성공 메시지 확인
+                if (data.message === "성공") {
                     verificationStatus.innerText = '인증 성공!';
                     verificationStatus.style.color = 'green';
-                } else if (data.message === "AUTHENTICATION_FAIL") {  // 실패 메시지 확인
+                } else if (data.message === "AUTHENTICATION_FAIL") {
                     verificationStatus.innerText = '인증 실패. 다시 시도해주세요.';
                     verificationStatus.style.color = 'red';
                 } else {
@@ -189,6 +182,57 @@
                 console.error('Error (인증번호 확인):', error);
                 verificationStatus.innerText = `인증 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
                 verificationStatus.style.color = 'red';
+            });
+        }
+
+        // 회원가입 데이터 전송
+        function handleSignup(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const name = document.getElementById('name').value;
+            const nickname = document.getElementById('nickname').value;
+            const gender = document.getElementById('gender').value;
+            const birthdate = document.getElementById('birthdate').value;
+            const verificationCode = document.getElementById('verification-code').value;
+            const tel = document.getElementById('tel').value;
+
+            if (password !== confirmPassword) {
+                alert('비밀번호가 일치하지 않습니다.');
+                return;
+            }
+
+            fetch(`${API_BASE_URL}/user/auth/join`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    authenticationCode: verificationCode,
+                    password: password,
+                    checkPassword: confirmPassword,
+                    name: name,
+                    nickname: nickname,
+                    gender: gender,
+                    birthdate: birthdate,
+                    tel: tel
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === '회원가입 성공') {
+                    alert('회원가입이 성공했습니다.');
+                    window.location.href = '/login.html';
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('서버 오류가 발생했습니다.');
             });
         }
     </script>
