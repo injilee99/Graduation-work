@@ -11,55 +11,57 @@
         <form id="signup-form" onsubmit="return handleSignup(event)">
             <div class="form-group">
                 <label for="email">아이디 (이메일)</label>
-                <input type="email" id="email" required>
+                <input type="email" id="email" name="email" required>
                 <button type="button" id="check-email-btn" onclick="checkEmail()">중복 확인</button>
                 <p id="email-status"></p>
             </div>
 
+            <!-- 이메일 인증 버튼, 중복 확인 성공 후에만 보임 -->
             <div class="form-group" id="email-auth-btn-group" style="display: none;">
                 <button type="button" id="send-verification-btn" onclick="sendEmailVerification()">이메일 인증 번호 전송</button>
                 <p id="verification-status"></p>
             </div>
 
+            <!-- 이메일 인증 입력란, 인증 번호 전송 후에 보임 -->
             <div class="form-group" id="email-verification-group" style="display: none;">
                 <label for="verification-code">이메일로 발송된 인증번호</label>
-                <input type="text" id="verification-code" required>
+                <input type="text" id="verification-code" name="verification-code" required>
                 <button type="button" onclick="verifyCode()">인증하기</button>
                 <p id="verification-status"></p>
             </div>
 
             <div class="form-group">
                 <label for="password">비밀번호</label>
-                <input type="password" id="password" required>
+                <input type="password" id="password" name="password" required>
             </div>
 
             <div class="form-group">
                 <label for="confirm-password">비밀번호 확인</label>
-                <input type="password" id="confirm-password" required>
+                <input type="password" id="confirm-password" name="confirm-password" required>
                 <p id="password-status"></p>
             </div>
 
             <div class="form-group">
                 <label for="name">이름</label>
-                <input type="text" id="name" required>
+                <input type="text" id="name" name="name" required>
             </div>
 
             <div class="form-group">
                 <label for="nickname">닉네임</label>
-                <input type="text" id="nickname" required>
+                <input type="text" id="nickname" name="nickname" required>
             </div>
 
             <div class="form-group">
                 <label for="gender">성별</label>
-                <select id="gender" required>
+                <select id="gender" name="gender" required>
                     <option value="M">남</option>
-                    <option value="W">여</option>
+                    <option value="F">여</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="birthdate">생년월일</label>
-                <input type="date" id="birthdate" required>
+                <input type="date" id="birthdate" name="birthdate" required>
             </div>
 
             <button type="submit">회원가입</button>
@@ -67,7 +69,7 @@
     </div>
 
     <script>
-        let authToken = ''; // JWT 토큰 저장 변수
+        const API_BASE_URL = 'https://ludorium.store/api'; // 원격 서버 주소
 
         // 이메일 중복 확인
         function checkEmail() {
@@ -76,28 +78,30 @@
 
             emailStatus.innerText = '이메일 중복 확인 중...';
 
-            fetch('https://ludorium.store/api/user/auth/email-check', {
+            fetch(`${API_BASE_URL}/user/auth/email-check`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ email: email })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.code === 200) {
-                    emailStatus.innerText = '사용 가능한 이메일입니다.';
-                    emailStatus.style.color = 'green';
-                    document.getElementById('email').readOnly = true;
-                    document.getElementById('check-email-btn').disabled = true;
-                    document.getElementById('email-auth-btn-group').style.display = 'block';
-                } else {
-                    emailStatus.innerText = '이미 사용 중인 이메일입니다.';
-                    emailStatus.style.color = 'red';
+            .then(response => {
+                if (response.status === 409) {
+                    throw new Error('이미 사용 중인 이메일입니다.');
                 }
+                return response.json();
+            })
+            .then(data => {
+                emailStatus.innerText = '사용 가능한 이메일입니다.';
+                emailStatus.style.color = 'green';
+                document.getElementById('email').readOnly = true;
+                document.getElementById('check-email-btn').disabled = true;
+
+                // 이메일 인증 버튼 표시
+                document.getElementById('email-auth-btn-group').style.display = 'block';
             })
             .catch(error => {
-                emailStatus.innerText = '오류가 발생했습니다.';
+                emailStatus.innerText = error.message;
                 emailStatus.style.color = 'red';
             });
         }
@@ -109,7 +113,7 @@
 
             emailStatus.innerText = '이메일 인증 번호 전송 중...';
 
-            fetch('https://ludorium.store/api/user/auth/email-authentication', {
+            fetch(`${API_BASE_URL}/user/auth/email-authentication`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -118,9 +122,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.code === 200) {
+                if (data && (data.code === "200" || data.message === "성공")) {
                     emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                     emailStatus.style.color = 'green';
+
+                    // 이메일 인증 입력란 표시
                     document.getElementById('email-verification-group').style.display = 'block';
                 } else {
                     emailStatus.innerText = '이메일 전송에 실패했습니다.';
@@ -128,20 +134,21 @@
                 }
             })
             .catch(error => {
-                emailStatus.innerText = 오류가 발생했습니다: ${error.message};
+                console.error('Error (이메일 전송):', error);
+                emailStatus.innerText = `이메일 전송 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
                 emailStatus.style.color = 'red';
             });
         }
 
-        // 이메일 인증 번호 확인
+        // 이메일 인증번호 확인
         function verifyCode() {
+            const verificationCode = document.getElementById('verification-code').value.trim();
             const email = document.getElementById('email').value;
-            const verificationCode = document.getElementById('verification-code').value;
             const verificationStatus = document.getElementById('verification-status');
 
             verificationStatus.innerText = '인증번호 확인 중...';
 
-            fetch('https://ludorium.store/api/user/auth/check-authentication', {
+            fetch(`${API_BASE_URL}/user/auth/check-authentication`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -153,39 +160,56 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.code === 200) {
+                if (data.message === "성공") {
                     verificationStatus.innerText = '인증 성공!';
                     verificationStatus.style.color = 'green';
-                } else {
+                } else if (data.message === "AUTHENTICATION_FAIL") {
                     verificationStatus.innerText = '인증 실패. 다시 시도해주세요.';
+                    verificationStatus.style.color = 'red';
+                } else {
+                    verificationStatus.innerText = '알 수 없는 오류가 발생했습니다.';
                     verificationStatus.style.color = 'red';
                 }
             })
             .catch(error => {
-                verificationStatus.innerText = 인증 중 오류 발생: ${error.message};
+                console.error('Error (인증번호 확인):', error);
+                verificationStatus.innerText = `인증 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
                 verificationStatus.style.color = 'red';
             });
         }
 
-        // 회원가입 처리
+        // 회원가입 데이터 전송
         function handleSignup(event) {
             event.preventDefault();
 
             const email = document.getElementById('email').value;
-            const verificationCode = document.getElementById('verification-code').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
             const name = document.getElementById('name').value;
             const nickname = document.getElementById('nickname').value;
             const gender = document.getElementById('gender').value;
             const birthdate = document.getElementById('birthdate').value;
+            const verificationCode = document.getElementById('verification-code').value;
+
+            // 전송할 데이터를 콘솔에 출력하여 확인
+            console.log({
+                email: email,
+                authenticationCode: verificationCode,
+                password: password,
+                checkPassword: confirmPassword,
+                name: name,
+                nickname: nickname,
+                gender: gender,
+                birthdate: birthdate
+            });
 
             if (password !== confirmPassword) {
-                document.getElementById('password-status').innerText = '비밀번호가 일치하지 않습니다.';
+                alert("비밀번호가 일치하지 않습니다.");
                 return;
             }
 
-            fetch('https://ludorium.store/api/user/auth/join', {
+            // 회원가입 요청
+            fetch(`${API_BASE_URL}/user/auth/join`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -198,19 +222,21 @@
                     name: name,
                     nickname: nickname,
                     gender: gender,
-                    birthDate: birthdate
-                })
+                    birthdate: birthdate
+                }),
             })
             .then(response => response.json())
             .then(data => {
-                if (data.code === 200) {
-                    alert('회원가입 성공!');
+                if (data.message === '회원가입 성공') {
+                    alert('회원가입이 성공했습니다.');
+                    window.location.href = '/login.html';
                 } else {
-                    alert(회원가입 실패: ${data.message});
+                    alert(data.message);
                 }
             })
             .catch(error => {
-                alert(회원가입 중 오류 발생: ${error.message});
+                console.error('Error:', error);
+                alert('서버 오류가 발생했습니다.');
             });
         }
     </script>
