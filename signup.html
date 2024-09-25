@@ -52,6 +52,11 @@
             </div>
 
             <div class="form-group">
+                <label for="tel">전화번호</label>
+                <input type="tel" id="tel" name="tel" required placeholder="010-1234-5678">
+            </div>
+
+            <div class="form-group">
                 <label for="gender">성별</label>
                 <select id="gender" name="gender" required>
                     <option value="M">남</option>
@@ -202,6 +207,7 @@
             const confirmPassword = document.getElementById('confirm-password').value;
             const name = document.getElementById('name').value;
             const nickname = document.getElementById('nickname').value;
+            const tel = document.getElementById('tel').value;
             const gender = document.getElementById('gender').value;
             const birthdate = document.getElementById('birthdate').value;
             const verificationCode = document.getElementById('verification-code').value;
@@ -224,11 +230,17 @@
                     checkPassword: confirmPassword,
                     name: name,
                     nickname: nickname,
+                    tel: tel, // 전화번호 추가
                     gender: gender,
-                    birthdate: birthdate
+                    birthDate: birthdate // API에서 요구하는 birthDate 형식에 맞추기
                 }),
             })
-            .then(response => response.json())
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('회원가입 중 문제가 발생했습니다.');
+            })
             .then(data => {
                 if (data.message === '회원가입 성공') {
                     alert('회원가입이 성공했습니다.');
