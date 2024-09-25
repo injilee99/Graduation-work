@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>비밀번호 수정</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+      body{
+        font-family: "Noto Sans KR";
+      }
+      header {
+        font-family: "Noto Sans KR", sans-serif;
+        font-weight: 500;
+        font-style: normal;
+        color: #333;
+      }
+
+      .top-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 30px;
+        color: #333;
+      }
+
+      .logo {
+        margin-left: 150px;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .main-menu {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 30px; /* 링크 간격 조정 */
+        justify-content: center; /* 중앙 정렬 */
+        flex: 1; /* 중간 네비게이션 바가 가로로 더 많은 공간을 차지하도록 설정 */
+      }
+
+      .main-menu li a {
+        color: #333;
+        text-decoration: none;
+        font-size: 16px;
+
+        padding: 5px 10px; /* 여백 추가 */
+
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      .auth-buttons {
+        display: flex;
+        gap: 10px;
+        margin-right: 150px;
+      }
+
+      .auth-buttons a {
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        color: white;
+        background-color: #889491;
+      }
+
+      /* 서브메뉴 */
+      .sub-nav {
+        background-color: #889491;
+        margin: 0 150px;
+        padding: 15px 45px;
+        border-radius: 30px;
+      }
+
+      .submenu {
+        list-style-type: none;
+        margin: 0 10px;
+        padding: 0;
+        display: flex;
+        gap: 30px;
+      }
+
+      .submenu li {
+        color: white;
+        cursor: pointer;
+        padding: 5px 10px;
+
+        border-radius: 15px;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .submenu li:hover {
+        background-color: #777;
+        color: #fff;
+      }
+
+      .menu {
+        background-color: #778881;
+        display: flex;
+        justify-content: space-around;
+        margin: 50px 150px;
+        padding: 15px 45px;
+        list-style-type: none;
+      }
+
+      .menu li {
+        padding: 0 20px;
+      }
+
+      .menu li a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: bold;
+        display: block;
+      }
+
+      .menu li a:hover {
+        background-color: #889491;
+      }
+      footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+      }
+
+      .form-horizontal {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .form-group {
+        margin: 0 600px;
+        display: flex;
+        flex-direction: column;
+        font-size: 16px;
+        color: #333;
+      }
+
+      label {
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input[type="password"] {
+        padding: 10px;
+        width: 100%;
+ 
+        border: none; /* 모든 테두리 제거 */
+        border-bottom: 1px solid grey; /* 아래쪽에만 1px 실선 추가 */
+
+        font-size: 16px;
+      }
+
+      .form-actions {
+        text-align: center;
+        margin-top: 20px;
+        
+      }
+
+      .btn-submit {
+        margin-bottom: 20px;
+        padding: 10px 20px;
+        background-color: #889491;
+        color: #fff;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .btn-submit:hover {
+        background-color: #778881;
+        
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="top-nav">
+        <div class="logo">Game Forge</div>
+        <nav>
+          <ul class="main-menu">
+            <li><a href="store.html">상점</a></li>
+            <li><a href="mypage.html">마이페이지</a></li>
+            <li><a href="community.html">자유게시판</a></li>
+            <li><a href="support.html">지원</a></li>
+          </ul>
+        </nav>
+        <div class="auth-buttons">
+          <a href="login.html" class="login-btn">로그인</a>
+        </div>
+      </div>
+      <div class="sub-nav">
+        <ul class="submenu">
+          <li>내 상점</li>
+          <li>최근에 본 제품</li>
+          <li>내 태그</li>
+          <li>추천 제품</li>
+          <li>카테고리 검색</li>
+          <li>장르별 검색</li>
+        </ul>
+      </div>
+    </header>
+
+    <nav>
+      <ul class="menu">
+        <li><a href="mypage.html">내정보</a></li>
+        <li><a href="#">주문내역</a></li>
+        <li><a href="#">쿠폰</a></li>
+        <li><a href="info.html">정보수정</a></li>
+        <li><a href="modpwd.html">비밀번호 수정</a></li>
+        <li><a href="#">회원탈퇴</a></li>
+      </ul>
+    </nav>
+    <div class="container"></div>
+      <form class="form-horizontal">
+        <div class="form-group">
+          <label for="current-password">현재 비밀번호</label>
+          <input type="password" id="current-password" placeholder="Value" />
+        </div>
+
+        <div class="form-group">
+          <label for="new-password">새 비밀번호</label>
+          <input type="password" id="new-password" placeholder="Value" />
+        </div>
+
+        <div class="form-group">
+          <label for="confirm-password">새 비밀번호 확인</label>
+          <input type="password" id="confirm-password" placeholder="Value" />
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-submit">
+            <a href="mypage.html" style="color: white; text-decoration: none;">비밀번호 수정</a>
+          </button>
+        </div>
+        
+      </form>
+    </div>
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 대진대학교 벤처 졸업작품.</p>
+      </div>
+    </footer>
+    
+  </body>
+</html>
