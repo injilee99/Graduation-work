@@ -53,7 +53,7 @@
 
             <div class="form-group">
                 <label for="tel">전화번호</label>
-                <input type="tel" id="tel" name="tel" required placeholder="010-1234-5678">
+                <input type="tel" id="tel" name="tel" required placeholder="01012345678">
             </div>
 
             <div class="form-group">
@@ -207,7 +207,7 @@
             const confirmPassword = document.getElementById('confirm-password').value;
             const name = document.getElementById('name').value;
             const nickname = document.getElementById('nickname').value;
-            const tel = document.getElementById('tel').value;
+            const tel = document.getElementById('tel').value.trim(); // 전화번호에서 공백 제거
             const gender = document.getElementById('gender').value;
             const birthdate = document.getElementById('birthdate').value;
             const verificationCode = document.getElementById('verification-code').value;
@@ -224,7 +224,7 @@
                 checkPassword: confirmPassword,
                 name: name,
                 nickname: nickname,
-                tel: tel, // 전화번호 추가
+                tel: tel, // 전화번호 필드
                 gender: gender,
                 birthDate: birthdate // API에서 요구하는 birthDate 형식에 맞추기
             };
