@@ -13,8 +13,7 @@ header {
     font-weight: 500;
     font-style: normal;
     color: #333;
-    background-color: #ffffff;
-}
+  }
 
 .top-nav {
     display: flex;
