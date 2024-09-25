@@ -217,23 +217,27 @@
                 return;
             }
 
+            const requestData = {
+                email: email,
+                authenticationCode: verificationCode,
+                password: password,
+                checkPassword: confirmPassword,
+                name: name,
+                nickname: nickname,
+                tel: tel, // 전화번호 추가
+                gender: gender,
+                birthDate: birthdate // API에서 요구하는 birthDate 형식에 맞추기
+            };
+
+            console.log("전송되는 데이터:", requestData); // 전송될 데이터를 콘솔에 출력
+
             // 회원가입 요청
             fetch(`${API_BASE_URL}/user/auth/join`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    email: email,
-                    authenticationCode: verificationCode,
-                    password: password,
-                    checkPassword: confirmPassword,
-                    name: name,
-                    nickname: nickname,
-                    tel: tel, // 전화번호 추가
-                    gender: gender,
-                    birthDate: birthdate // API에서 요구하는 birthDate 형식에 맞추기
-                }),
+                body: JSON.stringify(requestData),
             })
             .then(response => {
                 if (response.ok) {
