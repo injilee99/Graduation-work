@@ -60,7 +60,7 @@
                 <label for="gender">성별</label>
                 <select id="gender" name="gender" required>
                     <option value="M">남</option>
-                    <option value="F">여</option>
+                    <option value="W">여</option>
                 </select>
             </div>
 
@@ -74,7 +74,7 @@
     </div>
 
     <script>
-        const API_BASE_URL = 'https://ludorium.store/api'; // 원격 서버 주소
+        const API_BASE_URL = 'https://ludorium.store/api'; // 서버 주소
 
         // 전화번호에 하이픈 자동 추가
         function autoHyphen(target) {
@@ -149,7 +149,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ email: email }) // 이메일 데이터 전송
+                body: JSON.stringify({ email: email })
             })
             .then(response => {
                 if (response.status === 200) {
@@ -164,7 +164,6 @@
                 emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                 emailStatus.style.color = 'green';
 
-                // 이메일 인증 입력란 표시
                 document.getElementById('email-verification-group').style.display = 'block';
             })
             .catch(error => {
@@ -214,25 +213,26 @@
             });
         }
 
-        // 회원가입 데이터 전송
+        // 회원가입 데이터 전송 (요청한 순서로 필드 설정)
         function handleSignup(event) {
             event.preventDefault();
 
             const email = document.getElementById('email').value.trim();
+            const verificationCode = document.getElementById('verification-code').value;
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm-password').value;
             const name = document.getElementById('name').value;
             const nickname = document.getElementById('nickname').value;
-            const tel = document.getElementById('tel').value.trim();
+            const tel = document.getElementById('tel').value.replace(/-/g, '');
             const gender = document.getElementById('gender').value;
             const birthdate = document.getElementById('birthdate').value;
-            const verificationCode = document.getElementById('verification-code').value;
 
             if (password !== confirmPassword) {
                 alert("비밀번호가 일치하지 않습니다.");
                 return;
             }
 
+            // 순서에 맞춰 JSON 데이터 생성
             const requestData = {
                 email: email,
                 authenticationCode: verificationCode,
@@ -240,9 +240,9 @@
                 checkPassword: confirmPassword,
                 name: name,
                 nickname: nickname,
-                tel: tel, // 전화번호 필드
-                gender: gender === 'F' ? 'W' : 'M', // 성별 서버 요구 형식에 맞춤
-                birthDate: birthdate // 생년월일 필드
+                tel: tel, 
+                gender: gender === 'F' ? 'W' : 'M',
+                birthDate: birthdate
             };
 
             console.log("전송되는 데이터:", requestData); // 전송될 데이터를 콘솔에 출력
@@ -253,7 +253,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(requestData),
+                body: JSON.stringify(requestData), // 순서대로 데이터 전송
             })
             .then(response => {
                 if (!response.ok) {
