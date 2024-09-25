@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게임 상세 - game forge_eternal_return</title>
+    <link rel="stylesheet" href="eternal_return.css">
+</head>
+<body>
+    <header>
+        <div class="top-nav">
+            <div class="logo">Game Forge</div>
+            <nav>
+                <ul class="main-menu">
+                    <li><a href="store.html">상점</a></li>
+                    <li><a href="library.html">라이브러리</a></li>
+                    <li><a href="notice.html">공지사항</a></li>
+                    <li><a href="community.html">자유게시판</a></li>
+                </ul>
+            </nav>
+            <div class="auth-buttons" id="auth-buttons">
+                <a href="login.html" class="login-btn">로그인</a>
+                <a href="signup.html" class="signup-btn">회원가입</a>
+            </div>
+        </div>
+        <div class="sub-nav">
+            <ul class="submenu">
+                <li>내 상점</li>
+                <li>신규 및 특집</li>
+                <li>카테고리</li>
+                <li>포인트 상점</li>
+                <li>뉴스</li>
+                <li>실험실</li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <div class="game-header">
+            <div class="game-title">
+                <h1>eternal_return</h1>
+                <p>모든 게임 &gt; 무료 플레이 게임 &gt; eternal_return</p>
+            </div>
+        </div>
+
+        <div class="game-content">
+            <div class="game-left">
+                <div class="game-screenshots">
+                    <img src="./images/eternal_return.jpg" alt="게임 스크린샷">
+                </div>
+                <div class="game-description">
+                    <p>이터널 리턴은 쿼터뷰 스타일의 무료 배틀로얄 게임입니다. 제작, 사냥, 전투 그리고 멋진 캐릭터들을 경험해보시고 생존을 위한 전략적인 판단, 화려한 전투 플레이로 영원히 반복되는 실험에서 최후의 생존자가 되십시오..</p>
+                    <p>출시일: 2023년 7월 20일</p>
+                    <p>개발자: Nimble Neuron.</p>
+                </div>
+            </div>
+
+            <div class="game-right">
+                <div class="game-info">
+                    <button class="btn btn-primary">지금 실행하기</button>
+                    <button class="btn btn-secondary" onclick="addToCart()">장바구니에 담기</button>
+                    <button class="btn btn-secondary" onclick="goToCart()">장바구니로 이동</button>
+                </div>
+                <div class="game-specs">
+                    <h3>시스템 요구 사항</h3>
+                    <ul>
+                        <li><strong>운영체제:</strong> 64-bit Windows 10</li>
+                        <li><strong>프로세서:</strong> Intel Core i3-3225K / AMD FX-4350</li>
+                        <li><strong>메모리:</strong> 8 GB RAM</li>
+                        <li><strong>그래픽:</strong> NVIDIA GeForce GTX 660 / ATI Radeon HD 7850</li>
+                        <li><strong>저장공간:</strong> 15 GB 사용 가능 공간</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <section class="reviews">
+            <h3>리뷰</h3>
+            <!-- 로그인한 경우에만 리뷰 작성 폼을 보여줍니다 -->
+            <div id="review-form-container" style="display: none;">
+                <textarea id="review-text" rows="4" placeholder="리뷰를 작성하세요..."></textarea>
+                <button class="btn btn-primary" onclick="submitReview()">리뷰 제출</button>
+            </div>
+
+            <!-- 작성된 리뷰 목록 -->
+            <div class="review-list" id="review-list">
+                <!-- 여기에는 JavaScript로 리뷰가 추가됩니다 -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 대진대학교 벤처 졸업작품.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 로그인 여부를 로컬 스토리지에서 확인
+        const isLoggedIn = JSON.parse(localStorage.getItem('isLoggedIn')) || false;
+        const reviews = JSON.parse(localStorage.getItem('reviews')) || [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 로그인 상태에 따라 리뷰 폼 표시 여부 결정
+            if (isLoggedIn) {
+                document.getElementById('review-form-container').style.display = 'block';
+                document.getElementById('auth-buttons').style.display = 'none'; // 로그인 후 로그인/회원가입 버튼 숨기기
+            }
+            loadReviews();
+        });
+
+        function submitReview() {
+            const reviewText = document.getElementById('review-text').value;
+            if (reviewText.trim() === '') {
+                alert('리뷰를 입력해주세요.');
+                return;
+            }
+
+            const review = {
+                id: new Date().getTime(),
+                username: '사용자 이름', // 로그인한 사용자 이름
+                text: reviewText,
+                date: new Date().toLocaleDateString()
+            };
+
+            reviews.push(review);
+            localStorage.setItem('reviews', JSON.stringify(reviews));
+
+            addReviewToDOM(review);
+            document.getElementById('review-text').value = ''; // 입력란 초기화
+        }
+
+        function loadReviews() {
+            reviews.forEach(review => addReviewToDOM(review));
+        }
+
+        function addReviewToDOM(review) {
+            const reviewList = document.getElementById('review-list');
+            const reviewItem = document.createElement('div');
+            reviewItem.classList.add('review-item');
+            reviewItem.setAttribute('data-id', review.id);
+
+            reviewItem.innerHTML = `
+                <p><strong>${review.username}:</strong> ${review.text}</p>
+                <p>작성일: ${review.date}</p>
+                <button class="btn btn-secondary" onclick="editReview(${review.id})">수정</button>
+                <button class="btn btn-secondary" onclick="deleteReview(${review.id})">삭제</button>
+            `;
+
+            reviewList.appendChild(reviewItem);
+        }
+
+        function editReview(id) {
+            const review = reviews.find(r => r.id === id);
+            const newText = prompt('리뷰를 수정하세요:', review.text);
+            if (newText !== null && newText.trim() !== '') {
+                review.text = newText;
+                localStorage.setItem('reviews', JSON.stringify(reviews));
+                document.querySelector(`.review-item[data-id="${id}"] p:nth-child(1)`).innerHTML = `<strong>${review.username}:</strong> ${newText}`;
+            }
+        }
+
+        function deleteReview(id) {
+            const index = reviews.findIndex(r => r.id === id);
+            if (index !== -1) {
+                reviews.splice(index, 1);
+                localStorage.setItem('reviews', JSON.stringify(reviews));
+                document.querySelector(`.review-item[data-id="${id}"]`).remove();
+            }
+        }
+
+        function addToCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const game = {
+                id: 'eternal return',
+                title: 'eternal return',
+                price: 10000  // 게임의 가격, 예를 들어 10,000원
+            };
+
+            const existingGame = cart.find(item => item.id === game.id);
+            if (!existingGame) {
+                cart.push(game);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                if (confirm('장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?')) {
+                    goToCart();
+                }
+            } else {
+                alert('이미 장바구니에 담긴 상품입니다.');
+            }
+        }
+
+        function goToCart() {
+            window.location.href = 'cart.html';
+        }
+    </script>
+</body>
+</html>
