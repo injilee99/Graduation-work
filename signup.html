@@ -164,6 +164,7 @@
                 emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
                 emailStatus.style.color = 'green';
 
+                // 이메일 인증 입력란 표시
                 document.getElementById('email-verification-group').style.display = 'block';
             })
             .catch(error => {
@@ -213,7 +214,7 @@
             });
         }
 
-        // 회원가입 데이터 전송 (요청한 순서로 필드 설정)
+        // 회원가입 데이터 전송 (전화번호 하이픈 제거, 성별 M/W 전송)
         function handleSignup(event) {
             event.preventDefault();
 
@@ -223,16 +224,17 @@
             const confirmPassword = document.getElementById('confirm-password').value;
             const name = document.getElementById('name').value;
             const nickname = document.getElementById('nickname').value;
-            const tel = document.getElementById('tel').value.replace(/-/g, '');
-            const gender = document.getElementById('gender').value;
+            let tel = document.getElementById('tel').value.replace(/-/g, ''); // 하이픈 제거 후 전송
+            const gender = document.getElementById('gender').value; // 성별은 그대로 M 또는 W로 전송
             const birthdate = document.getElementById('birthdate').value;
 
+            // 비밀번호 확인
             if (password !== confirmPassword) {
                 alert("비밀번호가 일치하지 않습니다.");
                 return;
             }
 
-            // 순서에 맞춰 JSON 데이터 생성
+            // 서버에 전송할 데이터 객체
             const requestData = {
                 email: email,
                 authenticationCode: verificationCode,
@@ -240,12 +242,12 @@
                 checkPassword: confirmPassword,
                 name: name,
                 nickname: nickname,
-                tel: tel, 
-                gender: gender === 'F' ? 'W' : 'M',
-                birthDate: birthdate
+                tel: tel, // 하이픈 없는 전화번호 전송
+                gender: gender, // 성별 그대로 'M' 또는 'W' 전송
+                birthDate: birthdate // 생년월일 (YYYY-MM-DD 형식)
             };
 
-            console.log("전송되는 데이터:", requestData); // 전송될 데이터를 콘솔에 출력
+            console.log("전송되는 데이터:", requestData); // 전송 데이터를 콘솔에 출력하여 확인
 
             // 회원가입 요청
             fetch(`${API_BASE_URL}/user/auth/join`, {
@@ -253,7 +255,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(requestData), // 순서대로 데이터 전송
+                body: JSON.stringify(requestData), // JSON 데이터 전송
             })
             .then(response => {
                 if (!response.ok) {
@@ -266,7 +268,7 @@
                     alert('회원가입이 성공했습니다.');
                     window.location.href = '/login.html';
                 } else {
-                    alert(data.message);
+                    alert(data.message); // 서버에서 응답된 메시지를 사용자에게 알림
                 }
             })
             .catch(error => {
