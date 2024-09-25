@@ -214,7 +214,7 @@
             });
         }
 
-        // 회원가입 데이터 전송 (전화번호 하이픈 제거, 성별 M/W 전송)
+        // 회원가입 데이터 전송
         function handleSignup(event) {
             event.preventDefault();
 
@@ -224,8 +224,8 @@
             const confirmPassword = document.getElementById('confirm-password').value;
             const name = document.getElementById('name').value;
             const nickname = document.getElementById('nickname').value;
-            let tel = document.getElementById('tel').value.replace(/-/g, ''); // 하이픈 제거 후 전송
-            const gender = document.getElementById('gender').value; // 성별은 그대로 M 또는 W로 전송
+            let tel = document.getElementById('tel').value.replace(/-/g, '');
+            const gender = document.getElementById('gender').value;
             const birthdate = document.getElementById('birthdate').value;
 
             // 비밀번호 확인
@@ -242,8 +242,8 @@
                 checkPassword: confirmPassword,
                 name: name,
                 nickname: nickname,
-                tel: tel, // 하이픈 없는 전화번호 전송
-                gender: gender, // 성별 그대로 'M' 또는 'W' 전송
+                tel: tel,
+                gender: gender,
                 birthDate: birthdate // 생년월일 (YYYY-MM-DD 형식)
             };
 
