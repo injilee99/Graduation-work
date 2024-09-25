@@ -118,13 +118,9 @@
                     'Content-Type': 'application/json'
                 }
             })
-            .then(response => {
-                console.log('응답 상태 코드:', response.status);
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log('서버 응답 데이터:', data);
-                if (data.success) {
+                if (data.success === true) {
                     emailStatus.innerText = '사용 가능한 이메일입니다.';
                     emailStatus.style.color = 'green';
                     document.getElementById('email').readOnly = true;
@@ -133,11 +129,12 @@
                     // 이메일 인증 버튼 표시
                     document.getElementById('email-auth-btn-group').style.display = 'block';
                 } else {
-                    throw new Error('이미 사용 중인 이메일입니다.');
+                    emailStatus.innerText = '이미 사용 중인 이메일입니다.';
+                    emailStatus.style.color = 'red';
                 }
             })
             .catch(error => {
-                emailStatus.innerText = error.message;
+                emailStatus.innerText = '이메일 확인 중 오류가 발생했습니다.';
                 emailStatus.style.color = 'red';
                 console.error('Error:', error);
             });
@@ -158,12 +155,7 @@
                 },
                 body: JSON.stringify({ email: email })
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
