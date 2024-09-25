@@ -74,8 +74,8 @@
         // 로그인 후 JWT 토큰을 받아오기 위한 함수
         function loginAndGetToken() {
             const loginData = {
-                email: 'admin@example.com',  // 로그인할 이메일
-                password: 'password'  // 로그인할 비밀번호
+                email: 'admin@example.com',
+                password: 'password'
             };
 
             return fetch('https://ludorium.store/api/user/auth/login', {
@@ -94,7 +94,6 @@
             .then(data => {
                 if (data.success && data.token) {
                     authToken = `Bearer ${data.token}`;  // 발급된 토큰 저장
-                    console.log('로그인 성공, 토큰:', authToken);
                 } else {
                     throw new Error('로그인 실패');
                 }
@@ -104,19 +103,20 @@
             });
         }
 
-        // 이메일 중복 확인
+        // 이메일 중복 확인 (GET → POST로 변경)
         function checkEmail() {
             const email = document.getElementById('email').value;
             const emailStatus = document.getElementById('email-status');
 
             emailStatus.innerText = '이메일 중복 확인 중...';
 
-            fetch(`https://ludorium.store/api/user/auth/email-check?email=${email}`, {
-                method: 'GET',
+            fetch(`https://ludorium.store/api/user/auth/email-check`, {
+                method: 'POST',
                 headers: {
-                    'Authorization': authToken,  // 인증 헤더 추가
+                    'Authorization': authToken,
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({ email: email })
             })
             .then(response => response.json())
             .then(data => {
@@ -150,7 +150,7 @@
             fetch('https://ludorium.store/api/user/auth/email-authentication', {
                 method: 'POST',
                 headers: {
-                    'Authorization': authToken,  // 인증 헤더 추가
+                    'Authorization': authToken,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ email: email })
