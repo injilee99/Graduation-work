@@ -1,0 +1,209 @@
+/* 기본 스타일 */
+body {
+    font-family: 'Poppins', "Noto Sans KR", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+    color: #333;
+}
+
+/* 헤더 */
+header {
+    font-family: "Noto Sans KR", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    color: #333;
+    background-color: #ffffff;
+}
+
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    color: #333;
+}
+
+.logo {
+    margin-left: 150px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.main-menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex: 1;
+}
+
+.main-menu li a {
+    color: #333;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 5px 10px;
+    font-weight: 500;
+}
+
+.main-menu li a:hover {
+    color: #5c2c90; /* 메뉴 항목 호버 시 색상 */
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+    margin-right: 150px;
+}
+
+.auth-buttons a {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    background-color: #889491;
+}
+
+.auth-buttons a:hover {
+    background-color: #777;
+}
+
+/* 서브메뉴 */
+.sub-nav {
+    background-color: #889491;
+    margin: 0 150px;
+    padding: 15px 45px;
+    border-radius: 30px;
+}
+
+.submenu {
+    list-style-type: none;
+    margin: 0 10px;
+    padding: 0;
+    display: flex;
+    gap: 30px;
+}
+
+.submenu li {
+    color: white;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 15px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.submenu li:hover {
+    background-color: #777;
+    color: #fff;
+}
+
+/* 게임 콘텐츠 */
+.game-header {
+    padding: 20px 150px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.game-title h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.game-title p {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    color: #777;
+}
+
+/* 게임 콘텐츠 레이아웃 */
+.game-content {
+    display: flex;
+    padding: 20px 150px;
+    gap: 20px;
+}
+
+.game-left {
+    flex: 3;
+}
+
+.game-right {
+    flex: 1;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    color: #333;
+}
+
+/* 게임 스크린샷 영역 */
+.game-screenshots {
+    width: 100%;
+    background-color: #ddd;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.game-screenshots p {
+    font-size: 24px;
+    color: #333;
+}
+
+/* 버튼 스타일 */
+.game-info .btn {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 10px;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #5c2c90; /* 보라색 버튼 */
+}
+
+.btn-primary:hover {
+    background-color: #4a217a;
+}
+
+.btn-secondary {
+    background-color: #889491; /* 회색 버튼 */
+}
+
+.btn-secondary:hover {
+    background-color: #777;
+}
+
+/* 시스템 요구 사항 */
+.game-specs {
+    margin-top: 20px;
+    color: #333;
+}
+
+.game-specs ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.game-specs ul li {
+    margin-bottom: 10px;
+}
+
+/* 푸터 */
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}
