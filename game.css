@@ -139,19 +139,19 @@ header {
 /* 게임 스크린샷 영역 */
 .game-screenshots {
     width: 100%;
-    background-color: #ddd;
-    height: 600px; /* 높이를 더 크게 설정 */
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 10px;
+    /* 배경색 제거 */
+    background-color: transparent;
 }
 
 .game-screenshots img {
-    width: 100%; /* 이미지가 가로 전체를 차지 */
-    height: 100%; /* 이미지가 전체 높이를 차지 */
-    object-fit: cover; /* 이미지가 비율에 맞게 조정되도록 */
+    width: 100%;
+    height: auto;
     border-radius: 10px;
+    /* 부모 컨테이너가 전체 너비를 차지하도록 조정 */
+    object-fit: cover;
 }
 
 /* 버튼 스타일 */
