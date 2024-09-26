@@ -3,32 +3,284 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>상점 - game forge</title>
-    <link rel="stylesheet" href="store.css" />
+    <title>Game Forge - 상점</title>
+    <link rel="stylesheet" href="styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Material+Icons&display=swap"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
-    />
+    <style>
+      body {
+        font-family: "Noto Sans KR", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #fff;
+        color: #333;
+      }
+
+      /* 헤더 */
+      header {
+        font-family: "Noto Sans KR", sans-serif;
+        font-weight: 500;
+        font-style: normal;
+        color: #333;
+      }
+
+      .top-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 30px;
+        color: #333;
+      }
+
+      .logo {
+        margin-left: 150px;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .main-menu {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 30px;
+        justify-content: center;
+        flex: 1;
+      }
+
+      .main-menu li a {
+        color: #333;
+        text-decoration: none;
+        font-size: 16px;
+        padding: 5px 10px;
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      .auth-buttons {
+        display: flex;
+        gap: 10px;
+        margin-right: 150px;
+      }
+
+      .auth-buttons a {
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        color: white;
+        background-color: #889491;
+      }
+
+      /* 서브메뉴 */
+      .sub-nav {
+        background-color: #889491;
+        margin: 0 150px;
+        padding: 15px 45px;
+        border-radius: 30px;
+      }
+
+      .submenu {
+        list-style-type: none;
+        margin: 0 10px;
+        padding: 0;
+        display: flex;
+        gap: 30px;
+      }
+
+      .submenu li {
+        color: white;
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 15px;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .submenu li:hover {
+        background-color: #777;
+        color: #fff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Noto Sans KR", sans-serif;
+        background-color: #f4f4f4;
+      }
+
+      .container {
+        display: flex;
+        padding: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .filters {
+        width: 200px;
+        margin-right: 40px;
+      }
+
+      .sort select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      .genre-filter p {
+        font-weight: bold;
+      }
+
+      .genre-filter label {
+        display: block;
+      }
+
+      /* 검색창 스타일링 */
+      .search-bar {
+        display: flex;
+        align-items: center;
+        margin-top: 20px;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: transparent; /* 배경을 투명하게 설정 */
+        box-sizing: border-box;
+      }
+
+      .search-bar input {
+        border: none;
+        outline: none;
+        flex: 1;
+        padding-left: 5px;
+        font-size: 14px;
+        background-color: transparent; /* 입력 필드 배경을 투명하게 설정 */
+      }
+
+      .search-bar i {
+        color: #666;
+      }
+
+      .product-list {
+        flex-grow: 1;
+      }
+
+      .product-list h2 {
+        margin-bottom: 20px;
+        font-size: 24px;
+      }
+
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+      }
+
+      .product-card {
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      .product-card img {
+        width: 100%;
+        height: auto;
+        background-color: #ddd;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        transition: transform 0.3s ease; /* 부드러운 확대 애니메이션 */
+      }
+
+      .product-card img:hover {
+        transform: scale(1.1); /* 이미지가 커지도록 설정 */
+      }
+      .product-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .product-price {
+        text-decoration: line-through;
+        color: #888;
+      }
+
+      .sale-price {
+        font-size: 16px;
+        color: #4865dc;
+      }
+
+      .discount {
+        background-color: #d9534f;
+        color: #fff;
+        margin-left: 2px;
+        padding: 2px 5px;
+        border-radius: 10px;
+      }
+
+      .rating {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+      }
+
+      .rating i {
+        color: #ffcc00;
+        margin-right: 5px;
+      }
+
+      .rating span {
+        font-size: 14px;
+        color: #333;
+      }
+
+      .cart-btn {
+        margin-top: 15px;
+        padding: 10px 20px;
+        background-color: #889491;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .cart-btn:hover {
+        background-color: #5a54e8;
+      }
+
+      footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+      }
+    </style>
   </head>
   <body>
     <header>
       <div class="top-nav">
-        <!-- 'Game Forge'에 링크 추가 -->
-        <div class="logo">
-          <a href="main.html">Game Forge</a> <!-- main.html로 이동 -->
-        </div>
+        <div class="logo">Game Forge</div>
         <nav>
           <ul class="main-menu">
             <li><a href="store.html">상점</a></li>
-            <li><a href="library.html">라이브러리</a></li>
-            <li><a href="notice.html">공지사항</a></li>
+            <li><a href="mypage.html">마이페이지</a></li>
             <li><a href="community.html">자유게시판</a></li>
+            <li><a href="support.html">지원</a></li>
           </ul>
         </nav>
         <div class="auth-buttons">
@@ -46,57 +298,150 @@
         </ul>
       </div>
     </header>
+    <div class="container">
+      <!-- Filter and sorting section -->
+      <div class="filters">
+        <div class="sort">
+          <select>
+            <option>인기순</option>
+            <option>출시일순</option>
+            <option>낮은 가격순</option>
+            <option>높은 가격순</option>
+          </select>
+        </div>
+        <div class="genre-filter">
+          <p>장르별 검색</p>
+          <label><input type="checkbox" checked /> RPG</label><br />
+          <label><input type="checkbox" /> Sports</label><br />
+          <label><input type="checkbox" /> Action</label><br />
+          <label><input type="checkbox" /> Racing</label><br />
+          <label><input type="checkbox" /> Strategy</label>
+        </div>
+        <!-- 검색 창 추가 -->
+        <div class="search-bar">
+          <i class="material-icons">search</i>
+          <input type="text" placeholder="게임 검색" />
+        </div>
+      </div>
 
-    <div class="store-banner">
-      <img src="/images/battlefield.jpg" alt="상점 배너" class="banner-image" />
+      <!-- Product listing section -->
+      <div class="product-list">
+        <h2>구름 님을 위한 추천 게임</h2>
+        <div class="product-grid">
+          <!-- First Product Card -->
+          <div class="product-card">
+            <img src="/images/astroneer.jpg" alt="" />
+            <p class="product-title">Astroneer</p>
+            <p class="product-price">정상가: ₩ 64,900</p>
+            <p class="sale-price">
+              판매가: ₩ 59,800 <span class="discount">8%</span>
+            </p>
+            <div class="rating">
+              <i class="material-icons">star</i><span>4.5</span>
+            </div>
+            <button class="cart-btn">장바구니</button>
+          </div>
+
+          <!-- Second Product Card -->
+          <div class="product-card">
+            <img src="/images/once_human.jpg" alt="" />
+            <p class="product-title">Once Human</p>
+            <p class="product-price">정상가: ₩ 64,900</p>
+            <p class="sale-price">
+              판매가: ₩ 59,800 <span class="discount">8%</span>
+            </p>
+            <div class="rating">
+              <i class="material-icons">star</i><span>4.2</span>
+            </div>
+            <button class="cart-btn">장바구니</button>
+          </div>
+
+          <!-- Third Product Card -->
+          <div class="product-card">
+            <img src="/images/sims.jpg" alt="" />
+            <p class="product-title">Sims</p>
+            <p class="product-price">정상가: ₩ 64,900</p>
+            <p class="sale-price">
+              판매가: ₩ 59,800 <span class="discount">8%</span>
+            </p>
+            <div class="rating">
+              <i class="material-icons">star</i><span>4.7</span>
+            </div>
+            <button class="cart-btn">장바구니</button>
+          </div>
+
+          <!-- Fourth Product Card -->
+          <div class="product-card">
+            <img src="/images/stardew_valley.jpg" alt="" />
+            <p class="product-title">Stardew Valley</p>
+            <p class="product-price">정상가: ₩ 64,900</p>
+            <p class="sale-price">
+              판매가: ₩ 59,800 <span class="discount">8%</span>
+            </p>
+            <div class="rating">
+              <i class="material-icons">star</i><span>4.8</span>
+            </div>
+            <button class="cart-btn">장바구니</button>
+          </div>
+
+          <!-- Fifth Product Card -->
+          <div class="product-card">
+            <img src="/images/60_seconds.jpg" alt="" />
+            <p class="product-title">60 Seconds</p>
+            <p class="product-price">정상가: ₩ 64,900</p>
+            <p class="sale-price">
+              판매가: ₩ 59,800 <span class="discount">8%</span>
+            </p>
+            <div class="rating">
+              <i class="material-icons">star</i><span>4.0</span>
+            </div>
+            <button class="cart-btn">장바구니</button>
+          </div>
+
+          <!-- Sixth Product Card -->
+          <div class="product-card">
+            <img src="/images/battlegrounds.jpg" alt="" />
+            <p class="product-title">battlegrounds</p>
+            <p class="product-price">정상가: ₩ 64,900</p>
+            <p class="sale-price">
+              판매가: ₩ 59,800 <span class="discount">8%</span>
+            </p>
+            <div class="rating">
+              <i class="material-icons">star</i><span>4.6</span>
+            </div>
+            <button class="cart-btn">장바구니</button>
+          </div>
+
+          <!-- Seventh Product Card -->
+          <div class="product-card">
+            <img src="/images/core_keeeper.jpg" alt="" />
+            <p class="product-title">Core Keeper</p>
+            <p class="product-price">정상가: ₩ 64,900</p>
+            <p class="sale-price">
+              판매가: ₩ 59,800 <span class="discount">8%</span>
+            </p>
+            <div class="rating">
+              <i class="material-icons">star</i><span>4.9</span>
+            </div>
+            <button class="cart-btn">장바구니</button>
+          </div>
+
+          <!-- Eighth Product Card -->
+          <div class="product-card">
+            <img src="/images/eternal_return.jpg" alt="" />
+            <p class="product-title">Eternal Return</p>
+            <p class="product-price">정상가: ₩ 64,900</p>
+            <p class="sale-price">
+              판매가: ₩ 59,800 <span class="discount">8%</span>
+            </p>
+            <div class="rating">
+              <i class="material-icons">star</i><span>4.3</span>
+            </div>
+            <button class="cart-btn">장바구니</button>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <main>
-      <section class="store-featured">
-        <h2>추천 제품</h2>
-        <div class="featured-grid">
-          <div class="featured-item">
-            <img src="/images/13 No Man's Sky.jpg" alt="Game 1" />
-            <p>No Man's Sky</p>
-          </div>
-          <div class="featured-item">
-            <img src="/images/16 Assassin's Creed® Odyssey.jpg" alt="Game 2" />
-            <p>Assasin's Creed Odyssey</p>
-          </div>
-          <div class="featured-item">
-            <img src="/images/23 Assassin's Creed® Origins.jpg" alt="Game 3" />
-            <p>Assassin's Creed Origins</p>
-          </div>
-          <div class="featured-item">
-            <img src="/images/40 RimWorld.jpg" alt="Game 4" />
-            <p>RimWorld</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="store-categories">
-        <h2>카테고리별 제품</h2>
-        <div class="categories-grid">
-          <div class="category-item">
-            <img src="/images/51 Dota 2.jpg" alt="Action" />
-            <p>Action</p>
-          </div>
-          <div class="category-item">
-            <img src="/images/Red Dead Redemption 2.jpg" alt="RPG" />
-            <p>RPG</p>
-          </div>
-          <div class="category-item">
-            <img src="/images/50 Risk of Rain 2.jpg" alt="Strategy" />
-            <p>Strategy</p>
-          </div>
-          <div class="category-item">
-            <img src="/images/47 EA SPORTS FC™ 25.jpg" alt="Sports" />
-            <p>Sports</p>
-          </div>
-        </div>
-      </section>
-    </main>
-
     <footer>
       <div class="footer-content">
         <p>&copy; 대진대학교 벤처 졸업작품.</p>
