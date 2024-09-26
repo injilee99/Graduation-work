@@ -227,7 +227,7 @@ main {
 }
 
 .game-card img {
-    width: 90%;
+    width: 100%;
     height: auto;
     margin: 0 auto; /* 이미지를 중앙 정렬 */
     display: block;
