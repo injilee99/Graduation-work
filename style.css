@@ -207,7 +207,7 @@ main {
 /* 제품 그리드 */
 /* 이달의 추천 게임, 이달의 할인 게임 */
 .featured-games, .discounted-games {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .featured-games h2, .discounted-games h2 {
