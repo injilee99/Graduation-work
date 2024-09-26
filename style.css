@@ -221,7 +221,7 @@ main {
 .game-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    gap: 15px;
     padding-left: 90px;
     padding-right: 90px;
 }
@@ -236,7 +236,7 @@ main {
 }
 
 .game-card img {
-    width: 100%;
+    width: 90%;
     height: auto;
     display: block;
 }
