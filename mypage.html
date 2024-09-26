@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Noto Sans KR";
+      }
+      header {
+        font-family: "Noto Sans KR", sans-serif;
+        font-weight: 500;
+        font-style: normal;
+        color: #333;
+      }
+
+      .top-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 30px;
+        color: #333;
+      }
+
+      .logo {
+        margin-left: 150px;
+        font-size: 24px;
+        font-weight: bold;
+      }
+
+      .main-menu {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 30px; /* 링크 간격 조정 */
+        justify-content: center; /* 중앙 정렬 */
+        flex: 1; /* 중간 네비게이션 바가 가로로 더 많은 공간을 차지하도록 설정 */
+      }
+
+      .main-menu li a {
+        color: #333;
+        text-decoration: none;
+        font-size: 16px;
+
+        padding: 5px 10px; /* 여백 추가 */
+
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      .auth-buttons {
+        display: flex;
+        gap: 10px;
+        margin-right: 150px;
+      }
+
+      .auth-buttons a {
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        color: white;
+        background-color: #889491;
+      }
+
+      /* 서브메뉴 */
+      .sub-nav {
+        background-color: #889491;
+        margin: 0 150px;
+        padding: 15px 45px;
+        border-radius: 30px;
+      }
+
+      .submenu {
+        list-style-type: none;
+        margin: 0 10px;
+        padding: 0;
+        display: flex;
+        gap: 30px;
+      }
+
+      .submenu li {
+        color: white;
+        cursor: pointer;
+        padding: 5px 10px;
+
+        border-radius: 15px;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .submenu li:hover {
+        background-color: #777;
+        color: #fff;
+      }
+
+      .menu {
+        height: 20px;
+        background-color: #778881;
+        display: flex;
+        justify-content: space-around;
+        margin: 50px 150px;
+        padding: 15px 45px;
+        list-style-type: none;
+      }
+
+      .menu li {
+        padding: 0 20px;
+      }
+
+      .menu li a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: bold;
+        display: block;
+      }
+
+      .menu li a:hover {
+        background-color: #889491;
+      }
+
+      .profile-container {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column; /* 세로로 쌓이게 배치 */
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin-top: 50px; /* 상단에서 떨어지도록 여백 추가 */
+      }
+
+      .profile-header {
+        display: flex;
+        flex-direction: row; /* 세로가 아닌 가로로 나란히 배치 */
+        align-items: center; /* 이미지와 텍스트를 수직으로 가운데 정렬 */
+        justify-content: center; /* 이미지와 텍스트를 가로로 가운데 정렬 */
+        margin-bottom: 30px;
+      }
+
+      .profile-header h1 {
+        margin-left: 20px; /* 이미지와 텍스트 사이에 여백 추가 */
+        font-size: 24px;
+      }
+
+      .profile-image {
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+      }
+
+      .profile-info {
+        text-align: left;
+        margin: 40px;
+        width: 500px; /* 사용자 정보의 가로 폭 지정 */
+      }
+
+      .profile-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        font-size: 18px;
+      }
+
+      .label {
+        font-weight: bold;
+      }
+
+      .value {
+        margin-left: 20px;
+      }
+
+      footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="top-nav">
+        <div class="logo">Game Forge</div>
+        <nav>
+          <ul class="main-menu">
+            <li><a href="store.html">상점</a></li>
+            <li><a href="mypage.html">마이페이지</a></li>
+            <li><a href="community.html">자유게시판</a></li>
+            <li><a href="support.html">지원</a></li>
+          </ul>
+        </nav>
+        <div class="auth-buttons">
+          <a href="login.html" class="login-btn">로그인</a>
+        </div>
+      </div>
+      <div class="sub-nav">
+        <ul class="submenu">
+          <li>내 상점</li>
+          <li>최근에 본 제품</li>
+          <li>내 태그</li>
+          <li>추천 제품</li>
+          <li>카테고리 검색</li>
+          <li>장르별 검색</li>
+        </ul>
+      </div>
+    </header>
+
+    <nav>
+      <ul class="menu">
+        <li><a href="mypage.html">내정보</a></li>
+        <li><a href="#">주문내역</a></li>
+        <li><a href="#">쿠폰</a></li>
+        <li><a href="info.html">정보수정</a></li>
+        <li><a href="modpwd.html">비밀번호 수정</a></li>
+        <li><a href="#">회원탈퇴</a></li>
+      </ul>
+    </nav>
+
+    <div class="profile-container">
+      <div class="profile-header">
+        <img
+          src="https://via.placeholder.com/100"
+          alt="Profile Icon"
+          class="profile-image"
+        />
+        <h1>구름 님 안녕하세요!</h1>
+      </div>
+
+      <div class="profile-info">
+        <div class="profile-row">
+          <span class="label">접속 중인 아이디</span>
+          <span class="value">happy2024@naver.com</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">소셜 로그인</span>
+          <span class="value">네이버</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">생년월일</span>
+          <span class="value">2001-01-30</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">전화번호</span>
+          <span class="value">010-0000-0000</span>
+        </div>
+        <div class="profile-row">
+          <span class="label">성별</span>
+          <span class="value">W</span>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 대진대학교 벤처 졸업작품.</p>
+      </div>
+    </footer>
+  </body>
+</html>
