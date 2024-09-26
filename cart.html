@@ -1,99 +1,114 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>장바구니 - game forge</title>
-    <link rel="stylesheet" href="cart.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+  </head>
+  <body>
     <header>
-        <div class="top-nav">
-            <div class="logo">Game Forge</div>
-            <nav>
-                <ul class="main-menu">
-                    <li><a href="store.html">상점</a></li>
-                    <li><a href="library.html">라이브러리</a></li>
-                    <li><a href="notice.html">공지사항</a></li>
-                    <li><a href="community.html">자유게시판</a></li>
-                </ul>
-            </nav>
-            <div class="auth-buttons" id="auth-buttons">
-                <a href="login.html" class="login-btn">로그인</a>
-                <a href="signup.html" class="signup-btn">회원가입</a>
-            </div>
+      <div class="top-nav">
+        <div class="logo">Game Forge</div>
+        <nav>
+          <ul class="main-menu">
+            <li><a href="store.html">상점</a></li>
+            <li><a href="library.html">라이브러리</a></li>
+            <li><a href="notice.html">공지사항</a></li>
+            <li><a href="community.html">자유게시판</a></li>
+          </ul>
+        </nav>
+        <div class="auth-buttons" id="auth-buttons">
+          <a href="login.html" class="login-btn">로그인</a>
         </div>
-        <div class="sub-nav">
-            <ul class="submenu">
-                <li>내 상점</li>
-                <li>신규 및 특집</li>
-                <li>카테고리</li>
-                <li>포인트 상점</li>
-                <li>뉴스</li>
-                <li>실험실</li>
-            </ul>
-        </div>
+      </div>
+      <div class="sub-nav">
+        <ul class="submenu">
+          <li>내 상점</li>
+          <li>신규 및 특집</li>
+          <li>카테고리</li>
+          <li>포인트 상점</li>
+          <li>뉴스</li>
+          <li>실험실</li>
+        </ul>
+      </div>
     </header>
 
     <main>
-        <section class="cart-container">
-            <h2>장바구니</h2>
-            <div id="cart-items"></div>
-            <div class="cart-summary">
-                <h3>총 결제 금액: <span id="total-price">0</span>원</h3>
-                <button class="btn btn-primary" onclick="goToCheckout()">결제하기</button>
-            </div>
-        </section>
+      <section class="cart-container">
+        <div id="empty-cart-icon">
+          <span class="material-symbols-outlined">add_shopping_cart</span>
+        </div>
+        <div id="cart-items"></div>
+        <div class="cart-summary">
+          <h3>총 결제 금액:</h3>
+          <span id="total-price"></span>₩
+          <button id="btn-primary" onclick="goToCheckout()">결제하기</button>
+        </div>
+      </section>
     </main>
 
     <footer>
-        <div class="footer-content">
-            <p>&copy; 대진대학교 벤처 졸업작품.</p>
-        </div>
+      <div class="footer-content">
+        <p>&copy; 대진대학교 벤처 졸업작품.</p>
+      </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            loadCartItems();
-        });
+      document.addEventListener("DOMContentLoaded", () => {
+        loadCartItems();
+      });
 
-        function loadCartItems() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const cartItemsContainer = document.getElementById('cart-items');
-            const totalPriceEl = document.getElementById('total-price');
-            let totalPrice = 0;
+      function loadCartItems() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartItemsContainer = document.getElementById("cart-items");
+        const totalPriceEl = document.getElementById("total-price");
+        const emptyCartIcon = document.getElementById("empty-cart-icon");
+        let totalPrice = 0;
 
-            if (cart.length === 0) {
-                cartItemsContainer.innerHTML = '<p>장바구니가 비어 있습니다.</p>';
-                return;
-            }
+        if (cart.length === 0) {
+          emptyCartIcon.style.display = "block"; // 아이콘 표시
+          cartItemsContainer.innerHTML = "<p>장바구니가 비어 있습니다.</p>";
+          return;
+        }
 
-            cartItemsContainer.innerHTML = '';
+        emptyCartIcon.style.display = "none"; // 아이콘 숨기기
+        cartItemsContainer.innerHTML = "";
 
-            cart.forEach((item) => {
-                const cartItem = document.createElement('div');
-                cartItem.classList.add('cart-item');
-                cartItem.innerHTML = `
+        cart.forEach((item) => {
+          const cartItem = document.createElement("div");
+          cartItem.classList.add("cart-item");
+          cartItem.innerHTML = `
                     <p>${item.title} - ${item.price}원</p>
                     <button class="btn btn-secondary" onclick="removeFromCart('${item.id}')">삭제</button>
                 `;
-                cartItemsContainer.appendChild(cartItem);
-                totalPrice += item.price;
-            });
+          cartItemsContainer.appendChild(cartItem);
+          totalPrice += item.price;
+        });
 
-            totalPriceEl.textContent = totalPrice;
-        }
+        totalPriceEl.textContent = totalPrice;
+      }
 
-        function removeFromCart(id) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart = cart.filter(item => item.id !== id);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            loadCartItems();
-        }
+      function removeFromCart(id) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart = cart.filter((item) => item.id !== id);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        loadCartItems();
+      }
 
-        function goToCheckout() {
-            window.location.href = 'checkout.html';
-        }
+      function goToCheckout() {
+        window.location.href = "checkout.html";
+      }
     </script>
-</body>
+  </body>
 </html>
