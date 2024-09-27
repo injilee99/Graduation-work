@@ -87,18 +87,19 @@
                 body: JSON.stringify(requestData)
             })
             .then(response => {
+                // 서버에서 토큰을 반환하지 않은 경우 처리
                 if (!response.ok) {
                     return response.json().then(err => { throw new Error(err.message || '로그인 중 문제가 발생했습니다.'); });
                 }
-                return response.json();
+                return response.json(); // 서버 응답 데이터 반환
             })
             .then(data => {
-                // 로그인 응답에서 토큰을 제대로 받았는지 확인 (디버깅용 로그)
-                console.log("받은 토큰:", data.token);
+                // 서버 응답 데이터를 콘솔에 출력하여 확인 (디버깅)
+                console.log("서버 응답 데이터:", data);
 
-                // 토큰이 없는 경우 오류 처리
+                // 토큰이 없으면 오류를 발생시킴
                 if (!data.token) {
-                    throw new Error('토큰이 제공되지 않았습니다.');
+                    throw new Error('서버에서 토큰을 반환하지 않았습니다.');
                 }
 
                 // JWT 토큰에서 닉네임 추출
