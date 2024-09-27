@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
       rel="stylesheet"
     />
     <link
@@ -31,7 +31,9 @@
           </ul>
         </nav>
         <div class="auth-buttons">
-          <a href="login.html" class="login-btn">로그인</a> <!-- login.html로 이동 -->
+          <span id="welcome-message"></span> <!-- 환영 메시지 추가 -->
+          <a href="login.html" class="login-btn" id="login-btn">로그인</a> <!-- login.html로 이동 -->
+          <button id="logout-btn" style="display:none;" onclick="logout()">로그아웃</button> <!-- 로그아웃 버튼 추가 -->
         </div>
       </div>
       <div class="sub-nav">
@@ -137,5 +139,37 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+      // 로그인 상태 확인 함수
+      function checkLoginStatus() {
+        const token = localStorage.getItem('token'); // localStorage에서 토큰 가져오기
+        const nickname = localStorage.getItem('nickname'); // localStorage에서 닉네임 가져오기
+
+        const welcomeMessage = document.getElementById('welcome-message');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        if (token && nickname) {
+          // 로그인된 상태일 경우 환영 메시지와 로그아웃 버튼 표시
+          welcomeMessage.innerText = `환영합니다, ${nickname}님!`;
+          loginBtn.style.display = 'none'; // 로그인 버튼 숨김
+          logoutBtn.style.display = 'inline-block'; // 로그아웃 버튼 표시
+        } else {
+          // 토큰이 없으면 로그인 버튼 표시
+          loginBtn.style.display = 'inline-block';
+          logoutBtn.style.display = 'none';
+        }
+      }
+
+      // 로그아웃 처리 함수
+      function logout() {
+        localStorage.removeItem('token'); // 저장된 토큰 삭제
+        localStorage.removeItem('nickname'); // 저장된 닉네임 삭제
+        window.location.href = '/Graduation-work/login.html'; // 로그인 페이지로 리디렉트
+      }
+
+      // 페이지 로드 시 로그인 상태 확인
+      window.onload = checkLoginStatus;
+    </script>
   </body>
 </html>
