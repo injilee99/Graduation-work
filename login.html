@@ -4,68 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Forge - 로그인</title>
-    <link rel="stylesheet" href="login.css">
 </head>
 <body>
     <!-- 로그인 페이지 -->
-    <div class="login-container" id="login-container">
+    <div class="login-container">
         <h2>로그인</h2>
         <form id="login-form" onsubmit="return handleLogin(event)">
             <label for="email">이메일</label>
-            <input type="email" id="email" name="email" placeholder="이메일을 입력해 주세요" required />
+            <input type="email" id="email" name="email" required />
 
             <label for="password">비밀번호</label>
-            <input type="password" id="password" name="password" placeholder="비밀번호를 입력해 주세요" required />
-
-            <!-- 이메일 찾기 및 비밀번호 찾기 링크 -->
-            <div class="extra-options">
-                <a href="findid.html">이메일 찾기</a> | <a href="findpassword.html">비밀번호 찾기</a>
-            </div>
+            <input type="password" id="password" name="password" required />
 
             <button type="submit">로그인</button>
-            <p id="login-status"></p>
         </form>
 
-        <!-- 소셜 로그인 버튼 -->
-        <div class="social-login">
-            <a href="http://43.203.198.147:8080/oauth2/authorization/naver" class="naver-login">
-                <img src="./images/01 NAVER Logo_Green.png" alt="Naver" />
-            </a>
-            <a href="http://43.203.198.147:8080/oauth2/authorization/kakao" class="kakao-login">
-                <img src="./images/kakao_login_large.png" alt="KakaoTalk" />
-            </a>
-        </div>
-
-        <!-- 회원가입 링크 -->
-        <div class="extra-options">
-            <p>계정이 없으신가요? <a href="signup.html">회원가입</a></p>
-        </div>
-    </div>
-
-    <!-- 환영 메시지 모달 -->
-    <div id="welcome-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <p id="welcome-message-modal"></p>
-        </div>
+        <p id="login-status"></p>
     </div>
 
     <script>
-        const API_BASE_URL = 'https://ludorium.store/api';
+        const API_BASE_URL = 'https://ludorium.store/api'; // 서버 주소
 
         // 로그인 처리 함수
         function handleLogin(event) {
-            event.preventDefault(); // 폼 제출 시 새로고침 방지
+            event.preventDefault();
 
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
             const loginStatus = document.getElementById('login-status');
-
-            // 로그인 요청 데이터
-            const requestData = {
-                email: email,
-                password: password
-            };
 
             // 로그인 요청
             fetch(`${API_BASE_URL}/user/auth/login`, {
@@ -73,72 +39,31 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(requestData)
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
             })
             .then(response => {
                 if (!response.ok) {
-                    return response.json().then(err => { throw new Error(err.message || '로그인 중 문제가 발생했습니다.'); });
+                    throw new Error('로그인 중 오류가 발생했습니다.');
                 }
                 return response.json();
             })
             .then(data => {
-                // JWT 토큰 및 닉네임을 localStorage에 저장
+                // 로그인 성공 후 서버로부터 받은 닉네임과 토큰을 localStorage에 저장
                 localStorage.setItem('token', data.token); // 토큰 저장
                 localStorage.setItem('nickname', data.nickname); // 닉네임 저장
 
-                // 로그인 성공 시 모달로 환영 메시지 표시
-                document.getElementById('welcome-message-modal').innerText = `환영합니다, ${data.nickname}님!`;
-                document.getElementById('welcome-modal').style.display = 'block'; // 모달 표시
-
-                // 일정 시간 후 메인 페이지로 이동
-                setTimeout(() => {
-                    window.location.href = '/Graduation-work/main.html';
-                }, 2000); // 2초 후 페이지 이동
+                // 로그인 성공 메시지 및 메인 페이지로 이동
+                alert(`환영합니다, ${data.nickname}님!`);
+                window.location.href = 'main.html'; // 메인 페이지로 리디렉트
             })
             .catch(error => {
                 loginStatus.innerText = error.message;
                 loginStatus.style.color = 'red';
             });
         }
-
-        // 모달 닫기
-        function closeModal() {
-            document.getElementById('welcome-modal').style.display = 'none';
-        }
     </script>
-
-    <style>
-        /* 모달 스타일 */
-        .modal {
-            display: none; 
-            position: fixed;
-            z-index: 1; 
-            left: 0;
-            top: 0;
-            width: 100%; 
-            height: 100%; 
-            background-color: rgba(0, 0, 0, 0.5); 
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; 
-            padding: 20px;
-            border: 1px solid #888;
-            width: 30%;
-            text-align: center;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-    </style>
 </body>
 </html>
