@@ -120,11 +120,17 @@
             });
         }
 
-        // 페이지 로드 시 로그인 상태 확인 (이미 로그인된 경우 메인 페이지로 리디렉트)
+        // 페이지 로드 시 로그인 상태 확인
         function checkLoginRedirect() {
-            const token = localStorage.getItem('token');
-            if (token) {
-                window.location.href = '/Graduation-work/main.html';
+            // 만약 사용자가 main.html에서 로그아웃을 한 후 login.html로 돌아올 경우, 로그인 상태를 체크하지 않음
+            const path = window.location.pathname;
+
+            // login.html로 들어온 경우에만 로그인 상태 확인
+            if (path.includes('login.html')) {
+                const token = localStorage.getItem('token');
+                if (token) {
+                    window.location.href = '/Graduation-work/main.html';
+                }
             }
         }
 
