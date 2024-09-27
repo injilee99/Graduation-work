@@ -8,9 +8,9 @@
 </head>
 <body>
     <!-- 로그인 페이지 -->
-    <div class="login-container">
+    <div class="login-container" id="login-container">
         <h2>로그인</h2>
-        <form action="#" method="POST">
+        <form id="login-form" onsubmit="return handleLogin(event)">
             <label for="email">이메일</label>
             <input type="email" id="email" name="email" placeholder="이메일을 입력해 주세요" required />
 
@@ -23,6 +23,7 @@
             </div>
 
             <button type="submit">로그인</button>
+            <p id="login-status"></p>
         </form>
 
         <!-- 소셜 로그인 버튼 -->
@@ -44,7 +45,15 @@
     <!-- 추가 정보 입력 페이지 -->
     <div class="additional-info-container" style="display: none;" id="additional-info">
         <h2>추가 정보 입력</h2>
-        <form action="/saveAdditionalInfo" method="POST" enctype="multipart/form-data">
+        <form id="additional-info-form" action="/saveAdditionalInfo" method="POST" enctype="multipart/form-data">
+            <!-- 닉네임 입력 -->
+            <label for="nickname">닉네임</label>
+            <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력해 주세요" required />
+
+            <!-- 전화번호 입력 -->
+            <label for="tel">전화번호</label>
+            <input type="tel" id="tel" name="tel" placeholder="010-1234-5678" oninput="autoHyphen(this)" required />
+
             <!-- 성별 입력 -->
             <label for="gender">성별</label>
             <select id="gender" name="gender" required>
@@ -62,22 +71,102 @@
     </div>
 
     <script>
+        const API_BASE_URL = 'https://ludorium.store/api'; // 서버 주소
+
+        // 전화번호에 하이픈 자동 추가
+        function autoHyphen(target) {
+            let tel = target.value.replace(/[^0-9]/g, ''); // 숫자 이외의 값 제거
+            if (tel.length < 4) {
+                target.value = tel;
+            } else if (tel.length < 7) {
+                target.value = tel.substr(0, 3) + '-' + tel.substr(3);
+            } else if (tel.length < 11) {
+                target.value = tel.substr(0, 3) + '-' + tel.substr(3, 3) + '-' + tel.substr(6);
+            } else {
+                target.value = tel.substr(0, 3) + '-' + tel.substr(3, 4) + '-' + tel.substr(7);
+            }
+        }
+
+        // 로그인 처리
+        function handleLogin(event) {
+            event.preventDefault(); // 폼 제출 시 새로고침 방지
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const loginStatus = document.getElementById('login-status');
+
+            // 로그인 요청 데이터
+            const requestData = {
+                email: email,
+                password: password
+            };
+
+            // 로그인 요청
+            fetch(`${API_BASE_URL}/user/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw new Error(err.message || '로그인 중 문제가 발생했습니다.'); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                // JWT 토큰 저장 (localStorage 또는 sessionStorage)
+                localStorage.setItem('token', data.token); // 토큰을 저장
+
+                // 추가 정보 입력이 필요한 경우 확인 (예: 소셜 로그인 시 계정이 없을 때)
+                if (data.needsAdditionalInfo) {
+                    redirectToAdditionalInfoPage();
+                } else {
+                    // 로그인 성공 후 메인 페이지로 이동
+                    window.location.href = '/Graduation-work/main.html';
+                }
+            })
+            .catch(error => {
+                loginStatus.innerText = error.message;
+                loginStatus.style.color = 'red';
+            });
+        }
+
+        // 소셜 로그인 성공 후 추가 정보 입력이 필요한지 확인
+        function handleSocialLogin() {
+            // 소셜 로그인 성공 시 서버에서 받은 데이터에 따라 처리
+            fetch(`${API_BASE_URL}/user/auth/check-info`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.needsAdditionalInfo) {
+                    redirectToAdditionalInfoPage();
+                } else {
+                    window.location.href = '/Graduation-work/main.html';
+                }
+            })
+            .catch(error => {
+                console.error('소셜 로그인 처리 오류:', error);
+            });
+        }
+
         // 로그인 성공 후 추가 정보 페이지로 리다이렉트
         function redirectToAdditionalInfoPage() {
-            // 로그인 후 서버에서 새로 고침 또는 추가 정보 페이지로 리다이렉트할 수 있도록 구현
-            document.getElementById("additional-info").style.display = "block";  // 추가 정보 페이지 표시
+            document.getElementById("login-container").style.display = "none";  // 로그인 페이지 숨기기
+            document.getElementById("additional-info").style.display = "block";  // 추가 정보 입력 페이지 표시
         }
 
-        // 로그인 성공 시 백엔드에서 호출된 후 실행될 수 있습니다.
-        function onLoginSuccess() {
-            // 신규 유저인 경우 추가 정보 입력 페이지로 이동하도록 설정
-            redirectToAdditionalInfoPage();
-        }
-
-        // 페이지 초기화 시 추가 정보 입력이 필요한 경우에 대한 처리
+        // 소셜 로그인 성공 후 호출 (네이버, 카카오 등)
         window.onload = function() {
-            // 실제로는 서버에서 로그인 성공 여부를 받아서 처리
-            // onLoginSuccess();  // 사용자가 로그인 후 추가 정보 입력 페이지로 리다이렉트할 때 호출
+            // 소셜 로그인 시 추가 정보가 필요한지 체크 (예: 소셜 로그인 후)
+            if (window.location.href.includes("oauth2/success")) {
+                handleSocialLogin();
+            }
         }
     </script>
 </body>
