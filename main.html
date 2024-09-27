@@ -1,16 +1,26 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>game forge</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+  </head>
+  <body>
     <header>
       <div class="top-nav">
         <div class="logo">
-          <a href="main.html">Game Forge</a>
+          <a href="main.html">Game Forge</a> <!-- main 페이지로 이동 -->
         </div>
         <nav>
           <ul class="main-menu">
@@ -21,16 +31,104 @@
           </ul>
         </nav>
         <div class="auth-buttons">
-          <span id="welcome-message"></span>
-          <a href="login.html" class="login-btn" id="login-btn">로그인</a>
-          <button id="logout-btn" style="display:none;" onclick="logout()">로그아웃</button>
+          <span id="welcome-message"></span> <!-- 환영 메시지 추가 -->
+          <a href="login.html" class="login-btn" id="login-btn">로그인</a> <!-- login.html로 이동 -->
+          <button id="logout-btn" style="display:none;" onclick="logout()">로그아웃</button> <!-- 로그아웃 버튼 추가 -->
         </div>
+      </div>
+      <div class="sub-nav">
+        <ul class="submenu">
+          <li>내 상점</li>
+          <li>최근에 본 제품</li>
+          <li>내 태그</li>
+          <li>추천 제품</li>
+          <li>카테고리 검색</li>
+          <li>장르별 검색</li>
+        </ul>
       </div>
     </header>
 
+    <div class="banner-slider">
+      <div class="slides">
+        <div class="slide">
+          <img src="./images/core_keeeper.jpg" alt="core keeper" />
+        </div>
+        <div class="slide">
+          <img src="./images/eternal_return.jpg" alt="eternal return" />
+        </div>
+        <div class="slide">
+          <img src="./images/once_human.jpg" alt="stardew valley" />
+        </div>
+        <div class="slide">
+          <img src="./images/60_seconds.jpg" alt="sims" />
+        </div>
+      </div>
+      <div class="controls">
+        <span class="material-symbols-outlined prev">arrow_back_ios</span>
+        <span class="material-symbols-outlined next">arrow_forward_ios</span>
+      </div>
+    </div>
+
     <main>
       <section class="content">
-        <p>이곳은 메인 페이지의 콘텐츠입니다.</p>
+        <div class="search-bar">
+          <input
+            type="text"
+            placeholder="스타듀밸리의 최근 업데이트를 확인하세요!"
+            class="search-input"
+          />
+          <button class="search-btn">검색</button>
+        </div>
+
+        <!-- 이달의 추천 게임 -->
+        <section class="featured-games">
+          <h2>이달의 추천게임</h2>
+          <div class="game-grid">
+            <div class="game-card">
+              <a href="eternal_return.html">
+                <img src="./images/eternal_return.jpg" alt="Game 1" />
+              <p>Eternal Retrun</p>
+            </div>
+            <div class="game-card">
+              <a href="The sisms4.html">
+                <img src="./images/sims.jpg" alt="Game 2" />
+              <p>The Sims4</p>
+            </div>
+            <div class="game-card">
+              <a href="stardew_valley.html">
+                <img src="./images/stardew_valley.jpg" alt="Game 3" />
+              <p>Stardew Valley</p>
+            </div>
+            <div class="game-card">
+              <a href="core_keeper.html">
+                <img src="./images/core_keeeper.jpg" alt="Game 4" />
+              <p>Core Keeper</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 이달의 할인 게임 -->
+        <section class="discounted-games">
+          <h2>이달의 할인게임</h2>
+          <div class="game-grid">
+            <div class="game-card">
+              <img src="./images/battlegrounds.jpg" alt="Game 5" />
+              <p>BattelGrounds</p>
+            </div>
+            <div class="game-card">
+              <img src="./images/astroneer.jpg" alt="Game 6" />
+              <p>Astroneer</p>
+            </div>
+            <div class="game-card">
+              <img src="./images/60_seconds.jpg" alt="Game 7" />
+              <p>60 Seconds!</p>
+            </div>
+            <div class="game-card">
+              <img src="./images/once_human.jpg" alt="Game 8" />
+              <p>Once Human</p>
+            </div>
+          </div>
+        </section>
       </section>
     </main>
 
@@ -43,8 +141,8 @@
     <script>
       // 로그인 상태 확인 함수
       function checkLoginStatus() {
-        const token = localStorage.getItem('token'); // 토큰 가져오기
-        const nickname = localStorage.getItem('nickname'); // 닉네임 가져오기
+        const token = localStorage.getItem('token'); // localStorage에서 토큰 가져오기
+        const nickname = localStorage.getItem('nickname'); // localStorage에서 닉네임 가져오기
 
         const welcomeMessage = document.getElementById('welcome-message');
         const loginBtn = document.getElementById('login-btn');
@@ -73,5 +171,5 @@
       // 페이지 로드 시 로그인 상태 확인
       window.onload = checkLoginStatus;
     </script>
-</body>
+  </body>
 </html>
