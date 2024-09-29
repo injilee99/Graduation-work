@@ -96,16 +96,17 @@
                 console.log("서버 응답 데이터:", data);
 
                 // 토큰이 응답 데이터에 포함되지 않은 경우 처리
-                if (!data.token) {
+                if (!data.data || !data.data.accessToken) {
                     throw new Error('서버에서 토큰을 반환하지 않았습니다.');
                 }
 
                 // JWT 토큰에서 닉네임 추출
-                const decodedToken = decodeJWT(data.token);
+                const token = data.data.accessToken;
+                const decodedToken = decodeJWT(token);
                 const nickname = decodedToken.nickname;
 
                 // 닉네임과 토큰을 localStorage에 저장
-                localStorage.setItem('token', data.token); // 토큰 저장
+                localStorage.setItem('token', token); // 토큰 저장
                 localStorage.setItem('nickname', nickname); // 닉네임 저장
 
                 // 로그인 성공 후 메인 페이지로 이동
