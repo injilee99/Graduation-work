@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>추가 정보 입력 - Game Forge</title>
+    <link rel="stylesheet" href="more_information.css">
+</head>
+<body>
+    <div class="additional-info-container">
+        <h2>추가 정보 입력</h2>
+        <form id="additional-info-form" onsubmit="return handleAdditionalInfo(event)">
+            <div class="form-group">
+                <label for="name">이름</label>
+                <input type="text" id="name" name="name" required placeholder="이름을 입력해 주세요" />
+            </div>
+
+            <div class="form-group">
+                <label for="nickname">닉네임</label>
+                <input type="text" id="nickname" name="nickname" required placeholder="닉네임을 입력해 주세요" />
+            </div>
+
+            <div class="form-group">
+                <label for="tel">전화번호</label>
+                <input type="tel" id="tel" name="tel" required placeholder="010-1234-5678" oninput="autoHyphen(this)" />
+            </div>
+
+            <div class="form-group">
+                <label for="gender">성별</label>
+                <select id="gender" name="gender" required>
+                    <option value="M">남</option>
+                    <option value="W">여</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="birthdate">생년월일</label>
+                <input type="date" id="birthdate" name="birthdate" required />
+            </div>
+
+            <button type="submit">저장</button>
+        </form>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'https://ludorium.store/api/user/auth/oauth-join'; // 서버 주소
+
+        // 전화번호 자동 하이픈 추가
+        function autoHyphen(target) {
+            let tel = target.value.replace(/[^0-9]/g, '');
+            if (tel.length < 4) {
+                target.value = tel;
+            } else if (tel.length < 7) {
+                target.value = tel.substr(0, 3) + '-' + tel.substr(3);
+            } else if (tel.length < 11) {
+                target.value = tel.substr(0, 3) + '-' + tel.substr(3, 3) + '-' + tel.substr(6);
+            } else {
+                target.value = tel.substr(0, 3) + '-' + tel.substr(3, 4) + '-' + tel.substr(7);
+            }
+        }
+
+        // JWT 토큰을 디코딩하는 함수 (Base64 디코딩)
+        function decodeJWT(token) {
+            if (!token) {
+                throw new Error('토큰이 제공되지 않았습니다.');
+            }
+
+            const base64Url = token.split('.')[1];
+            if (!base64Url) {
+                throw new Error('토큰 형식이 올바르지 않습니다.');
+            }
+
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            return JSON.parse(jsonPayload);
+        }
+
+        // URL에서 토큰 추출
+        function getTokenFromUrl() {
+            const url = window.location.href;
+            const token = url.split('/').pop(); // URL 마지막 부분에서 토큰 추출
+            return token;
+        }
+
+        // 페이지 로드 시 이메일 표시
+        window.onload = function() {
+            const token = getTokenFromUrl();
+            const decodedToken = decodeJWT(token);
+
+            // 이메일을 저장
+            const email = decodedToken.email;
+            localStorage.setItem('email', email); // 이메일 저장
+
+            // 추가 정보 입력 페이지에 표시 (옵션)
+            console.log("디코딩된 이메일:", email);
+        }
+
+        // 추가 정보 처리 함수
+        function handleAdditionalInfo(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const nickname = document.getElementById('nickname').value.trim();
+            let tel = document.getElementById('tel').value.replace(/-/g, ''); // 하이픈 제거
+            const gender = document.getElementById('gender').value;
+            const birthdate = document.getElementById('birthdate').value;
+            const email = localStorage.getItem('email'); // URL에서 추출한 이메일 사용
+
+            const requestData = {
+                name: name,
+                nickname: nickname,
+                tel: tel,
+                gender: gender,
+                birthDate: birthdate,
+                email: email
+            };
+
+            // 서버에 추가 정보 전송
+            fetch(API_BASE_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getTokenFromUrl()}` // URL에서 추출한 토큰을 Authorization 헤더에 추가
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('추가 정보 저장 중 문제가 발생했습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert('추가 정보가 성공적으로 저장되었습니다.');
+                window.location.href = '/Graduation-work/main.html'; // 메인 페이지로 이동
+            })
+            .catch(error => {
+                console.error('추가 정보 저장 오류:', error.message);
+                alert('추가 정보 저장 오류: ' + error.message);
+            });
+        }
+    </script>
+</body>
+</html>
