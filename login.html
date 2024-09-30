@@ -87,12 +87,10 @@
                 body: JSON.stringify(requestData)
             })
             .then(response => {
-                // 응답이 제대로 왔는지 확인
                 console.log("서버 응답 상태 코드:", response.status);
                 return response.json();
             })
             .then(data => {
-                // 서버에서 반환된 데이터 전체를 콘솔에 출력 (디버깅)
                 console.log("서버 응답 데이터:", data);
 
                 // 토큰이 응답 데이터에 포함되지 않은 경우 처리
@@ -100,18 +98,22 @@
                     throw new Error('서버에서 토큰을 반환하지 않았습니다.');
                 }
 
-                // JWT 토큰에서 닉네임 추출
                 const token = data.data.accessToken;
                 const decodedToken = decodeJWT(token);
-                const nickname = decodedToken.nickname;
 
-                // 닉네임과 토큰을 localStorage에 저장
-                localStorage.setItem('token', token); // 토큰 저장
-                localStorage.setItem('nickname', nickname); // 닉네임 저장
+                // 신규 사용자 여부 체크
+                if (decodedToken.role === 'ROLE_GUEST') {
+                    // 신규 사용자일 경우 추가 정보 입력 페이지로 리디렉트
+                    window.location.href = `/Graduation-work/more_information.html/${token}`;
+                } else {
+                    // 기존 사용자일 경우 닉네임 저장 및 메인 페이지로 이동
+                    const nickname = decodedToken.nickname;
+                    localStorage.setItem('token', token); // 토큰 저장
+                    localStorage.setItem('nickname', nickname); // 닉네임 저장
 
-                // 로그인 성공 후 메인 페이지로 이동
-                alert(`환영합니다, ${nickname}님!`);
-                window.location.href = '/Graduation-work/main.html';
+                    alert(`환영합니다, ${nickname}님!`);
+                    window.location.href = '/Graduation-work/main.html';
+                }
             })
             .catch(error => {
                 console.error("로그인 오류:", error.message); // 콘솔에 오류 메시지 출력
