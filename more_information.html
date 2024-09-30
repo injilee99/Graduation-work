@@ -78,24 +78,34 @@
             return JSON.parse(jsonPayload);
         }
 
-        // URL에서 토큰 추출
-        function getTokenFromUrl() {
-            const url = window.location.href;
-            const token = url.split('/').pop(); // URL 마지막 부분에서 토큰 추출
-            return token;
+        // URL에서 토큰 추출 후 URL에서 제거하고 저장하는 함수
+        function cleanUrlAndStoreToken() {
+            const currentUrl = window.location.href;
+            const token = currentUrl.split('/').pop(); // URL 마지막 부분에서 토큰 추출
+            const baseUrl = 'https://genu99.github.io/Graduation-work/more_information.html';
+
+            // 토큰 유효성 검사
+            if (token && token.length > 10) {
+                localStorage.setItem('token', token); // 토큰을 localStorage에 저장
+
+                // URL에서 토큰 제거하고 깨끗한 URL로 리디렉션
+                window.history.replaceState({}, document.title, baseUrl);
+            }
         }
 
-        // 페이지 로드 시 이메일 표시
+        // 페이지 로드 시 URL에서 토큰을 추출하고 이메일 표시
         window.onload = function() {
-            const token = getTokenFromUrl();
-            const decodedToken = decodeJWT(token);
+            cleanUrlAndStoreToken();
+            
+            const token = localStorage.getItem('token');
+            if (token) {
+                const decodedToken = decodeJWT(token);
+                const email = decodedToken.email;
+                localStorage.setItem('email', email); // 이메일 저장
 
-            // 이메일을 저장
-            const email = decodedToken.email;
-            localStorage.setItem('email', email); // 이메일 저장
-
-            // 추가 정보 입력 페이지에 표시 (옵션)
-            console.log("디코딩된 이메일:", email);
+                // 이메일 확인 (옵션)
+                console.log("디코딩된 이메일:", email);
+            }
         }
 
         // 추가 정보 처리 함수
@@ -107,7 +117,8 @@
             let tel = document.getElementById('tel').value.replace(/-/g, ''); // 하이픈 제거
             const gender = document.getElementById('gender').value;
             const birthdate = document.getElementById('birthdate').value;
-            const email = localStorage.getItem('email'); // URL에서 추출한 이메일 사용
+            const email = localStorage.getItem('email'); // 저장된 이메일 사용
+            const token = localStorage.getItem('token'); // 저장된 토큰 사용
 
             const requestData = {
                 name: name,
@@ -123,7 +134,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getTokenFromUrl()}` // URL에서 추출한 토큰을 Authorization 헤더에 추가
+                    'Authorization': `Bearer ${token}` // Authorization 헤더에 토큰 추가
                 },
                 body: JSON.stringify(requestData)
             })
