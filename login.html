@@ -22,7 +22,7 @@
                 <a href="findid.html">이메일 찾기</a> | <a href="findpassword.html">비밀번호 찾기</a>
             </div>
 
-            <button type="submit">로그인</button>
+            <button type="submit" id="login-button">로그인</button>
             <p id="login-status"></p>
         </form>
 
@@ -44,6 +44,8 @@
 
     <script>
         const API_BASE_URL = 'https://ludorium.store/api'; // 서버 주소
+        const loginButton = document.getElementById('login-button');
+        const loginStatus = document.getElementById('login-status');
 
         // JWT 토큰을 디코딩하는 함수 (Base64 디코딩)
         function decodeJWT(token) {
@@ -70,13 +72,16 @@
 
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value.trim();
-            const loginStatus = document.getElementById('login-status');
 
             // 로그인 요청 데이터
             const requestData = {
                 email: email,
                 password: password
             };
+
+            // 로그인 버튼을 비활성화하고 로딩 중 메시지를 표시
+            loginButton.disabled = true;
+            loginButton.innerText = '로그인 중...';
 
             // 로그인 요청
             fetch(`${API_BASE_URL}/user/auth/login`, {
@@ -87,9 +92,8 @@
                 body: JSON.stringify(requestData)
             })
             .then(response => {
-                console.log("서버 응답 상태 코드:", response.status);
                 if (!response.ok) {
-                    throw new Error('로그인에 실패했습니다.');
+                    throw new Error('로그인에 실패했습니다. 다시 시도해 주세요.');
                 }
                 return response.json();
             })
@@ -123,6 +127,11 @@
                 console.error("로그인 오류:", error.message); // 콘솔에 오류 메시지 출력
                 loginStatus.innerText = error.message;
                 loginStatus.style.color = 'red';
+            })
+            .finally(() => {
+                // 로그인 버튼 다시 활성화
+                loginButton.disabled = false;
+                loginButton.innerText = '로그인';
             });
         }
 
