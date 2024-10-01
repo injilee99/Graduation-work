@@ -43,7 +43,7 @@
     </div>
 
     <script>
-        const API_BASE_URL = 'https://ludorium.store/api/user/auth/oauth-join'; // 서버 주소
+        const API_BASE_URL = 'https://ludorium.store/api/user/auth/oauth-join';
 
         // 전화번호 자동 하이픈 추가
         function autoHyphen(target) {
@@ -52,59 +52,25 @@
                 target.value = tel;
             } else if (tel.length < 7) {
                 target.value = tel.substr(0, 3) + '-' + tel.substr(3);
-            } else if (tel.length < 11) {
-                target.value = tel.substr(0, 3) + '-' + tel.substr(3, 3) + '-' + tel.substr(6);
             } else {
                 target.value = tel.substr(0, 3) + '-' + tel.substr(3, 4) + '-' + tel.substr(7);
             }
         }
 
-        // JWT 토큰을 디코딩하는 함수 (Base64 디코딩)
-        function decodeJWT(token) {
-            if (!token) {
-                throw new Error('토큰이 제공되지 않았습니다.');
-            }
-
-            const base64Url = token.split('.')[1];
-            if (!base64Url) {
-                throw new Error('토큰 형식이 올바르지 않습니다.');
-            }
-
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-
-            return JSON.parse(jsonPayload);
+        // URL에서 토큰 추출
+        function getTokenFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('access');
         }
 
-        // URL에서 토큰 추출 후 URL에서 제거하고 저장하는 함수
-        function cleanUrlAndStoreToken() {
-            const currentUrl = window.location.href;
-            const token = currentUrl.split('/').pop(); // URL 마지막 부분에서 토큰 추출
-            const baseUrl = 'https://genu99.github.io/Graduation-work/more_information.html';
-
-            // 토큰 유효성 검사
-            if (token && token.length > 10) {
-                localStorage.setItem('token', token); // 토큰을 localStorage에 저장
-
-                // URL에서 토큰 제거하고 깨끗한 URL로 리디렉션
-                window.history.replaceState({}, document.title, baseUrl);
-            }
-        }
-
-        // 페이지 로드 시 URL에서 토큰을 추출하고 이메일 표시
+        // 페이지 로드 시 토큰 처리
         window.onload = function() {
-            cleanUrlAndStoreToken();
-            
-            const token = localStorage.getItem('token');
+            const token = getTokenFromUrl();
             if (token) {
-                const decodedToken = decodeJWT(token);
-                const email = decodedToken.email;
-                localStorage.setItem('email', email); // 이메일 저장
-
-                // 이메일 확인 (옵션)
-                console.log("디코딩된 이메일:", email);
+                localStorage.setItem('accessToken', token);
+            } else {
+                alert('잘못된 접근입니다.');
+                window.location.href = 'login.html';
             }
         }
 
@@ -114,19 +80,17 @@
 
             const name = document.getElementById('name').value.trim();
             const nickname = document.getElementById('nickname').value.trim();
-            let tel = document.getElementById('tel').value.replace(/-/g, ''); // 하이픈 제거
+            let tel = document.getElementById('tel').value.replace(/-/g, '');
             const gender = document.getElementById('gender').value;
             const birthdate = document.getElementById('birthdate').value;
-            const email = localStorage.getItem('email'); // 저장된 이메일 사용
-            const token = localStorage.getItem('token'); // 저장된 토큰 사용
+            const accessToken = localStorage.getItem('accessToken');
 
             const requestData = {
                 name: name,
                 nickname: nickname,
                 tel: tel,
                 gender: gender,
-                birthDate: birthdate,
-                email: email
+                birthDate: birthdate
             };
 
             // 서버에 추가 정보 전송
@@ -134,7 +98,7 @@
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Authorization 헤더에 토큰 추가
+                    'Authorization': `Bearer ${accessToken}`
                 },
                 body: JSON.stringify(requestData)
             })
@@ -146,7 +110,7 @@
             })
             .then(data => {
                 alert('추가 정보가 성공적으로 저장되었습니다.');
-                window.location.href = '/Graduation-work/main.html'; // 메인 페이지로 이동
+                window.location.href = '/Graduation-work/main.html';
             })
             .catch(error => {
                 console.error('추가 정보 저장 오류:', error.message);
