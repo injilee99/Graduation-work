@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>game forge</title>
+    <title>Game Forge</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -32,8 +32,8 @@
         </nav>
         <div class="auth-buttons">
           <span id="welcome-message"></span> <!-- 환영 메시지 추가 -->
-          <a href="login.html" class="login-btn" id="login-btn">로그인</a> <!-- login.html로 이동 -->
-          <button id="logout-btn" style="display:none;" onclick="logout()">로그아웃</button> <!-- 로그아웃 버튼 추가 -->
+          <a href="login.html" class="login-btn" id="login-btn">로그인</a>
+          <button id="logout-btn" style="display:none;" onclick="logout()">로그아웃</button>
         </div>
       </div>
       <div class="sub-nav">
@@ -139,6 +139,21 @@
     </footer>
 
     <script>
+      // JWT 토큰을 디코딩하는 함수
+      function decodeJWT(token) {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split('')
+            .map(function (c) {
+              return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            })
+            .join('')
+        );
+        return JSON.parse(jsonPayload);
+      }
+
       // 로그인 상태 확인 함수
       function checkLoginStatus() {
         const token = localStorage.getItem('token'); // localStorage에서 토큰 가져오기
@@ -149,7 +164,9 @@
         const logoutBtn = document.getElementById('logout-btn');
 
         // 토큰과 닉네임이 모두 있을 경우 로그인된 것으로 간주
-        if (token && nickname) {
+        if (token) {
+          const decodedToken = decodeJWT(token);
+          const nickname = decodedToken.nickname || '사용자';
           welcomeMessage.innerText = `환영합니다, ${nickname}님!`;
           loginBtn.style.display = 'none'; // 로그인 버튼 숨김
           logoutBtn.style.display = 'inline-block'; // 로그아웃 버튼 표시
