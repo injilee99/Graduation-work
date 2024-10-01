@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>My Page - Game Forge</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -40,18 +40,16 @@
         margin: 0;
         padding: 0;
         display: flex;
-        gap: 30px; /* 링크 간격 조정 */
-        justify-content: center; /* 중앙 정렬 */
-        flex: 1; /* 중간 네비게이션 바가 가로로 더 많은 공간을 차지하도록 설정 */
+        gap: 30px;
+        justify-content: center;
+        flex: 1;
       }
 
       .main-menu li a {
         color: #333;
         text-decoration: none;
         font-size: 16px;
-
-        padding: 5px 10px; /* 여백 추가 */
-
+        padding: 5px 10px;
         font-weight: 500;
         font-style: normal;
       }
@@ -70,7 +68,6 @@
         background-color: #889491;
       }
 
-      /* 서브메뉴 */
       .sub-nav {
         background-color: #889491;
         margin: 0 150px;
@@ -90,7 +87,6 @@
         color: white;
         cursor: pointer;
         padding: 5px 10px;
-
         border-radius: 15px;
         transition: background-color 0.3s, color 0.3s;
       }
@@ -129,23 +125,23 @@
         margin: 0;
         padding: 0;
         display: flex;
-        flex-direction: column; /* 세로로 쌓이게 배치 */
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         text-align: center;
-        margin-top: 50px; /* 상단에서 떨어지도록 여백 추가 */
+        margin-top: 50px;
       }
 
       .profile-header {
         display: flex;
-        flex-direction: row; /* 세로가 아닌 가로로 나란히 배치 */
-        align-items: center; /* 이미지와 텍스트를 수직으로 가운데 정렬 */
-        justify-content: center; /* 이미지와 텍스트를 가로로 가운데 정렬 */
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
         margin-bottom: 30px;
       }
 
       .profile-header h1 {
-        margin-left: 20px; /* 이미지와 텍스트 사이에 여백 추가 */
+        margin-left: 20px;
         font-size: 24px;
       }
 
@@ -158,7 +154,7 @@
       .profile-info {
         text-align: left;
         margin: 40px;
-        width: 500px; /* 사용자 정보의 가로 폭 지정 */
+        width: 500px;
       }
 
       .profile-row {
@@ -233,29 +229,29 @@
           alt="Profile Icon"
           class="profile-image"
         />
-        <h1>구름 님 안녕하세요!</h1>
+        <h1 id="nickname">사용자님 안녕하세요!</h1>
       </div>
 
       <div class="profile-info">
         <div class="profile-row">
           <span class="label">접속 중인 아이디</span>
-          <span class="value">happy2024@naver.com</span>
+          <span class="value" id="email">email@example.com</span>
         </div>
         <div class="profile-row">
           <span class="label">소셜 로그인</span>
-          <span class="value">네이버</span>
+          <span class="value" id="social-login">-</span>
         </div>
         <div class="profile-row">
           <span class="label">생년월일</span>
-          <span class="value">2001-01-30</span>
+          <span class="value" id="birthdate">YYYY-MM-DD</span>
         </div>
         <div class="profile-row">
           <span class="label">전화번호</span>
-          <span class="value">010-0000-0000</span>
+          <span class="value" id="tel">010-0000-0000</span>
         </div>
         <div class="profile-row">
           <span class="label">성별</span>
-          <span class="value">W</span>
+          <span class="value" id="gender">-</span>
         </div>
       </div>
     </div>
@@ -265,5 +261,25 @@
         <p>&copy; 대진대학교 벤처 졸업작품.</p>
       </div>
     </footer>
+
+    <script>
+      // 페이지 로드 시 사용자 정보를 로컬스토리지에서 가져와서 표시
+      window.onload = function () {
+        const nickname = localStorage.getItem("nickname");
+        const email = localStorage.getItem("email");
+        const birthdate = localStorage.getItem("birthdate");
+        const tel = localStorage.getItem("tel");
+        const gender = localStorage.getItem("gender");
+        const socialLogin = localStorage.getItem("socialLogin"); // 카카오, 네이버 등
+
+        // 사용자 정보 표시
+        document.getElementById("nickname").innerText = nickname ? `${nickname}님 안녕하세요!` : "사용자님 안녕하세요!";
+        document.getElementById("email").innerText = email || "email@example.com";
+        document.getElementById("birthdate").innerText = birthdate || "YYYY-MM-DD";
+        document.getElementById("tel").innerText = tel || "010-0000-0000";
+        document.getElementById("gender").innerText = gender || "-";
+        document.getElementById("social-login").innerText = socialLogin || "-";
+      };
+    </script>
   </body>
 </html>
