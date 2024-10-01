@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>추가 정보 입력 - Game Forge</title>
-    <link rel="stylesheet" href="more_information.css">
+    <!-- CSS 파일 경로 수정 -->
+    <link rel="stylesheet" href="/Graduation-work/more_information.css">
 </head>
 <body>
     <div class="additional-info-container">
@@ -57,30 +58,23 @@
             }
         }
 
-        // URL에서 토큰과 이메일 추출
+        // URL에서 토큰 추출
         function getTokenFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
             const token = urlParams.get('access');
-            console.log('Extracted token:', token); // 콘솔에 토큰 출력
+            console.log('Extracted token:', token); // 추출된 토큰 확인
             return token;
         }
 
-        function getEmailFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('email');
-        }
-
-        // 페이지 로드 시 토큰과 이메일 처리
+        // 페이지 로드 시 토큰 처리
         window.onload = function() {
             const token = getTokenFromUrl();
-            const email = getEmailFromUrl();
-
-            if (token && email) {
-                localStorage.setItem('accessToken', token);
-                localStorage.setItem('email', email); // 이메일 저장
+            if (token) {
+                console.log("Token detected and stored");
+                localStorage.setItem('accessToken', token); // 토큰을 localStorage에 저장
             } else {
                 alert('잘못된 접근입니다.');
-                window.location.href = 'login.html';
+                window.location.href = 'login.html'; // 토큰이 없을 경우 로그인 페이지로 이동
             }
         }
 
@@ -90,11 +84,10 @@
 
             const name = document.getElementById('name').value.trim();
             const nickname = document.getElementById('nickname').value.trim();
-            let tel = document.getElementById('tel').value.replace(/-/g, '');
+            let tel = document.getElementById('tel').value.replace(/-/g, ''); // 하이픈 제거
             const gender = document.getElementById('gender').value;
             const birthdate = document.getElementById('birthdate').value;
-            const email = localStorage.getItem('email'); // URL에서 추출한 이메일 사용
-            const accessToken = localStorage.getItem('accessToken');
+            const accessToken = localStorage.getItem('accessToken'); // 저장된 액세스 토큰 가져오기
 
             const requestData = {
                 name: name,
@@ -102,15 +95,17 @@
                 tel: tel,
                 gender: gender,
                 birthDate: birthdate,
-                email: email
+                email: localStorage.getItem('email') // 로컬스토리지에서 이메일 가져오기
             };
+
+            console.log('Sending data to server:', requestData); // 전송할 데이터 확인
 
             // 서버에 추가 정보 전송
             fetch(API_BASE_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`
+                    'Authorization': `Bearer ${accessToken}` // 토큰을 Authorization 헤더에 추가
                 },
                 body: JSON.stringify(requestData)
             })
@@ -122,11 +117,11 @@
             })
             .then(data => {
                 alert('추가 정보가 성공적으로 저장되었습니다.');
-                window.location.href = '/Graduation-work/main.html';
+                window.location.href = '/Graduation-work/main.html'; // 저장 성공 시 메인 페이지로 이동
             })
             .catch(error => {
                 console.error('추가 정보 저장 오류:', error.message);
-                alert('추가 정보 저장 오류: ' + error.message);
+                alert('추가 정보 저장 오류: ' + error.message); // 오류 시 알림
             });
         }
     </script>
