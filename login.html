@@ -79,7 +79,7 @@
             };
 
             // 로그인 요청
-            fetch(${API_BASE_URL}/user/auth/login, {
+            fetch(`${API_BASE_URL}/user/auth/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -112,7 +112,7 @@
                     localStorage.setItem('token', token); // 토큰 저장
                     localStorage.setItem('nickname', nickname); // 닉네임 저장
 
-                    alert(환영합니다, ${nickname}님!);
+                    alert(`환영합니다, ${nickname}님!`);
                     window.location.href = '/Graduation-work/main.html';
                 }
             })
@@ -131,6 +131,8 @@
             // main.html, signup.html 페이지에서는 자동 리디렉션 방지
             if (token && !path.includes('login.html')) {
                 window.location.href = '/Graduation-work/main.html';
+            } else if (!token) {
+                alert("로그인이 필요합니다.");
             }
         }
 
