@@ -67,6 +67,7 @@
         window.onload = function() {
             const token = getTokenFromUrl();
             if (token) {
+                console.log("Access Token:", token); // 토큰을 확인
                 localStorage.setItem('accessToken', token);
             } else {
                 alert('잘못된 접근입니다.');
@@ -84,6 +85,14 @@
             const gender = document.getElementById('gender').value;
             const birthdate = document.getElementById('birthdate').value;
             const accessToken = localStorage.getItem('accessToken');
+
+            // 입력된 데이터 확인
+            console.log("이름:", name);
+            console.log("닉네임:", nickname);
+            console.log("전화번호:", tel);
+            console.log("성별:", gender);
+            console.log("생년월일:", birthdate);
+            console.log("Access Token:", accessToken);
 
             const requestData = {
                 name: name,
@@ -103,12 +112,17 @@
                 body: JSON.stringify(requestData)
             })
             .then(response => {
+                console.log("응답 상태:", response.status); // 응답 상태 확인
                 if (!response.ok) {
-                    throw new Error('추가 정보 저장 중 문제가 발생했습니다.');
+                    return response.json().then(data => {
+                        console.error('서버 응답 오류:', data);
+                        throw new Error('추가 정보 저장 중 문제가 발생했습니다.');
+                    });
                 }
                 return response.json();
             })
             .then(data => {
+                console.log('서버 응답 데이터:', data); // 서버 응답 데이터 확인
                 alert('추가 정보가 성공적으로 저장되었습니다.');
                 window.location.href = '/Graduation-work/main.html';
             })
