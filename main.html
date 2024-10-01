@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,600;1,700&display=swap"
       rel="stylesheet"
     />
     <link
@@ -141,20 +141,19 @@
     <script>
       // 로그인 상태 확인 함수
       function checkLoginStatus() {
-        const token = localStorage.getItem('accessToken'); // localStorage에서 액세스 토큰 가져오기
+        const token = localStorage.getItem('token'); // localStorage에서 토큰 가져오기
         const nickname = localStorage.getItem('nickname'); // localStorage에서 닉네임 가져오기
 
         const welcomeMessage = document.getElementById('welcome-message');
         const loginBtn = document.getElementById('login-btn');
         const logoutBtn = document.getElementById('logout-btn');
 
+        // 토큰과 닉네임이 모두 있을 경우 로그인된 것으로 간주
         if (token && nickname) {
-          // 로그인된 상태일 경우 환영 메시지와 로그아웃 버튼 표시
           welcomeMessage.innerText = `환영합니다, ${nickname}님!`;
           loginBtn.style.display = 'none'; // 로그인 버튼 숨김
           logoutBtn.style.display = 'inline-block'; // 로그아웃 버튼 표시
         } else {
-          // 로그인되지 않은 경우 로그인 버튼 표시
           welcomeMessage.innerText = ''; // 환영 메시지 삭제
           loginBtn.style.display = 'inline-block'; // 로그인 버튼 표시
           logoutBtn.style.display = 'none'; // 로그아웃 버튼 숨김
@@ -163,7 +162,7 @@
 
       // 로그아웃 처리 함수 (페이지 유지)
       function logout() {
-        localStorage.removeItem('accessToken'); // 토큰 삭제
+        localStorage.removeItem('token'); // 토큰 삭제
         localStorage.removeItem('nickname'); // 닉네임 삭제
         checkLoginStatus(); // 로그아웃 후 상태 갱신
       }
