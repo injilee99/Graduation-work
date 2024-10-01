@@ -57,18 +57,25 @@
             }
         }
 
-        // URL에서 토큰 추출
+        // URL에서 토큰과 이메일 추출
         function getTokenFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get('access');
         }
 
-        // 페이지 로드 시 토큰 처리
+        function getEmailFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('email');
+        }
+
+        // 페이지 로드 시 토큰과 이메일 처리
         window.onload = function() {
             const token = getTokenFromUrl();
-            if (token) {
-                console.log("Access Token:", token); // 토큰을 확인
+            const email = getEmailFromUrl();
+
+            if (token && email) {
                 localStorage.setItem('accessToken', token);
+                localStorage.setItem('email', email); // 이메일 저장
             } else {
                 alert('잘못된 접근입니다.');
                 window.location.href = 'login.html';
@@ -84,22 +91,16 @@
             let tel = document.getElementById('tel').value.replace(/-/g, '');
             const gender = document.getElementById('gender').value;
             const birthdate = document.getElementById('birthdate').value;
+            const email = localStorage.getItem('email'); 
             const accessToken = localStorage.getItem('accessToken');
-
-            // 입력된 데이터 확인
-            console.log("이름:", name);
-            console.log("닉네임:", nickname);
-            console.log("전화번호:", tel);
-            console.log("성별:", gender);
-            console.log("생년월일:", birthdate);
-            console.log("Access Token:", accessToken);
 
             const requestData = {
                 name: name,
                 nickname: nickname,
                 tel: tel,
                 gender: gender,
-                birthDate: birthdate
+                birthDate: birthdate,
+                email: email
             };
 
             // 서버에 추가 정보 전송
@@ -112,17 +113,12 @@
                 body: JSON.stringify(requestData)
             })
             .then(response => {
-                console.log("응답 상태:", response.status); // 응답 상태 확인
                 if (!response.ok) {
-                    return response.json().then(data => {
-                        console.error('서버 응답 오류:', data);
-                        throw new Error('추가 정보 저장 중 문제가 발생했습니다.');
-                    });
+                    throw new Error('추가 정보 저장 중 문제가 발생했습니다.');
                 }
                 return response.json();
             })
             .then(data => {
-                console.log('서버 응답 데이터:', data); // 서버 응답 데이터 확인
                 alert('추가 정보가 성공적으로 저장되었습니다.');
                 window.location.href = '/Graduation-work/main.html';
             })
