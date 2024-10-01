@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>game forge</title>
+    <title>game forge - 마이페이지</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,600;1,700;1,800&display=swap"
       rel="stylesheet"
     />
     <link
@@ -36,99 +36,18 @@
           <button id="logout-btn" style="display:none;" onclick="logout()">로그아웃</button> <!-- 로그아웃 버튼 추가 -->
         </div>
       </div>
-      <div class="sub-nav">
-        <ul class="submenu">
-          <li>내 상점</li>
-          <li>최근에 본 제품</li>
-          <li>내 태그</li>
-          <li>추천 제품</li>
-          <li>카테고리 검색</li>
-          <li>장르별 검색</li>
-        </ul>
-      </div>
     </header>
 
-    <div class="banner-slider">
-      <div class="slides">
-        <div class="slide">
-          <img src="./images/core_keeeper.jpg" alt="core keeper" />
-        </div>
-        <div class="slide">
-          <img src="./images/eternal_return.jpg" alt="eternal return" />
-        </div>
-        <div class="slide">
-          <img src="./images/once_human.jpg" alt="stardew valley" />
-        </div>
-        <div class="slide">
-          <img src="./images/60_seconds.jpg" alt="sims" />
-        </div>
-      </div>
-      <div class="controls">
-        <span class="material-symbols-outlined prev">arrow_back_ios</span>
-        <span class="material-symbols-outlined next">arrow_forward_ios</span>
-      </div>
-    </div>
-
     <main>
-      <section class="content">
-        <div class="search-bar">
-          <input
-            type="text"
-            placeholder="스타듀밸리의 최근 업데이트를 확인하세요!"
-            class="search-input"
-          />
-          <button class="search-btn">검색</button>
+      <section class="profile-section">
+        <h2>마이페이지</h2>
+        <div class="profile-info">
+          <h3 id="user-nickname">닉네임: </h3>
+          <p id="user-email">이메일: </p>
+          <p id="user-tel">전화번호: </p>
+          <p id="user-gender">성별: </p>
+          <p id="user-birthdate">생년월일: </p>
         </div>
-
-        <!-- 이달의 추천 게임 -->
-        <section class="featured-games">
-          <h2>이달의 추천게임</h2>
-          <div class="game-grid">
-            <div class="game-card">
-              <a href="eternal_return.html">
-                <img src="./images/eternal_return.jpg" alt="Game 1" />
-              <p>Eternal Retrun</p>
-            </div>
-            <div class="game-card">
-              <a href="The sims4.html">
-                <img src="./images/sims.jpg" alt="Game 2" />
-              <p>The Sims4</p>
-            </div>
-            <div class="game-card">
-              <a href="stardew_valley.html">
-                <img src="./images/stardew_valley.jpg" alt="Game 3" />
-              <p>Stardew Valley</p>
-            </div>
-            <div class="game-card">
-              <a href="core_keeper.html">
-                <img src="./images/core_keeeper.jpg" alt="Game 4" />
-              <p>Core Keeper</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- 이달의 할인 게임 -->
-        <section class="discounted-games">
-          <h2>이달의 할인게임</h2>
-          <div class="game-grid">
-            <div class="game-card">
-              <img src="./images/battlegrounds.jpg" alt="Game 5" />
-              <p>BattelGrounds</p>
-            </div>
-            <div class="game-card">
-              <img src="./images/astroneer.jpg" alt="Game 6" />
-              <p>Astroneer</p>
-            </div>
-            <div class="game-card">
-              <img src="./images/60_seconds.jpg" alt="Game 7" />
-              <p>60 Seconds!</p>
-            </div>
-            <div class="game-card">
-              <img src="./images/once_human.jpg" alt="Game 8" />
-              <p>Once Human</p>
-            </div>
-          </div>
-        </section>
       </section>
     </main>
 
@@ -141,8 +60,12 @@
     <script>
       // 로그인 상태 확인 함수
       function checkLoginStatus() {
-        const token = localStorage.getItem('accessToken'); // localStorage에서 액세스 토큰 가져오기
-        const nickname = localStorage.getItem('nickname'); // localStorage에서 닉네임 가져오기
+        const token = localStorage.getItem('token'); // 토큰 가져오기
+        const nickname = localStorage.getItem('nickname'); // 닉네임 가져오기
+        const email = localStorage.getItem('email'); // 이메일 가져오기
+        const tel = localStorage.getItem('tel'); // 전화번호 가져오기
+        const gender = localStorage.getItem('gender'); // 성별 가져오기
+        const birthdate = localStorage.getItem('birthdate'); // 생년월일 가져오기
 
         const welcomeMessage = document.getElementById('welcome-message');
         const loginBtn = document.getElementById('login-btn');
@@ -153,18 +76,28 @@
           welcomeMessage.innerText = `환영합니다, ${nickname}님!`;
           loginBtn.style.display = 'none'; // 로그인 버튼 숨김
           logoutBtn.style.display = 'inline-block'; // 로그아웃 버튼 표시
+
+          // 사용자 정보 표시
+          document.getElementById('user-nickname').innerText = `닉네임: ${nickname}`;
+          document.getElementById('user-email').innerText = `이메일: ${email || 'N/A'}`;
+          document.getElementById('user-tel').innerText = `전화번호: ${tel || 'N/A'}`;
+          document.getElementById('user-gender').innerText = `성별: ${gender || 'N/A'}`;
+          document.getElementById('user-birthdate').innerText = `생년월일: ${birthdate || 'N/A'}`;
         } else {
-          // 로그인되지 않은 경우 로그인 버튼 표시
-          welcomeMessage.innerText = ''; // 환영 메시지 삭제
-          loginBtn.style.display = 'inline-block'; // 로그인 버튼 표시
-          logoutBtn.style.display = 'none'; // 로그아웃 버튼 숨김
+          // 로그인이 안된 경우 로그인 페이지로 리디렉트
+          alert('로그인이 필요합니다.');
+          window.location.href = 'login.html';
         }
       }
 
       // 로그아웃 처리 함수 (페이지 유지)
       function logout() {
-        localStorage.removeItem('accessToken'); // 토큰 삭제
+        localStorage.removeItem('token'); // 토큰 삭제
         localStorage.removeItem('nickname'); // 닉네임 삭제
+        localStorage.removeItem('email'); // 이메일 삭제
+        localStorage.removeItem('tel'); // 전화번호 삭제
+        localStorage.removeItem('gender'); // 성별 삭제
+        localStorage.removeItem('birthdate'); // 생년월일 삭제
         checkLoginStatus(); // 로그아웃 후 상태 갱신
       }
 
