@@ -60,7 +60,9 @@
         // URL에서 토큰과 이메일 추출
         function getTokenFromUrl() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('access');
+            const token = urlParams.get('access');
+            console.log('Extracted token:', token); // 콘솔에 토큰 출력
+            return token;
         }
 
         function getEmailFromUrl() {
@@ -91,7 +93,7 @@
             let tel = document.getElementById('tel').value.replace(/-/g, '');
             const gender = document.getElementById('gender').value;
             const birthdate = document.getElementById('birthdate').value;
-            const email = localStorage.getItem('email'); 
+            const email = localStorage.getItem('email'); // URL에서 추출한 이메일 사용
             const accessToken = localStorage.getItem('accessToken');
 
             const requestData = {
