@@ -88,6 +88,9 @@
             })
             .then(response => {
                 console.log("서버 응답 상태 코드:", response.status);
+                if (!response.ok) {
+                    throw new Error('로그인에 실패했습니다.');
+                }
                 return response.json();
             })
             .then(data => {
@@ -105,7 +108,7 @@
                 if (decodedToken.role === 'ROLE_GUEST') {
                     // 신규 사용자일 경우 토큰을 localStorage에 저장 후 more_information.html로 이동
                     localStorage.setItem('token', token); // 토큰 저장
-                    window.location.href = '/Graduation-work/more_information.html'; // **토큰 없이 이동**
+                    window.location.href = '/Graduation-work/more_information.html';
                 } else {
                     // 기존 사용자일 경우 닉네임 저장 및 메인 페이지로 이동
                     const nickname = decodedToken.nickname;
@@ -131,8 +134,6 @@
             // main.html, signup.html 페이지에서는 자동 리디렉션 방지
             if (token && !path.includes('login.html')) {
                 window.location.href = '/Graduation-work/main.html';
-            } else if (!token) {
-                alert("로그인이 필요합니다.");
             }
         }
 
