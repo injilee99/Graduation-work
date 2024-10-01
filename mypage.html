@@ -3,190 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Page - Game Forge</title>
+    <title>game forge</title>
+    <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet"
     />
-    <style>
-      body {
-        font-family: "Noto Sans KR";
-      }
-      header {
-        font-family: "Noto Sans KR", sans-serif;
-        font-weight: 500;
-        font-style: normal;
-        color: #333;
-      }
-
-      .top-nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 30px;
-        color: #333;
-      }
-
-      .logo {
-        margin-left: 150px;
-        font-size: 24px;
-        font-weight: bold;
-      }
-
-      .main-menu {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        gap: 30px;
-        justify-content: center;
-        flex: 1;
-      }
-
-      .main-menu li a {
-        color: #333;
-        text-decoration: none;
-        font-size: 16px;
-        padding: 5px 10px;
-        font-weight: 500;
-        font-style: normal;
-      }
-
-      .auth-buttons {
-        display: flex;
-        gap: 10px;
-        margin-right: 150px;
-      }
-
-      .auth-buttons a {
-        padding: 10px 20px;
-        border-radius: 5px;
-        text-decoration: none;
-        color: white;
-        background-color: #889491;
-      }
-
-      .sub-nav {
-        background-color: #889491;
-        margin: 0 150px;
-        padding: 15px 45px;
-        border-radius: 30px;
-      }
-
-      .submenu {
-        list-style-type: none;
-        margin: 0 10px;
-        padding: 0;
-        display: flex;
-        gap: 30px;
-      }
-
-      .submenu li {
-        color: white;
-        cursor: pointer;
-        padding: 5px 10px;
-        border-radius: 15px;
-        transition: background-color 0.3s, color 0.3s;
-      }
-
-      .submenu li:hover {
-        background-color: #777;
-        color: #fff;
-      }
-
-      .menu {
-        height: 20px;
-        background-color: #778881;
-        display: flex;
-        justify-content: space-around;
-        margin: 50px 150px;
-        padding: 15px 45px;
-        list-style-type: none;
-      }
-
-      .menu li {
-        padding: 0 20px;
-      }
-
-      .menu li a {
-        text-decoration: none;
-        color: #fff;
-        font-weight: bold;
-        display: block;
-      }
-
-      .menu li a:hover {
-        background-color: #889491;
-      }
-
-      .profile-container {
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        margin-top: 50px;
-      }
-
-      .profile-header {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 30px;
-      }
-
-      .profile-header h1 {
-        margin-left: 20px;
-        font-size: 24px;
-      }
-
-      .profile-image {
-        border-radius: 50%;
-        width: 100px;
-        height: 100px;
-      }
-
-      .profile-info {
-        text-align: left;
-        margin: 40px;
-        width: 500px;
-      }
-
-      .profile-row {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px 0;
-        font-size: 18px;
-      }
-
-      .label {
-        font-weight: bold;
-      }
-
-      .value {
-        margin-left: 20px;
-      }
-
-      footer {
-        background-color: #333;
-        color: white;
-        text-align: center;
-        padding: 20px;
-        position: relative;
-        bottom: 0;
-        width: 100%;
-      }
-    </style>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
   </head>
   <body>
     <header>
       <div class="top-nav">
-        <div class="logo">Game Forge</div>
+        <div class="logo">
+          <a href="main.html">Game Forge</a> <!-- main 페이지로 이동 -->
+        </div>
         <nav>
           <ul class="main-menu">
             <li><a href="store.html">상점</a></li>
@@ -196,7 +31,9 @@
           </ul>
         </nav>
         <div class="auth-buttons">
-          <a href="login.html" class="login-btn">로그인</a>
+          <span id="welcome-message"></span> <!-- 환영 메시지 추가 -->
+          <a href="login.html" class="login-btn" id="login-btn">로그인</a> <!-- login.html로 이동 -->
+          <button id="logout-btn" style="display:none;" onclick="logout()">로그아웃</button> <!-- 로그아웃 버튼 추가 -->
         </div>
       </div>
       <div class="sub-nav">
@@ -211,50 +48,89 @@
       </div>
     </header>
 
-    <nav>
-      <ul class="menu">
-        <li><a href="mypage.html">내정보</a></li>
-        <li><a href="#">주문내역</a></li>
-        <li><a href="#">쿠폰</a></li>
-        <li><a href="info.html">정보수정</a></li>
-        <li><a href="modpwd.html">비밀번호 수정</a></li>
-        <li><a href="#">회원탈퇴</a></li>
-      </ul>
-    </nav>
-
-    <div class="profile-container">
-      <div class="profile-header">
-        <img
-          src="https://via.placeholder.com/100"
-          alt="Profile Icon"
-          class="profile-image"
-        />
-        <h1 id="nickname">사용자님 안녕하세요!</h1>
+    <div class="banner-slider">
+      <div class="slides">
+        <div class="slide">
+          <img src="./images/core_keeeper.jpg" alt="core keeper" />
+        </div>
+        <div class="slide">
+          <img src="./images/eternal_return.jpg" alt="eternal return" />
+        </div>
+        <div class="slide">
+          <img src="./images/once_human.jpg" alt="stardew valley" />
+        </div>
+        <div class="slide">
+          <img src="./images/60_seconds.jpg" alt="sims" />
+        </div>
       </div>
-
-      <div class="profile-info">
-        <div class="profile-row">
-          <span class="label">접속 중인 아이디</span>
-          <span class="value" id="email">email@example.com</span>
-        </div>
-        <div class="profile-row">
-          <span class="label">소셜 로그인</span>
-          <span class="value" id="social-login">-</span>
-        </div>
-        <div class="profile-row">
-          <span class="label">생년월일</span>
-          <span class="value" id="birthdate">YYYY-MM-DD</span>
-        </div>
-        <div class="profile-row">
-          <span class="label">전화번호</span>
-          <span class="value" id="tel">010-0000-0000</span>
-        </div>
-        <div class="profile-row">
-          <span class="label">성별</span>
-          <span class="value" id="gender">-</span>
-        </div>
+      <div class="controls">
+        <span class="material-symbols-outlined prev">arrow_back_ios</span>
+        <span class="material-symbols-outlined next">arrow_forward_ios</span>
       </div>
     </div>
+
+    <main>
+      <section class="content">
+        <div class="search-bar">
+          <input
+            type="text"
+            placeholder="스타듀밸리의 최근 업데이트를 확인하세요!"
+            class="search-input"
+          />
+          <button class="search-btn">검색</button>
+        </div>
+
+        <!-- 이달의 추천 게임 -->
+        <section class="featured-games">
+          <h2>이달의 추천게임</h2>
+          <div class="game-grid">
+            <div class="game-card">
+              <a href="eternal_return.html">
+                <img src="./images/eternal_return.jpg" alt="Game 1" />
+              <p>Eternal Retrun</p>
+            </div>
+            <div class="game-card">
+              <a href="The sims4.html">
+                <img src="./images/sims.jpg" alt="Game 2" />
+              <p>The Sims4</p>
+            </div>
+            <div class="game-card">
+              <a href="stardew_valley.html">
+                <img src="./images/stardew_valley.jpg" alt="Game 3" />
+              <p>Stardew Valley</p>
+            </div>
+            <div class="game-card">
+              <a href="core_keeper.html">
+                <img src="./images/core_keeeper.jpg" alt="Game 4" />
+              <p>Core Keeper</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 이달의 할인 게임 -->
+        <section class="discounted-games">
+          <h2>이달의 할인게임</h2>
+          <div class="game-grid">
+            <div class="game-card">
+              <img src="./images/battlegrounds.jpg" alt="Game 5" />
+              <p>BattelGrounds</p>
+            </div>
+            <div class="game-card">
+              <img src="./images/astroneer.jpg" alt="Game 6" />
+              <p>Astroneer</p>
+            </div>
+            <div class="game-card">
+              <img src="./images/60_seconds.jpg" alt="Game 7" />
+              <p>60 Seconds!</p>
+            </div>
+            <div class="game-card">
+              <img src="./images/once_human.jpg" alt="Game 8" />
+              <p>Once Human</p>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
 
     <footer>
       <div class="footer-content">
@@ -263,23 +139,37 @@
     </footer>
 
     <script>
-      // 페이지 로드 시 사용자 정보를 로컬스토리지에서 가져와서 표시
-      window.onload = function () {
-        const nickname = localStorage.getItem("nickname");
-        const email = localStorage.getItem("email");
-        const birthdate = localStorage.getItem("birthdate");
-        const tel = localStorage.getItem("tel");
-        const gender = localStorage.getItem("gender");
-        const socialLogin = localStorage.getItem("socialLogin"); // 카카오, 네이버 등
+      // 로그인 상태 확인 함수
+      function checkLoginStatus() {
+        const token = localStorage.getItem('accessToken'); // localStorage에서 액세스 토큰 가져오기
+        const nickname = localStorage.getItem('nickname'); // localStorage에서 닉네임 가져오기
 
-        // 사용자 정보 표시
-        document.getElementById("nickname").innerText = nickname ? `${nickname}님 안녕하세요!` : "사용자님 안녕하세요!";
-        document.getElementById("email").innerText = email || "email@example.com";
-        document.getElementById("birthdate").innerText = birthdate || "YYYY-MM-DD";
-        document.getElementById("tel").innerText = tel || "010-0000-0000";
-        document.getElementById("gender").innerText = gender || "-";
-        document.getElementById("social-login").innerText = socialLogin || "-";
-      };
+        const welcomeMessage = document.getElementById('welcome-message');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        if (token && nickname) {
+          // 로그인된 상태일 경우 환영 메시지와 로그아웃 버튼 표시
+          welcomeMessage.innerText = `환영합니다, ${nickname}님!`;
+          loginBtn.style.display = 'none'; // 로그인 버튼 숨김
+          logoutBtn.style.display = 'inline-block'; // 로그아웃 버튼 표시
+        } else {
+          // 로그인되지 않은 경우 로그인 버튼 표시
+          welcomeMessage.innerText = ''; // 환영 메시지 삭제
+          loginBtn.style.display = 'inline-block'; // 로그인 버튼 표시
+          logoutBtn.style.display = 'none'; // 로그아웃 버튼 숨김
+        }
+      }
+
+      // 로그아웃 처리 함수 (페이지 유지)
+      function logout() {
+        localStorage.removeItem('accessToken'); // 토큰 삭제
+        localStorage.removeItem('nickname'); // 닉네임 삭제
+        checkLoginStatus(); // 로그아웃 후 상태 갱신
+      }
+
+      // 페이지 로드 시 로그인 상태 확인
+      window.onload = checkLoginStatus;
     </script>
   </body>
 </html>
