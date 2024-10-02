@@ -141,9 +141,9 @@
     <script>
       // 로그인 상태 확인 함수
       function checkLoginStatus() {
-        const token = localStorage.getItem('token');
-        const nickname = localStorage.getItem('nickname'); 
-        
+        const token = localStorage.getItem('token'); // localStorage에서 토큰 가져오기
+        const nickname = localStorage.getItem('nickname'); // localStorage에서 닉네임 가져오기
+
         const welcomeMessage = document.getElementById('welcome-message');
         const loginBtn = document.getElementById('login-btn');
         const logoutBtn = document.getElementById('logout-btn');
