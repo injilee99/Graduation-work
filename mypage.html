@@ -72,12 +72,14 @@
                     }
                 })
                 .then(response => {
+                    console.log("응답 상태 코드:", response.status);  // 응답 상태 코드 출력
                     if (!response.ok) {
                         throw new Error('사용자 정보를 불러오지 못했습니다.');
                     }
                     return response.json();
                 })
                 .then(data => {
+                    console.log("서버 응답 데이터:", data);  // 서버에서 받은 데이터 출력
                     // 응답에서 데이터가 data.data에 있으므로 그 경로를 사용해야 함
                     const userData = data.data;
                     // 사용자 정보 표시
@@ -88,7 +90,7 @@
                     document.getElementById('user-birthdate').innerText = `생년월일: ${userData.birthDate || 'N/A'}`;
                 })
                 .catch(error => {
-                    console.error(error.message);
+                    console.error("에러 메시지:", error.message);  // 에러 메시지 출력
                     alert('사용자 정보를 불러오는 중 오류가 발생했습니다.');
                 });
             } else {
