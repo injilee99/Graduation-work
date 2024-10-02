@@ -52,10 +52,6 @@
             }
 
             const base64Url = token.split('.')[1];
-            if (!base64Url) {
-                throw new Error('토큰 형식이 올바르지 않습니다.');
-            }
-
             const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
             const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
                 return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
@@ -64,80 +60,31 @@
             return JSON.parse(jsonPayload);
         }
 
-        // 로그인 처리 함수
-        function handleLogin(event) {
-            event.preventDefault(); // 폼 제출 시 새로고침 방지
+        // URL에서 토큰 추출 (카카오, 네이버 등 OAuth 로그인 후 전달된 access 토큰)
+        function getTokenFromUrl() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('access'); // access 토큰이 URL 파라미터에 포함되어 있음
+        }
 
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-            const loginStatus = document.getElementById('login-status');
+        // OAuth 로그인 후 추가 처리
+        window.onload = function() {
+            const token = getTokenFromUrl();
+            if (token) {
+                console.log("Token detected and stored:", token);
+                localStorage.setItem('token', token); // 토큰을 localStorage에 저장
 
-            // 로그인 요청 데이터
-            const requestData = {
-                email: email,
-                password: password
-            };
-
-            // 로그인 요청
-            fetch(`${API_BASE_URL}/user/auth/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData)
-            })
-            .then(response => {
-                console.log("서버 응답 상태 코드:", response.status);
-                if (!response.ok) {
-                    throw new Error('로그인에 실패했습니다.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("서버 응답 데이터:", data);
-
-                // 토큰이 응답 데이터에 포함되지 않은 경우 처리
-                if (!data.data || !data.data.accessToken) {
-                    throw new Error('서버에서 토큰을 반환하지 않았습니다.');
-                }
-
-                const token = data.data.accessToken;
+                // JWT 토큰에서 닉네임 추출하여 저장
                 const decodedToken = decodeJWT(token);
+                const nickname = decodedToken.nickname;
+                localStorage.setItem('nickname', nickname); // 닉네임을 localStorage에 저장
+                console.log("Nickname stored:", nickname);
 
-                // 신규 사용자 여부 체크
-                if (decodedToken.role === 'ROLE_GUEST') {
-                    // 신규 사용자일 경우 토큰을 localStorage에 저장 후 more_information.html로 이동
-                    localStorage.setItem('token', token); // 토큰 저장
-                    window.location.href = '/Graduation-work/more_information.html';
-                } else {
-                    // 기존 사용자일 경우 닉네임 저장 및 메인 페이지로 이동
-                    const nickname = decodedToken.nickname;
-                    localStorage.setItem('token', token); // 토큰 저장
-                    localStorage.setItem('nickname', nickname); // 닉네임 저장
-
-                    alert(`환영합니다, ${nickname}님!`);
-                    window.location.href = '/Graduation-work/main.html';
-                }
-            })
-            .catch(error => {
-                console.error("로그인 오류:", error.message); // 콘솔에 오류 메시지 출력
-                loginStatus.innerText = error.message;
-                loginStatus.style.color = 'red';
-            });
-        }
-
-        // 로그인 상태가 이미 유지된 경우 메인 페이지로 리디렉트
-        function checkLoginRedirect() {
-            const token = localStorage.getItem('token');
-            const path = window.location.pathname;
-
-            // main.html, signup.html 페이지에서는 자동 리디렉션 방지
-            if (token && !path.includes('login.html')) {
+                // 메인 페이지로 이동
                 window.location.href = '/Graduation-work/main.html';
+            } else {
+                console.log('No token found in URL');
             }
-        }
-
-        window.onload = checkLoginRedirect;
+        };
     </script>
 </body>
 </html>
