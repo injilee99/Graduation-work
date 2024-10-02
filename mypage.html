@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Forge - 마이페이지</title>
-    <link rel="stylesheet" href="mypage.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
@@ -51,7 +51,7 @@
         const API_BASE_URL = 'https://ludorium.store/api'; // 서버 주소
 
         // 로그인 상태 확인 및 유저 정보 불러오기
-        function checkLoginStatus() {
+        async function checkLoginStatus() {
             const token = localStorage.getItem('token'); // 토큰 가져오기
             const welcomeMessage = document.getElementById('welcome-message');
             const loginBtn = document.getElementById('login-btn');
@@ -63,20 +63,14 @@
                 loginBtn.style.display = 'none'; // 로그인 버튼 숨김
                 logoutBtn.style.display = 'inline-block'; // 로그아웃 버튼 표시
 
-                // 사용자 정보 불러오기
-                getUserInfo(token)
-                .then(userInfo => {
-                    // 사용자 정보 표시
-                    document.getElementById('user-nickname').innerText = `닉네임: ${userInfo.nickname}`;
-                    document.getElementById('user-email').innerText = `이메일: ${userInfo.email || 'N/A'}`;
-                    document.getElementById('user-tel').innerText = `전화번호: ${userInfo.tel || 'N/A'}`;
-                    document.getElementById('user-gender').innerText = `성별: ${userInfo.gender || 'N/A'}`;
-                    document.getElementById('user-birthdate').innerText = `생년월일: ${userInfo.birthDate || 'N/A'}`;
-                })
-                .catch(error => {
-                    console.error(error.message);
+                // API 호출로 사용자 정보 가져오기
+                try {
+                    const userInfo = await getUserInfo(token);
+                    displayUserInfo(userInfo);
+                } catch (error) {
+                    console.error('사용자 정보를 불러오는 중 오류가 발생했습니다.', error);
                     alert('사용자 정보를 불러오는 중 오류가 발생했습니다.');
-                });
+                }
             } else {
                 // 토큰이 없을 경우 로그인 페이지로 리디렉트
                 alert('로그인이 필요합니다.');
@@ -87,6 +81,7 @@
         // 사용자 정보 가져오는 함수
         async function getUserInfo(token) {
             try {
+                console.log("Sending request with token:", token); // 토큰 로그
                 const response = await fetch(`${API_BASE_URL}/user/mypage`, {
                     method: 'GET',
                     headers: {
@@ -104,6 +99,7 @@
                 }
 
                 const data = await response.json();
+                console.log("Received user data:", data); // 응답 로그
                 return data.data;
             } catch (error) {
                 console.error('getUserInfo 에러:', error);
@@ -111,10 +107,18 @@
             }
         }
 
+        // 사용자 정보를 화면에 표시하는 함수
+        function displayUserInfo(userInfo) {
+            document.getElementById('user-nickname').innerText = `닉네임: ${userInfo.nickname}`;
+            document.getElementById('user-email').innerText = `이메일: ${userInfo.email}`;
+            document.getElementById('user-tel').innerText = `전화번호: ${userInfo.tel || 'N/A'}`;
+            document.getElementById('user-gender').innerText = `성별: ${userInfo.gender || 'N/A'}`;
+            document.getElementById('user-birthdate').innerText = `생년월일: ${userInfo.birthDate || 'N/A'}`;
+        }
+
         // 로그아웃 처리 함수 (페이지 유지)
         function logout() {
             localStorage.removeItem('token'); // 토큰 삭제
-            localStorage.removeItem('nickname'); // 닉네임 삭제
             checkLoginStatus(); // 로그아웃 후 상태 갱신
         }
 
