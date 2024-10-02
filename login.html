@@ -85,6 +85,58 @@
                 console.log('No token found in URL');
             }
         };
+
+        // 일반 로그인 처리 함수
+        function handleLogin(event) {
+            event.preventDefault(); // 폼 제출 시 새로고침 방지
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const loginStatus = document.getElementById('login-status');
+
+            // 로그인 요청 데이터
+            const requestData = {
+                email: email,
+                password: password
+            };
+
+            // 로그인 요청
+            fetch(`${API_BASE_URL}/user/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => {
+                console.log("서버 응답 상태 코드:", response.status);
+                if (!response.ok) {
+                    throw new Error('로그인에 실패했습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("서버 응답 데이터:", data);
+
+                if (!data.data || !data.data.accessToken) {
+                    throw new Error('서버에서 토큰을 반환하지 않았습니다.');
+                }
+
+                const token = data.data.accessToken;
+                const decodedToken = decodeJWT(token);
+
+                // 로그인 성공 처리
+                localStorage.setItem('token', token); // 토큰 저장
+                localStorage.setItem('nickname', decodedToken.nickname); // 닉네임 저장
+                alert(`환영합니다, ${decodedToken.nickname}님!`);
+                window.location.href = '/Graduation-work/main.html';
+            })
+            .catch(error => {
+                console.error("로그인 오류:", error.message);
+                loginStatus.innerText = error.message;
+                loginStatus.style.color = 'red';
+            });
+        }
     </script>
 </body>
 </html>
