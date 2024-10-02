@@ -1,0 +1,169 @@
+
+body {
+  font-family: "Noto Sans KR";
+  background-color: #f8f8f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.signup-container {
+  font-family: "Noto Sans KR";
+  background-color: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  text-align: center;
+}
+
+h2 {
+    font-family: "Noto Sans KR";
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+label {
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+
+.input-group {
+  display: flex;
+  align-items: center;
+}
+
+.input-group input[type="text"],
+.input-group input[type="email"] {
+  flex: 1;
+  padding: 10px;
+  border: none; 
+  border-bottom: 1px solid #dadada; 
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.input-group button {
+  padding: 10px 0;
+  background-color: #889491;
+  color: white;
+
+  border-radius: 15px; 
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.input-group button:disabled {
+  background-color: #ccc;
+  cursor: pointer;
+}
+
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="tel"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 5px;
+  border: none; 
+  border-bottom: 1px solid #dadada;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 10px;
+  font-size: 14px;
+  background-color: #889491;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: pointer;
+}
+#check-email-btn {
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #889491;
+  color: white;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 12px;
+  width: auto;
+  margin-left: 20px;
+}
+#send-verification-btn {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+#check-email-btn,
+#send-verification-btn {
+  width: auto;
+  background-color: #889491;
+  color: white;
+  font-size: 12px;
+  border-radius: 15px;
+}
+
+#check-email-btn,
+#send-verification-btn:disabled {
+  background-color: #ccc;
+  cursor: pointer;
+}
+
+#email-auth-btn-group,
+#email-verification-group {
+  margin-top: 10px;
+}
+
+#email-status,
+#verification-status,
+#password-status {
+  font-size: 12px;
+  color: red;
+  margin-top: 5px;
+}
+
+button[type="submit"] {
+  margin-top: 20px;
+  background-color: #889491;
+  color: white;
+  width: 100%;
+}
+
+button[type="submit"]:hover {
+  background-color: #889491;
+}
+
+input[type="email"]:read-only {
+  background-color: #f0f0f0;
+}
+
+input[type="email"]:disabled {
+  background-color: #e0e0e0;
+}
