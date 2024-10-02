@@ -72,26 +72,26 @@
                     }
                 })
                 .then(response => {
-                    console.log("응답 상태 코드:", response.status);  // 응답 상태 코드 출력
+                    console.log(response.status); // 응답 상태 코드 확인
                     if (!response.ok) {
-                        throw new Error('사용자 정보를 불러오지 못했습니다.');
+                        return response.json().then(errorData => {
+                            console.error('Error data:', errorData); // 서버에서 반환된 에러 데이터 로그
+                            throw new Error(`서버 오류: ${errorData.message || '사용자 정보를 불러오지 못했습니다.'}`);
+                        });
                     }
                     return response.json();
                 })
                 .then(data => {
-                    console.log("서버 응답 데이터:", data);  // 서버에서 받은 데이터 출력
-                    // 응답에서 데이터가 data.data에 있으므로 그 경로를 사용해야 함
-                    const userData = data.data;
                     // 사용자 정보 표시
-                    document.getElementById('user-nickname').innerText = `닉네임: ${userData.nickname}`;
-                    document.getElementById('user-email').innerText = `이메일: ${userData.email}`;
-                    document.getElementById('user-tel').innerText = `전화번호: ${userData.tel || 'N/A'}`;
-                    document.getElementById('user-gender').innerText = `성별: ${userData.gender || 'N/A'}`;
-                    document.getElementById('user-birthdate').innerText = `생년월일: ${userData.birthDate || 'N/A'}`;
+                    document.getElementById('user-nickname').innerText = `닉네임: ${data.data.nickname}`;
+                    document.getElementById('user-email').innerText = `이메일: ${data.data.email}`;
+                    document.getElementById('user-tel').innerText = `전화번호: ${data.data.tel || 'N/A'}`;
+                    document.getElementById('user-gender').innerText = `성별: ${data.data.gender || 'N/A'}`;
+                    document.getElementById('user-birthdate').innerText = `생년월일: ${data.data.birthDate || 'N/A'}`;
                 })
                 .catch(error => {
-                    console.error("에러 메시지:", error.message);  // 에러 메시지 출력
-                    alert('사용자 정보를 불러오는 중 오류가 발생했습니다.');
+                    console.error('에러 메시지:', error.message); // 에러 메시지 콘솔에 출력
+                    alert(`에러 메시지: ${error.message}`); // 사용자에게 오류 메시지 표시
                 });
             } else {
                 // 토큰이 없을 경우 로그인 페이지로 리디렉트
@@ -100,17 +100,10 @@
             }
         }
 
-        // 로그아웃 처리 함수 (로그아웃 후 로그인 페이지로 리디렉트)
+        // 로그아웃 처리 함수 (페이지 유지)
         function logout() {
             localStorage.removeItem('token'); // 토큰 삭제
-            localStorage.removeItem('nickname'); // 닉네임 삭제
-            localStorage.removeItem('email'); // 이메일 삭제
-            localStorage.removeItem('tel'); // 전화번호 삭제
-            localStorage.removeItem('gender'); // 성별 삭제
-            localStorage.removeItem('birthdate'); // 생년월일 삭제
-
-            // 로그아웃 후 로그인 페이지로 리디렉트
-            window.location.href = 'login.html';
+            checkLoginStatus(); // 로그아웃 후 상태 갱신
         }
 
         // 페이지 로드 시 로그인 상태 및 유저 정보 확인
