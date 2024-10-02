@@ -95,7 +95,8 @@
                 }
 
                 if (!response.ok) {
-                    throw new Error('사용자 정보를 불러오지 못했습니다.');
+                    const errorData = await response.json();
+                    throw new Error(`사용자 정보를 불러오지 못했습니다. 서버 응답: ${JSON.stringify(errorData)}`);
                 }
 
                 const data = await response.json();
