@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Forge - 마이페이지</title>
-    <link rel="stylesheet" href="mypage.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
@@ -85,25 +85,30 @@
         }
 
         // 사용자 정보 가져오는 함수
-        function getUserInfo(token) {
-            return fetch(`${API_BASE_URL}/user/mypage`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`, // 토큰 포함
-                    'Content-Type': 'application/json'
+        async function getUserInfo(token) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/user/mypage`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // 토큰 포함
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.status === 500) {
+                    throw new Error('서버에서 내부 오류가 발생했습니다.');
                 }
-            })
-            .then(response => {
-                if (response.status === 401) {
-                    throw new Error('토큰이 만료되었습니다.');
-                }
+
                 if (!response.ok) {
-                    console.error(`서버 오류: ${response.status} - ${response.statusText}`);
                     throw new Error('사용자 정보를 불러오지 못했습니다.');
                 }
-                return response.json();
-            })
-            .then(data => data.data);
+
+                const data = await response.json();
+                return data.data;
+            } catch (error) {
+                console.error('getUserInfo 에러:', error);
+                throw error;
+            }
         }
 
         // 로그아웃 처리 함수 (페이지 유지)
