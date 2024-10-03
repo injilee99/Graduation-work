@@ -50,8 +50,10 @@
     <script>
         const API_BASE_URL = 'https://ludorium.store/api';
 
+        // 로그인 상태 확인 및 유저 정보 불러오기
         async function checkLoginStatus() {
             const token = localStorage.getItem('token');
+            const refreshToken = localStorage.getItem('refresh_token');
             const welcomeMessage = document.getElementById('welcome-message');
             const loginBtn = document.getElementById('login-btn');
             const logoutBtn = document.getElementById('logout-btn');
@@ -62,11 +64,14 @@
                 logoutBtn.style.display = 'inline-block';
 
                 try {
-                    await getUserInfo();
+                    await getUserInfo(token);
                 } catch (error) {
-                    console.error('사용자 정보를 불러오는 중 오류가 발생했습니다:', error);
-                    alert('사용자 정보를 불러오는 중 오류가 발생했습니다. 다시 로그인해 주세요.');
-                    window.location.href = 'login.html';
+                    if (error.message === '토큰 만료') {
+                        await refreshTokenHandler(refreshToken);
+                    } else {
+                        alert('사용자 정보를 불러오는 중 오류가 발생했습니다.');
+                        console.error('Error:', error);
+                    }
                 }
             } else {
                 alert('로그인이 필요합니다.');
@@ -74,45 +79,76 @@
             }
         }
 
-        async function getUserInfo() {
-            const token = localStorage.getItem('token');
+        // 사용자 정보 가져오기
+        async function getUserInfo(token) {
             try {
                 const response = await fetch(`${API_BASE_URL}/user/mypage`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
+                        'Content-Type': 'application/json'
+                    }
                 });
+
                 if (response.status === 401) {
-                    alert('세션이 만료되었습니다. 다시 로그인해 주세요.');
-                    window.location.href = 'login.html';
-                } else if (!response.ok) {
-                    throw new Error('사용자 정보를 불러오지 못했습니다.');
-                } else {
-                    const data = await response.json();
-                    updateProfileInfo(data);
+                    throw new Error('토큰 만료');
                 }
+
+                if (!response.ok) {
+                    throw new Error('사용자 정보를 불러오지 못했습니다.');
+                }
+
+                const data = await response.json();
+                document.getElementById('user-nickname').innerText = `닉네임: ${data.nickname}`;
+                document.getElementById('user-email').innerText = `이메일: ${data.email}`;
+                document.getElementById('user-tel').innerText = `전화번호: ${data.tel || 'N/A'}`;
+                document.getElementById('user-gender').innerText = `성별: ${data.gender || 'N/A'}`;
+                document.getElementById('user-birthdate').innerText = `생년월일: ${data.birthdate || 'N/A'}`;
             } catch (error) {
-                console.error(error.message);
-                alert('사용자 정보를 불러오는 중 오류가 발생했습니다.');
                 throw error;
             }
         }
 
-        function updateProfileInfo(data) {
-            document.getElementById('user-nickname').innerText = `닉네임: ${data.nickname}`;
-            document.getElementById('user-email').innerText = `이메일: ${data.email}`;
-            document.getElementById('user-tel').innerText = `전화번호: ${data.tel || 'N/A'}`;
-            document.getElementById('user-gender').innerText = `성별: ${data.gender || 'N/A'}`;
-            document.getElementById('user-birthdate').innerText = `생년월일: ${data.birthDate || 'N/A'}`;
+        // 토큰 갱신 함수
+        async function refreshTokenHandler(refreshToken) {
+            if (!refreshToken) {
+                alert('리프레시 토큰이 없습니다. 다시 로그인해 주세요.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization-Refresh': `Bearer ${refreshToken}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('토큰 갱신 실패');
+                }
+
+                const data = await response.json();
+                localStorage.setItem('token', data.accessToken);  // 새로운 액세스 토큰 저장
+                await getUserInfo(data.accessToken);  // 사용자 정보 다시 불러오기
+
+            } catch (error) {
+                console.error('토큰 갱신 오류:', error);
+                alert('토큰 갱신 중 오류가 발생했습니다. 다시 로그인해 주세요.');
+                window.location.href = 'login.html';
+            }
         }
 
+        // 로그아웃 처리 함수
         function logout() {
             localStorage.removeItem('token');
+            localStorage.removeItem('refresh_token');
             checkLoginStatus();
         }
 
+        // 페이지 로드 시 로그인 상태 및 유저 정보 확인
         window.onload = checkLoginStatus;
     </script>
 </body>
