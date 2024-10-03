@@ -13,7 +13,7 @@
     <header>
         <div class="top-nav">
             <div class="logo">
-                <a href="main.html">Game Forge</a> <!-- main 페이지로 이동 -->
+                <a href="main.html">Game Forge</a>
             </div>
             <nav>
                 <ul class="main-menu">
@@ -24,9 +24,9 @@
                 </ul>
             </nav>
             <div class="auth-buttons">
-                <span id="welcome-message"></span> <!-- 환영 메시지 추가 -->
-                <a href="login.html" class="login-btn" id="login-btn">로그인</a> <!-- login.html로 이동 -->
-                <button id="logout-btn" style="display:none;" onclick="logout()">로그아웃</button> <!-- 로그아웃 버튼 -->
+                <span id="welcome-message"></span>
+                <a href="login.html" class="login-btn" id="login-btn">로그인</a>
+                <button id="logout-btn" style="display:none;" onclick="logout()">로그아웃</button>
             </div>
         </div>
         <div class="sub-nav">
@@ -141,6 +141,7 @@
       // 로그인 상태 확인 함수
       function checkLoginStatus() {
         const token = localStorage.getItem('token'); // localStorage에서 토큰 가져오기
+        const refreshToken = localStorage.getItem('refresh_token'); // 리프레시 토큰 가져오기
         const nickname = localStorage.getItem('nickname'); // localStorage에서 닉네임 가져오기
 
         const welcomeMessage = document.getElementById('welcome-message');
@@ -151,6 +152,12 @@
           welcomeMessage.innerText = `환영합니다, ${nickname}님!`;
           loginBtn.style.display = 'none';
           logoutBtn.style.display = 'inline-block';
+
+          // 토큰 만료 여부 확인 후 만료 시 리프레시
+          if (isTokenExpired(token)) {
+            refreshTokenHandler(refreshToken);
+          }
+
         } else {
           welcomeMessage.innerText = '';
           loginBtn.style.display = 'inline-block';
@@ -158,9 +165,49 @@
         }
       }
 
+      // 토큰 만료 확인 함수
+      function isTokenExpired(token) {
+        const decodedToken = decodeJWT(token);
+        const currentTime = Math.floor(Date.now() / 1000); // 현재 시간 (초 단위)
+        return decodedToken.exp < currentTime; // 만료 시간이 현재 시간보다 이전이면 true 반환
+      }
+
+      // 리프레시 토큰을 사용하여 액세스 토큰 갱신
+      async function refreshTokenHandler(refreshToken) {
+        if (!refreshToken) {
+          alert('리프레시 토큰이 없습니다. 다시 로그인해 주세요.');
+          window.location.href = 'login.html';
+          return;
+        }
+
+        try {
+          const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization-Refresh': `${refreshToken}`
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error('토큰 갱신 실패');
+          }
+
+          const data = await response.json();
+          localStorage.setItem('token', data.accessToken); // 새로운 액세스 토큰 저장
+          checkLoginStatus(); // 로그인 상태 다시 확인
+
+        } catch (error) {
+          console.error('토큰 갱신 오류:', error);
+          alert('토큰 갱신 중 오류가 발생했습니다. 다시 로그인해 주세요.');
+          window.location.href = 'login.html';
+        }
+      }
+
       // 로그아웃 처리 함수
       function logout() {
         localStorage.removeItem('token');
+        localStorage.removeItem('refresh_token');
         localStorage.removeItem('nickname');
         checkLoginStatus();
       }
@@ -169,12 +216,19 @@
       function getTokenFromUrl() {
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('access');
+        const refreshToken = urlParams.get('refresh');
+
         if (token) {
           localStorage.setItem('token', token);
           const decodedToken = decodeJWT(token);
           localStorage.setItem('nickname', decodedToken.nickname);
-          checkLoginStatus();
         }
+
+        if (refreshToken) {
+          localStorage.setItem('refresh_token', refreshToken); // 리프레시 토큰 저장
+        }
+
+        checkLoginStatus();
       }
 
       // 페이지 로드 시 로그인 상태 확인
@@ -183,5 +237,5 @@
         getTokenFromUrl();
       };
     </script>
-  </body>
+</body>
 </html>
