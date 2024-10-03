@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Forge - 마이페이지</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mypage.css">
 </head>
 <body>
     <header>
@@ -50,7 +50,6 @@
     <script>
         const API_BASE_URL = 'https://ludorium.store/api';
 
-        // 로그인 상태 확인 및 유저 정보 불러오기
         async function checkLoginStatus() {
             const token = localStorage.getItem('token');
             const refreshToken = localStorage.getItem('refresh_token');
@@ -67,6 +66,7 @@
                     await getUserInfo(token);
                 } catch (error) {
                     if (error.message === '토큰 만료') {
+                        console.log('리프레시 토큰:', refreshToken);
                         await refreshTokenHandler(refreshToken);
                     } else {
                         alert('사용자 정보를 불러오는 중 오류가 발생했습니다.');
@@ -79,7 +79,6 @@
             }
         }
 
-        // 사용자 정보 가져오기
         async function getUserInfo(token) {
             try {
                 const response = await fetch(`${API_BASE_URL}/user/mypage`, {
@@ -109,7 +108,6 @@
             }
         }
 
-        // 토큰 갱신 함수
         async function refreshTokenHandler(refreshToken) {
             if (!refreshToken) {
                 alert('리프레시 토큰이 없습니다. 다시 로그인해 주세요.');
@@ -118,6 +116,7 @@
             }
 
             try {
+                console.log('리프레시 토큰:', refreshToken);
                 const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
                     method: 'POST',
                     headers: {
@@ -131,9 +130,8 @@
                 }
 
                 const data = await response.json();
-                localStorage.setItem('token', data.accessToken);  // 새로운 액세스 토큰 저장
-                await getUserInfo(data.accessToken);  // 사용자 정보 다시 불러오기
-
+                localStorage.setItem('token', data.accessToken);
+                await getUserInfo(data.accessToken);
             } catch (error) {
                 console.error('토큰 갱신 오류:', error);
                 alert('토큰 갱신 중 오류가 발생했습니다. 다시 로그인해 주세요.');
@@ -141,14 +139,12 @@
             }
         }
 
-        // 로그아웃 처리 함수
         function logout() {
             localStorage.removeItem('token');
             localStorage.removeItem('refresh_token');
             checkLoginStatus();
         }
 
-        // 페이지 로드 시 로그인 상태 및 유저 정보 확인
         window.onload = checkLoginStatus;
     </script>
 </body>
