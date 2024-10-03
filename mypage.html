@@ -66,13 +66,8 @@
                 try {
                     await getUserInfo(token);
                 } catch (error) {
-                    if (error.message === '토큰 만료') {
-                        console.log('리프레시 토큰:', refreshToken); // 리프레시 토큰을 콘솔에 출력
-                        await refreshTokenHandler(refreshToken); // 토큰 갱신
-                    } else {
-                        alert('사용자 정보를 불러오는 중 오류가 발생했습니다.');
-                        console.error('Error:', error);
-                    }
+                    alert('사용자 정보를 불러오는 중 오류가 발생했습니다.');
+                    console.error('Error:', error);
                 }
             } else {
                 alert('로그인이 필요합니다.');
@@ -86,62 +81,28 @@
                 const response = await fetch(`${API_BASE_URL}/user/mypage`, {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${token}`, // Bearer 토큰 헤더 추가
+                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });
-
-                if (response.status === 401) {
-                    throw new Error('토큰 만료');
-                }
 
                 if (!response.ok) {
                     throw new Error('사용자 정보를 불러오지 못했습니다.');
                 }
 
-                const data = await response.json();
-                console.log('닉네임:', data.nickname); // 콘솔에 닉네임 출력
+                const jsonResponse = await response.json();
+                const data = jsonResponse.data;
 
-                // 마이페이지에 사용자 정보 출력
+                console.log(data.nickname);
+
                 document.getElementById('user-nickname').innerText = `닉네임: ${data.nickname}`;
                 document.getElementById('user-email').innerText = `이메일: ${data.email}`;
                 document.getElementById('user-tel').innerText = `전화번호: ${data.tel || 'N/A'}`;
-                document.getElementById('user-gender').innerText = `성별: ${data.gender || 'N/A'}`; // 성별 정보가 없을 수도 있음
+                document.getElementById('user-gender').innerText = `성별: ${data.gender || 'N/A'}`; // 성별 데이터가 있으면 표시
                 document.getElementById('user-birthdate').innerText = `생년월일: ${data.birthDate || 'N/A'}`;
             } catch (error) {
+                console.error('Error:', error);
                 throw error;
-            }
-        }
-
-        // 토큰 갱신 함수
-        async function refreshTokenHandler(refreshToken) {
-            if (!refreshToken) {
-                alert('리프레시 토큰이 없습니다. 다시 로그인해 주세요.');
-                window.location.href = 'login.html';
-                return;
-            }
-
-            try {
-                console.log('리프레시 토큰:', refreshToken); // 콘솔에 리프레시 토큰 출력
-                const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization-Refresh': `${refreshToken}` // 리프레시 토큰 전송
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('토큰 갱신 실패');
-                }
-
-                const data = await response.json();
-                localStorage.setItem('token', data.accessToken);  // 새로운 액세스 토큰 저장
-                await getUserInfo(data.accessToken);  // 사용자 정보 다시 불러오기
-            } catch (error) {
-                console.error('토큰 갱신 오류:', error);
-                alert('토큰 갱신 중 오류가 발생했습니다. 다시 로그인해 주세요.');
-                window.location.href = 'login.html';
             }
         }
 
