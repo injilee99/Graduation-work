@@ -54,6 +54,7 @@
         async function checkLoginStatus() {
             const token = localStorage.getItem('token');
             const refreshToken = localStorage.getItem('refresh_token');
+            const currentTime = new Date().toISOString(); // 요청 시간 저장
             const welcomeMessage = document.getElementById('welcome-message');
             const loginBtn = document.getElementById('login-btn');
             const logoutBtn = document.getElementById('logout-btn');
@@ -82,12 +83,15 @@
 
         // 사용자 정보 가져오기
         async function getUserInfo(token) {
+            const currentTime = new Date().toISOString(); // 요청 시간 저장
+
             try {
                 const response = await fetch(`${API_BASE_URL}/user/mypage`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Request-Time': currentTime // 요청 시간 전송
                     }
                 });
 
@@ -119,12 +123,14 @@
             }
 
             try {
+                const currentTime = new Date().toISOString(); // 요청 시간 저장
                 console.log('리프레시 토큰:', refreshToken);  // 콘솔에 리프레시 토큰 출력
                 const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization-Refresh': `${refreshToken}`
+                        'Authorization-Refresh': `${refreshToken}`,
+                        'Request-Time': currentTime // 요청 시간 전송
                     }
                 });
 
