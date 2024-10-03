@@ -53,69 +53,46 @@
         // 로그인 상태 확인 및 유저 정보 불러오기
         async function checkLoginStatus() {
             const token = localStorage.getItem('token'); // 토큰 가져오기
-            const welcomeMessage = document.getElementById('welcome-message');
-            const loginBtn = document.getElementById('login-btn');
-            const logoutBtn = document.getElementById('logout-btn');
 
-            if (token) {
-                // 토큰이 있을 경우 환영 메시지와 로그아웃 버튼 표시
-                welcomeMessage.innerText = '환영합니다!';
-                loginBtn.style.display = 'none'; // 로그인 버튼 숨김
-                logoutBtn.style.display = 'inline-block'; // 로그아웃 버튼 표시
-
-                // API 호출로 사용자 정보 가져오기
-                try {
-                    const userInfo = await getUserInfo(token);
-                    displayUserInfo(userInfo);
-                } catch (error) {
-                    console.error('사용자 정보를 불러오는 중 오류가 발생했습니다.', error);
-                    alert('사용자 정보를 불러오는 중 오류가 발생했습니다.');
-                }
-            } else {
-                // 토큰이 없을 경우 로그인 페이지로 리디렉트
+            if (!token) {
                 alert('로그인이 필요합니다.');
                 window.location.href = 'login.html';
+                return;
             }
-        }
 
-        // 사용자 정보 가져오는 함수
-        async function getUserInfo(token) {
             try {
-                console.log("Sending request with token:", token); // 토큰 로그
+                console.log('Sending request with token:', token);
                 const response = await fetch(`${API_BASE_URL}/user/mypage`, {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${token}`, // 토큰 포함
+                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });
 
-                // 500 에러 처리
-                if (response.status === 500) {
-                    throw new Error('서버에서 내부 오류가 발생했습니다.');
-                }
-
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(`사용자 정보를 불러오지 못했습니다. 서버 응답: ${JSON.stringify(errorData)}`);
+                    // 토큰이 만료된 경우, 새로 고침 후 다시 시도
+                    if (response.status === 401) {
+                        alert("로그인이 만료되었습니다. 다시 로그인해 주세요.");
+                        window.location.href = 'login.html';
+                        return;
+                    }
+                    throw new Error(`Error: ${response.status} - ${response.statusText}`);
                 }
 
                 const data = await response.json();
-                console.log("Received user data:", data); // 응답 로그
-                return data.data;
-            } catch (error) {
-                console.error('getUserInfo 에러:', error);
-                throw error;
-            }
-        }
+                console.log('User data:', data);
 
-        // 사용자 정보를 화면에 표시하는 함수
-        function displayUserInfo(userInfo) {
-            document.getElementById('user-nickname').innerText = `닉네임: ${userInfo.nickname}`;
-            document.getElementById('user-email').innerText = `이메일: ${userInfo.email}`;
-            document.getElementById('user-tel').innerText = `전화번호: ${userInfo.tel || 'N/A'}`;
-            document.getElementById('user-gender').innerText = `성별: ${userInfo.gender || 'N/A'}`;
-            document.getElementById('user-birthdate').innerText = `생년월일: ${userInfo.birthDate || 'N/A'}`;
+                // 사용자 정보 표시
+                document.getElementById('user-nickname').innerText = `닉네임: ${data.data.nickname}`;
+                document.getElementById('user-email').innerText = `이메일: ${data.data.email}`;
+                document.getElementById('user-tel').innerText = `전화번호: ${data.data.tel || 'N/A'}`;
+                document.getElementById('user-gender').innerText = `성별: ${data.data.gender || 'N/A'}`;
+                document.getElementById('user-birthdate').innerText = `생년월일: ${data.data.birthDate || 'N/A'}`;
+            } catch (error) {
+                console.error('getUserInfo 에러:', error.message);
+                alert('사용자 정보를 불러오는 중 오류가 발생했습니다. ' + error.message);
+            }
         }
 
         // 로그아웃 처리 함수 (페이지 유지)
