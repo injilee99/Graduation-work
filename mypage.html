@@ -64,15 +64,14 @@
                 logoutBtn.style.display = 'inline-block';
 
                 try {
-                    console.log('유저 정보를 가져옵니다...');
                     await getUserInfo(token);
                 } catch (error) {
-                    console.error('Error:', error.message);
                     if (error.message === '토큰 만료') {
                         console.log('리프레시 토큰:', refreshToken); // 리프레시 토큰을 콘솔에 출력
                         await refreshTokenHandler(refreshToken);
                     } else {
                         alert('사용자 정보를 불러오는 중 오류가 발생했습니다.');
+                        console.error('Error:', error);
                     }
                 }
             } else {
@@ -100,14 +99,16 @@
                     throw new Error('사용자 정보를 불러오지 못했습니다.');
                 }
 
-                const data = await response.json();
-                console.log("서버에서 받아온 데이터:", data);
+                const data = await response.json();  // 서버에서 받은 json을 파싱
+                console.log(data.nickname);  // 콘솔에 닉네임 출력
 
+                // HTML 요소에 유저 정보 표시
                 document.getElementById('user-nickname').innerText = `닉네임: ${data.nickname}`;
                 document.getElementById('user-email').innerText = `이메일: ${data.email}`;
                 document.getElementById('user-tel').innerText = `전화번호: ${data.tel || 'N/A'}`;
-                document.getElementById('user-gender').innerText = `성별: ${data.gender || 'N/A'}`;
-                document.getElementById('user-birthdate').innerText = `생년월일: ${data.birthDate || 'N/A'}`;
+                document.getElementById('user-gender').innerText = `성별: ${data.gender || 'N/A'}`;  // 성별이 없을 경우 N/A
+                document.getElementById('user-birthdate').innerText = `생년월일: ${data.birthDate || 'N/A'}`;  // 생년월일
+
             } catch (error) {
                 console.error('getUserInfo 오류:', error.message);
                 throw error;
@@ -123,7 +124,7 @@
             }
 
             try {
-                console.log('리프레시 토큰으로 토큰 갱신 요청 중:', refreshToken);  // 콘솔에 리프레시 토큰 출력
+                console.log('리프레시 토큰:', refreshToken);  // 콘솔에 리프레시 토큰 출력
                 const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
                     method: 'POST',
                     headers: {
@@ -137,8 +138,6 @@
                 }
 
                 const data = await response.json();
-                console.log('새로운 토큰:', data.accessToken);
-
                 localStorage.setItem('token', data.accessToken);  // 새로운 액세스 토큰 저장
                 await getUserInfo(data.accessToken);  // 사용자 정보 다시 불러오기
 
