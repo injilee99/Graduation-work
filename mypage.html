@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Forge - 마이페이지</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mypages.css">
 </head>
 <body>
     <header>
@@ -61,7 +61,21 @@
             }
 
             try {
-                console.log('Sending request with token:', token);
+                const userInfo = await getUserInfo(token);
+                // 사용자 정보 표시
+                document.getElementById('user-nickname').innerText = `닉네임: ${userInfo.nickname}`;
+                document.getElementById('user-email').innerText = `이메일: ${userInfo.email}`;
+                document.getElementById('user-tel').innerText = `전화번호: ${userInfo.tel || 'N/A'}`;
+                document.getElementById('user-gender').innerText = `성별: ${userInfo.gender || 'N/A'}`;
+                document.getElementById('user-birthdate').innerText = `생년월일: ${userInfo.birthDate || 'N/A'}`;
+            } catch (error) {
+                console.error('사용자 정보를 불러오는 중 오류가 발생했습니다:', error);
+                alert('사용자 정보를 불러오는 중 오류가 발생했습니다. ' + error.message);
+            }
+        }
+
+        async function getUserInfo(token) {
+            try {
                 const response = await fetch(`${API_BASE_URL}/user/mypage`, {
                     method: 'GET',
                     headers: {
@@ -70,28 +84,44 @@
                     }
                 });
 
+                if (response.status === 401) {
+                    // 토큰 만료시 refresh token 요청
+                    console.log('토큰이 만료되었습니다. 토큰을 재발급합니다.');
+                    const newToken = await refreshToken();
+                    localStorage.setItem('token', newToken);
+                    return getUserInfo(newToken); // 재발급된 토큰으로 다시 요청
+                }
+
                 if (!response.ok) {
-                    // 토큰이 만료된 경우, 새로 고침 후 다시 시도
-                    if (response.status === 401) {
-                        alert("로그인이 만료되었습니다. 다시 로그인해 주세요.");
-                        window.location.href = 'login.html';
-                        return;
-                    }
                     throw new Error(`Error: ${response.status} - ${response.statusText}`);
                 }
 
                 const data = await response.json();
-                console.log('User data:', data);
-
-                // 사용자 정보 표시
-                document.getElementById('user-nickname').innerText = `닉네임: ${data.data.nickname}`;
-                document.getElementById('user-email').innerText = `이메일: ${data.data.email}`;
-                document.getElementById('user-tel').innerText = `전화번호: ${data.data.tel || 'N/A'}`;
-                document.getElementById('user-gender').innerText = `성별: ${data.data.gender || 'N/A'}`;
-                document.getElementById('user-birthdate').innerText = `생년월일: ${data.data.birthDate || 'N/A'}`;
+                return data.data;
             } catch (error) {
-                console.error('getUserInfo 에러:', error.message);
-                alert('사용자 정보를 불러오는 중 오류가 발생했습니다. ' + error.message);
+                throw new Error('getUserInfo 에러: ' + error.message);
+            }
+        }
+
+        async function refreshToken() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('토큰 재발급 실패');
+                }
+
+                const data = await response.json();
+                return data.token; // 새로 발급된 토큰 반환
+            } catch (error) {
+                console.error('토큰 재발급 에러:', error);
+                alert('토큰 재발급 중 오류가 발생했습니다.');
+                window.location.href = 'login.html'; // 토큰 재발급 실패 시 로그인 페이지로 리디렉트
             }
         }
 
