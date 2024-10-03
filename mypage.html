@@ -50,101 +50,93 @@
     <script>
         const API_BASE_URL = 'https://ludorium.store/api'; // 서버 주소
 
-        // 로그인 상태 확인 및 유저 정보 불러오기
-        async function checkLoginStatus() {
-            const token = localStorage.getItem('token'); // 액세스 토큰 가져오기
-            const refreshToken = localStorage.getItem('refreshToken'); // 리프레시 토큰 가져오기
+        // 토큰 재발급 함수
+        async function refreshTokenHandler() {
+            const refreshToken = localStorage.getItem('refreshToken');
+            try {
+                const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization-Refresh': `Bearer ${refreshToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
 
-            const welcomeMessage = document.getElementById('welcome-message');
-            const loginBtn = document.getElementById('login-btn');
-            const logoutBtn = document.getElementById('logout-btn');
+                if (!response.ok) {
+                    throw new Error('토큰 재발급 중 오류가 발생했습니다.');
+                }
 
-            if (token) {
-                // 토큰이 있을 경우 환영 메시지와 로그아웃 버튼 표시
-                welcomeMessage.innerText = '환영합니다!';
-                loginBtn.style.display = 'none'; // 로그인 버튼 숨김
-                logoutBtn.style.display = 'inline-block'; // 로그아웃 버튼 표시
-
-                // 사용자 정보 가져오기
-                await getUserInfo(token, refreshToken);
-            } else {
-                // 토큰이 없을 경우 로그인 페이지로 리디렉트
-                alert('로그인이 필요합니다.');
+                const data = await response.json();
+                localStorage.setItem('token', data.accessToken);
+                return data.accessToken;
+            } catch (error) {
+                alert(error.message + ' 다시 로그인해 주세요.');
                 window.location.href = 'login.html';
+                return null;
             }
         }
 
         // 사용자 정보 불러오기
-        async function getUserInfo(token, refreshToken) {
+        async function getUserInfo() {
+            let token = localStorage.getItem('token');
+
             try {
                 const response = await fetch(`${API_BASE_URL}/user/mypage`, {
                     method: 'GET',
                     headers: {
-                        'Authorization': `Bearer ${token}`, // 액세스 토큰 포함
+                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     }
                 });
 
                 if (response.status === 401) {
                     // 토큰이 만료된 경우
-                    await refreshTokenHandler(refreshToken);
+                    token = await refreshTokenHandler();
+                    if (token) {
+                        return getUserInfo(); // 재귀 호출로 정보 재요청
+                    }
                 } else if (!response.ok) {
                     throw new Error('사용자 정보를 불러오지 못했습니다.');
-                } else {
-                    const data = await response.json();
-                    displayUserInfo(data);
-                }
-            } catch (error) {
-                console.error('getUserInfo 에러:', error);
-                alert(`사용자 정보를 불러오는 중 오류가 발생했습니다. Error: ${error.message}`);
-            }
-        }
-
-        // 사용자 정보 화면에 표시
-        function displayUserInfo(data) {
-            document.getElementById('user-nickname').innerText = `닉네임: ${data.nickname}`;
-            document.getElementById('user-email').innerText = `이메일: ${data.email}`;
-            document.getElementById('user-tel').innerText = `전화번호: ${data.tel || 'N/A'}`;
-            document.getElementById('user-gender').innerText = `성별: ${data.gender || 'N/A'}`;
-            document.getElementById('user-birthdate').innerText = `생년월일: ${data.birthdate || 'N/A'}`;
-        }
-
-        // 토큰 재발급 처리
-        async function refreshTokenHandler(refreshToken) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization-Refresh': `${refreshToken}` // 리프레시 토큰 포함
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('토큰 재발급에 실패했습니다.');
                 }
 
                 const data = await response.json();
-                localStorage.setItem('token', data.accessToken); // 새로운 액세스 토큰 저장
-                console.log('토큰이 재발급되었습니다.');
-
-                // 새로 발급받은 토큰으로 다시 사용자 정보 요청
-                await getUserInfo(data.accessToken, refreshToken);
+                document.getElementById('user-nickname').innerText = `닉네임: ${data.nickname}`;
+                document.getElementById('user-email').innerText = `이메일: ${data.email}`;
+                document.getElementById('user-tel').innerText = `전화번호: ${data.tel || 'N/A'}`;
+                document.getElementById('user-gender').innerText = `성별: ${data.gender || 'N/A'}`;
+                document.getElementById('user-birthdate').innerText = `생년월일: ${data.birthdate || 'N/A'}`;
             } catch (error) {
-                console.error('토큰 재발급 에러:', error);
-                alert('토큰 재발급 중 오류가 발생했습니다. 다시 로그인해 주세요.');
-                window.location.href = '/login.html'; // 오류 시 로그인 페이지로 리디렉션
+                console.error(error.message);
+                alert('사용자 정보를 불러오는 중 오류가 발생했습니다.');
             }
         }
 
-        // 로그아웃 처리 함수 (페이지 유지)
-        function logout() {
-            localStorage.removeItem('token'); // 액세스 토큰 삭제
-            localStorage.removeItem('refreshToken'); // 리프레시 토큰 삭제
-            window.location.href = '/login.html'; // 로그인 페이지로 리디렉션
+        // 로그인 상태 확인 및 사용자 정보 가져오기
+        async function checkLoginStatus() {
+            const token = localStorage.getItem('token');
+            const welcomeMessage = document.getElementById('welcome-message');
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            if (token) {
+                welcomeMessage.innerText = '환영합니다!';
+                loginBtn.style.display = 'none'; // 로그인 버튼 숨김
+                logoutBtn.style.display = 'inline-block'; // 로그아웃 버튼 표시
+                await getUserInfo(); // 사용자 정보 불러오기
+            } else {
+                alert('로그인이 필요합니다.');
+                window.location.href = 'login.html'; // 로그인이 안된 경우 로그인 페이지로 리디렉트
+            }
         }
 
-        // 페이지 로드 시 로그인 상태 및 유저 정보 확인
+        // 로그아웃 처리
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken'); // 리프레시 토큰도 삭제
+            checkLoginStatus();
+        }
+
+        // 페이지 로드 시 로그인 상태 확인
         window.onload = checkLoginStatus;
     </script>
 </body>
