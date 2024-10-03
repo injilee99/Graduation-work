@@ -122,7 +122,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization-Refresh': `Bearer ${refreshToken}`
+                        'Authorization': `Bearer ${refreshToken}`  // 기존 Authorization-Refresh에서 Authorization으로 수정
                     }
                 });
 
