@@ -10,7 +10,7 @@
     <header>
         <div class="top-nav">
             <div class="logo">
-                <a href="main.html">Game Forge</a>
+                <a href="main.html">Game Forge</a> <!-- main 페이지로 이동 -->
             </div>
             <nav>
                 <ul class="main-menu">
@@ -21,9 +21,9 @@
                 </ul>
             </nav>
             <div class="auth-buttons">
-                <span id="welcome-message"></span>
-                <a href="login.html" class="login-btn" id="login-btn">로그인</a>
-                <button id="logout-btn" style="display:none;" onclick="logout()">로그아웃</button>
+                <span id="welcome-message"></span> <!-- 환영 메시지 추가 -->
+                <a href="login.html" class="login-btn" id="login-btn">로그인</a> <!-- login.html로 이동 -->
+                <button id="logout-btn" style="display:none;" onclick="logout()">로그아웃</button> <!-- 로그아웃 버튼 추가 -->
             </div>
         </div>
     </header>
@@ -50,6 +50,7 @@
     <script>
         const API_BASE_URL = 'https://ludorium.store/api'; 
 
+        // 로그인 상태 확인 및 유저 정보 불러오기
         function checkLoginStatus() {
             const token = localStorage.getItem('token');
             const refreshToken = localStorage.getItem('refreshToken');
@@ -59,11 +60,12 @@
 
             if (token) {
                 welcomeMessage.innerText = '환영합니다!';
-                loginBtn.style.display = 'none';
-                logoutBtn.style.display = 'inline-block';
+                loginBtn.style.display = 'none'; // 로그인 버튼 숨김
+                logoutBtn.style.display = 'inline-block'; // 로그아웃 버튼 표시
 
                 getUserInfo(token).catch(async error => {
                     if (error.message === "Unauthorized" && refreshToken) {
+                        console.log("토큰이 만료됨. 새로 갱신합니다.");
                         await refreshAccessToken(refreshToken);
                         getUserInfo(localStorage.getItem('token'));
                     } else {
@@ -77,11 +79,12 @@
             }
         }
 
+        // 사용자 정보 가져오기
         async function getUserInfo(token) {
             const response = await fetch(`${API_BASE_URL}/user/mypage`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${token}`, 
                     'Content-Type': 'application/json'
                 }
             });
@@ -101,11 +104,12 @@
             document.getElementById('user-birthdate').innerText = `생년월일: ${data.birthdate || 'N/A'}`;
         }
 
+        // 토큰 갱신 함수
         async function refreshAccessToken(refreshToken) {
             const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
                 method: 'POST',
                 headers: {
-                    'Authorization-Refresh': refreshToken,
+                    'Authorization-Refresh': refreshToken, 
                     'Content-Type': 'application/json'
                 }
             });
@@ -115,15 +119,18 @@
             }
 
             const data = await response.json();
-            localStorage.setItem('token', data.accessToken);
+            localStorage.setItem('token', data.accessToken); 
+            console.log("토큰이 성공적으로 갱신되었습니다.");
         }
 
+        // 로그아웃 처리 함수
         function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('token'); 
+            localStorage.removeItem('refreshToken'); 
             checkLoginStatus();
         }
 
+        // 페이지 로드 시 로그인 상태 및 유저 정보 확인
         window.onload = checkLoginStatus;
     </script>
 </body>
