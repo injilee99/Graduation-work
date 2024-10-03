@@ -126,6 +126,10 @@
                 const refreshToken = data.data.refreshToken;
                 const decodedToken = decodeJWT(accessToken);
 
+                // 토큰 출력 (로그용)
+                console.log('Access Token:', accessToken);
+                console.log('Refresh Token:', refreshToken);
+
                 // 로그인 성공 처리
                 localStorage.setItem('token', accessToken); // 액세스 토큰 저장
                 localStorage.setItem('refresh_token', refreshToken); // 리프레시 토큰 저장
