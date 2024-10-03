@@ -117,15 +117,12 @@
                 return;
             }
 
-            // 리프레시 토큰 확인용 로그 출력
-            console.log('리프레시 토큰:', refreshToken);
-
             try {
                 const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${refreshToken}`  // Authorization-Refresh를 Authorization으로 변경
+                        'Authorization-Refresh': `${refreshToken}`
                     }
                 });
 
