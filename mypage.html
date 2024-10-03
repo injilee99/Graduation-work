@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Forge - 마이페이지</title>
-    <link rel="stylesheet" href="mypage.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
@@ -67,6 +67,7 @@
                     await getUserInfo(token);
                 } catch (error) {
                     if (error.message === '토큰 만료') {
+                        console.log('리프레시 토큰:', refreshToken); // 리프레시 토큰을 콘솔에 출력
                         await refreshTokenHandler(refreshToken);
                     } else {
                         alert('사용자 정보를 불러오는 중 오류가 발생했습니다.');
@@ -118,6 +119,7 @@
             }
 
             try {
+                console.log('리프레시 토큰:', refreshToken);  // 콘솔에 리프레시 토큰 출력
                 const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
                     method: 'POST',
                     headers: {
