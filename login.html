@@ -118,15 +118,17 @@
             .then(data => {
                 console.log("서버 응답 데이터:", data);
 
-                if (!data.data || !data.data.accessToken) {
+                if (!data.data || !data.data.accessToken || !data.data.refreshToken) {
                     throw new Error('서버에서 토큰을 반환하지 않았습니다.');
                 }
 
-                const token = data.data.accessToken;
-                const decodedToken = decodeJWT(token);
+                const accessToken = data.data.accessToken;
+                const refreshToken = data.data.refreshToken;
+                const decodedToken = decodeJWT(accessToken);
 
                 // 로그인 성공 처리
-                localStorage.setItem('token', token); // 토큰 저장
+                localStorage.setItem('token', accessToken); // 액세스 토큰 저장
+                localStorage.setItem('refresh_token', refreshToken); // 리프레시 토큰 저장
                 localStorage.setItem('nickname', decodedToken.nickname); // 닉네임 저장
                 alert(`환영합니다, ${decodedToken.nickname}님!`);
                 window.location.href = '/Graduation-work/main.html';
