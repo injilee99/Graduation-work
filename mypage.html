@@ -54,7 +54,6 @@
         async function checkLoginStatus() {
             const token = localStorage.getItem('token');
             const refreshToken = localStorage.getItem('refresh_token');
-            const currentTime = new Date().toISOString(); // 요청 시간 저장
             const welcomeMessage = document.getElementById('welcome-message');
             const loginBtn = document.getElementById('login-btn');
             const logoutBtn = document.getElementById('logout-btn');
@@ -83,15 +82,12 @@
 
         // 사용자 정보 가져오기
         async function getUserInfo(token) {
-            const currentTime = new Date().toISOString(); // 요청 시간 저장
-
             try {
                 const response = await fetch(`${API_BASE_URL}/user/mypage`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                        'Request-Time': currentTime // 요청 시간 전송
+                        'Content-Type': 'application/json'
                     }
                 });
 
@@ -125,6 +121,7 @@
             try {
                 const currentTime = new Date().toISOString(); // 요청 시간 저장
                 console.log('리프레시 토큰:', refreshToken);  // 콘솔에 리프레시 토큰 출력
+                console.log('요청 시간:', currentTime); // 콘솔에 요청 시간 출력
                 const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
                     method: 'POST',
                     headers: {
@@ -135,7 +132,9 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('토큰 갱신 실패');
+                    const errorMessage = `토큰 갱신 실패, 상태 코드: ${response.status}`;
+                    console.error(errorMessage);
+                    throw new Error(errorMessage);
                 }
 
                 const data = await response.json();
