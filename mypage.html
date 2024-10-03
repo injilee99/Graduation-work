@@ -100,11 +100,15 @@
                 }
 
                 const data = await response.json();
+                
+                console.log(data.nickname);
+
                 document.getElementById('user-nickname').innerText = `닉네임: ${data.nickname}`;
                 document.getElementById('user-email').innerText = `이메일: ${data.email}`;
                 document.getElementById('user-tel').innerText = `전화번호: ${data.tel || 'N/A'}`;
                 document.getElementById('user-gender').innerText = `성별: ${data.gender || 'N/A'}`;
-                document.getElementById('user-birthdate').innerText = `생년월일: ${data.birthdate || 'N/A'}`;
+                document.getElementById('user-birthdate').innerText = `생년월일: ${data.birthDate || 'N/A'}`;
+
             } catch (error) {
                 throw error;
             }
@@ -119,22 +123,17 @@
             }
 
             try {
-                const currentTime = new Date().toISOString(); // 요청 시간 저장
                 console.log('리프레시 토큰:', refreshToken);  // 콘솔에 리프레시 토큰 출력
-                console.log('요청 시간:', currentTime); // 콘솔에 요청 시간 출력
                 const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization-Refresh': `${refreshToken}`,
-                        'Request-Time': currentTime // 요청 시간 전송
+                        'Authorization-Refresh': `${refreshToken}`
                     }
                 });
 
                 if (!response.ok) {
-                    const errorMessage = `토큰 갱신 실패, 상태 코드: ${response.status}`;
-                    console.error(errorMessage);
-                    throw new Error(errorMessage);
+                    throw new Error('토큰 갱신 실패');
                 }
 
                 const data = await response.json();
