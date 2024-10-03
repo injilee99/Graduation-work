@@ -1,151 +1,174 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Forge - 마이페이지</title>
-    <link rel="stylesheet" href="mypage.css">
-</head>
-<body>
-    <header>
-        <div class="top-nav">
-            <div class="logo">
-                <a href="main.html">Game Forge</a>
-            </div>
-            <nav>
-                <ul class="main-menu">
-                    <li><a href="store.html">상점</a></li>
-                    <li><a href="mypage.html">마이페이지</a></li>
-                    <li><a href="community.html">자유게시판</a></li>
-                    <li><a href="support.html">지원</a></li>
-                </ul>
-            </nav>
-            <div class="auth-buttons">
-                <span id="welcome-message"></span>
-                <a href="login.html" class="login-btn" id="login-btn">로그인</a>
-                <button id="logout-btn" style="display:none;" onclick="logout()">로그아웃</button>
-            </div>
-        </div>
-    </header>
+      body {
+        font-family: "Noto Sans KR";
+      }
+      header {
+        font-family: "Noto Sans KR", sans-serif;
+        font-weight: 500;
+        font-style: normal;
+        color: #333;
+      }
 
-    <main>
-        <section class="profile-section">
-            <h2>마이페이지</h2>
-            <div class="profile-info">
-                <h3 id="user-nickname">닉네임: </h3>
-                <p id="user-email">이메일: </p>
-                <p id="user-tel">전화번호: </p>
-                <p id="user-gender">성별: </p>
-                <p id="user-birthdate">생년월일: </p>
-            </div>
-        </section>
-    </main>
+      .top-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 30px;
+        color: #333;
+      }
 
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 대진대학교 벤처 졸업작품.</p>
-        </div>
-    </footer>
+      .logo {
+        margin-left: 150px;
+        font-size: 24px;
+        font-weight: bold;
+      }
 
-    <script>
-        const API_BASE_URL = 'https://ludorium.store/api';
+      .main-menu {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 30px; /* 링크 간격 조정 */
+        justify-content: center; /* 중앙 정렬 */
+        flex: 1; /* 중간 네비게이션 바가 가로로 더 많은 공간을 차지하도록 설정 */
+      }
 
-        async function checkLoginStatus() {
-            const token = localStorage.getItem('token');
-            const refreshToken = localStorage.getItem('refresh_token');
-            const welcomeMessage = document.getElementById('welcome-message');
-            const loginBtn = document.getElementById('login-btn');
-            const logoutBtn = document.getElementById('logout-btn');
+      .main-menu li a {
+        color: #333;
+        text-decoration: none;
+        font-size: 16px;
 
-            if (token) {
-                welcomeMessage.innerText = '환영합니다!';
-                loginBtn.style.display = 'none';
-                logoutBtn.style.display = 'inline-block';
+        padding: 5px 10px; /* 여백 추가 */
 
-                try {
-                    await getUserInfo(token);
-                } catch (error) {
-                    if (error.message === '토큰 만료') {
-                        console.log('리프레시 토큰:', refreshToken);
-                        await refreshTokenHandler(refreshToken);
-                    } else {
-                        alert('사용자 정보를 불러오는 중 오류가 발생했습니다.');
-                        console.error('Error:', error);
-                    }
-                }
-            } else {
-                alert('로그인이 필요합니다.');
-                window.location.href = 'login.html';
-            }
-        }
+        font-weight: 500;
+        font-style: normal;
+      }
 
-        async function getUserInfo(token) {
-            try {
-                const response = await fetch(`${API_BASE_URL}/user/mypage`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
+      .auth-buttons {
+        display: flex;
+        gap: 10px;
+        margin-right: 150px;
+      }
 
-                if (response.status === 401) {
-                    throw new Error('토큰 만료');
-                }
+      .auth-buttons a {
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        color: white;
+        background-color: #889491;
+      }
 
-                if (!response.ok) {
-                    throw new Error('사용자 정보를 불러오지 못했습니다.');
-                }
+      /* 서브메뉴 */
+      .sub-nav {
+        background-color: #889491;
+        margin: 0 150px;
+        padding: 15px 45px;
+        border-radius: 30px;
+      }
 
-                const data = await response.json();
-                document.getElementById('user-nickname').innerText = `닉네임: ${data.nickname}`;
-                document.getElementById('user-email').innerText = `이메일: ${data.email}`;
-                document.getElementById('user-tel').innerText = `전화번호: ${data.tel || 'N/A'}`;
-                document.getElementById('user-gender').innerText = `성별: ${data.gender || 'N/A'}`;
-                document.getElementById('user-birthdate').innerText = `생년월일: ${data.birthdate || 'N/A'}`;
-            } catch (error) {
-                throw error;
-            }
-        }
+      .submenu {
+        list-style-type: none;
+        margin: 0 10px;
+        padding: 0;
+        display: flex;
+        gap: 30px;
+      }
 
-        async function refreshTokenHandler(refreshToken) {
-            if (!refreshToken) {
-                alert('리프레시 토큰이 없습니다. 다시 로그인해 주세요.');
-                window.location.href = 'login.html';
-                return;
-            }
+      .submenu li {
+        color: white;
+        cursor: pointer;
+        padding: 5px 10px;
 
-            try {
-                console.log('리프레시 토큰:', refreshToken);
-                const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization-Refresh': `${refreshToken}`
-                    }
-                });
+        border-radius: 15px;
+        transition: background-color 0.3s, color 0.3s;
+      }
 
-                if (!response.ok) {
-                    throw new Error('토큰 갱신 실패');
-                }
+      .submenu li:hover {
+        background-color: #777;
+        color: #fff;
+      }
 
-                const data = await response.json();
-                localStorage.setItem('token', data.accessToken);
-                await getUserInfo(data.accessToken);
-            } catch (error) {
-                console.error('토큰 갱신 오류:', error);
-                alert('토큰 갱신 중 오류가 발생했습니다. 다시 로그인해 주세요.');
-                window.location.href = 'login.html';
-            }
-        }
+      .menu {
+        height: 20px;
+        background-color: #778881;
+        display: flex;
+        justify-content: space-around;
+        margin: 50px 150px;
+        padding: 15px 45px;
+        list-style-type: none;
+      }
 
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('refresh_token');
-            checkLoginStatus();
-        }
+      .menu li {
+        padding: 0 20px;
+      }
 
-        window.onload = checkLoginStatus;
-    </script>
-</body>
-</html>
+      .menu li a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: bold;
+        display: block;
+      }
+
+      .menu li a:hover {
+        background-color: #889491;
+      }
+
+      .profile-container {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column; /* 세로로 쌓이게 배치 */
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin-top: 50px; /* 상단에서 떨어지도록 여백 추가 */
+      }
+
+      .profile-header {
+        display: flex;
+        flex-direction: row; /* 세로가 아닌 가로로 나란히 배치 */
+        align-items: center; /* 이미지와 텍스트를 수직으로 가운데 정렬 */
+        justify-content: center; /* 이미지와 텍스트를 가로로 가운데 정렬 */
+        margin-bottom: 30px;
+      }
+
+      .profile-header h1 {
+        margin-left: 20px; /* 이미지와 텍스트 사이에 여백 추가 */
+        font-size: 24px;
+      }
+
+      .profile-image {
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+      }
+
+      .profile-info {
+        text-align: left;
+        margin: 40px;
+        width: 500px; /* 사용자 정보의 가로 폭 지정 */
+      }
+
+      .profile-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        font-size: 18px;
+      }
+
+      .label {
+        font-weight: bold;
+      }
+
+      .value {
+        margin-left: 20px;
+      }
+
+      footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+      }
