@@ -89,7 +89,7 @@
     </footer>
 
     <script>
-        const API_BASE_URL = 'https://ludorium.store/api';
+        const API_BASE_URL = 'https://ludorium.store';
 
         // 로그인 상태 확인 및 유저 정보 불러오기
         async function checkLoginStatus() {
@@ -124,7 +124,7 @@
         // 사용자 정보 가져오기
         async function getUserInfo(token) {
             try {
-                const response = await fetch(`${API_BASE_URL}/user/mypage`, {
+                const response = await fetch(`${API_BASE_URL}/api/user/mypage`, {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -167,7 +167,7 @@
             }
 
             try {
-                const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
+                const response = await fetch(`${API_BASE_URL}/api/user/auth/refresh-token`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -243,7 +243,7 @@
         async function updateUserProfileImage(imageUrl) {
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch(`${API_BASE_URL}/user/mypage/update-profile-image`, {
+                const response = await fetch(`${API_BASE_URL}/api/user/mypage/update-profile-image`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,
