@@ -30,13 +30,38 @@
 
     <main>
         <section class="profile-section">
-            <h2>마이페이지</h2>
-            <div class="profile-info">
-                <h3 id="user-nickname">닉네임: </h3>
-                <p id="user-email">이메일: </p>
-                <p id="user-tel">전화번호: </p>
-                <p id="user-gender">성별: </p>
-                <p id="user-birthdate">생년월일: </p>
+            <div class="profile-container">
+                <div class="profile-header">
+                    <img
+                        src="https://via.placeholder.com/100"
+                        alt="Profile Icon"
+                        class="profile-image"
+                    />
+                    <h1 id="user-nickname">닉네임 님 안녕하세요!</h1>
+                </div>
+
+                <div class="profile-info">
+                    <div class="profile-row">
+                        <span class="label">접속 중인 아이디</span>
+                        <span class="value" id="user-email">이메일 정보</span>
+                    </div>
+                    <div class="profile-row">
+                        <span class="label">소셜 로그인</span>
+                        <span class="value">네이버</span>
+                    </div>
+                    <div class="profile-row">
+                        <span class="label">생년월일</span>
+                        <span class="value" id="user-birthdate">생년월일 정보</span>
+                    </div>
+                    <div class="profile-row">
+                        <span class="label">전화번호</span>
+                        <span class="value" id="user-tel">전화번호 정보</span>
+                    </div>
+                    <div class="profile-row">
+                        <span class="label">성별</span>
+                        <span class="value" id="user-gender">성별 정보</span>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -98,15 +123,14 @@
                 const jsonResponse = await response.json();
                 const data = jsonResponse.data;
 
-                // 콘솔에 받은 데이터 출력
-                console.log(data.nickname);
+                // 닉네임 출력
+                document.getElementById('user-nickname').innerText = `${data.nickname} 님 안녕하세요!`;
 
-                // 받은 데이터를 HTML에 출력
-                document.getElementById('user-nickname').innerText = `닉네임: ${data.nickname}`;
-                document.getElementById('user-email').innerText = `이메일: ${data.email}`;
-                document.getElementById('user-tel').innerText = `전화번호: ${data.tel || 'N/A'}`;
-                document.getElementById('user-gender').innerText = `성별: ${data.gender === 'M' ? '남자' : (data.gender === 'W' ? '여자' : 'N/A')}`;
-                document.getElementById('user-birthdate').innerText = `생년월일: ${data.birthDate || 'N/A'}`;
+                // 이메일, 전화번호, 성별, 생년월일 출력
+                document.getElementById('user-email').innerText = data.email;
+                document.getElementById('user-tel').innerText = data.tel || 'N/A';
+                document.getElementById('user-gender').innerText = data.gender === 'M' ? '남자' : (data.gender === 'W' ? '여자' : 'N/A');
+                document.getElementById('user-birthdate').innerText = data.birthDate || 'N/A';
             } catch (error) {
                 console.error('Error:', error);
                 throw error;
