@@ -30,28 +30,29 @@
 
     <!-- 헤더 아래에 위치한 내비게이션 바 -->
     <nav>
-        <ul class="menu">
-            <li><a href="mypage.html">내정보</a></li>
-            <li><a href="#">주문내역</a></li>
-            <li><a href="#">쿠폰</a></li>
-            <li><a href="info.html">정보수정</a></li>
-            <li><a href="modpwd.html">비밀번호 수정</a></li>
-            <li><a href="#">회원탈퇴</a></li>
-        </ul>
+      <ul class="menu">
+        <li><a href="mypage.html">내정보</a></li>
+        <li><a href="#">주문내역</a></li>
+        <li><a href="#">쿠폰</a></li>
+        <li><a href="info.html">정보수정</a></li>
+        <li><a href="modpwd.html">비밀번호 수정</a></li>
+        <li><a href="#">회원탈퇴</a></li>
+      </ul>
     </nav>
 
     <main>
         <section class="profile-section">
             <div class="profile-container">
                 <div class="profile-header">
-                    <!-- 프로필 이미지 클릭 시 파일 선택 창 열기 -->
-                    <img
-                        id="profile-image"
-                        src="https://via.placeholder.com/100"
-                        alt="Profile Icon"
-                        class="profile-image"
-                        onclick="document.getElementById('file-input').click();" />
-                    <input type="file" id="file-input" style="display:none;" accept="image/*" onchange="uploadImage(event)">
+                    <label for="profile-image-upload">
+                        <img
+                            id="profile-image"
+                            src="https://via.placeholder.com/100"
+                            alt="Profile Icon"
+                            class="profile-image"
+                        />
+                    </label>
+                    <input type="file" id="profile-image-upload" style="display: none;" onchange="uploadImage()" />
                     <h1 id="user-nickname">닉네임 님 안녕하세요!</h1>
                 </div>
 
@@ -89,6 +90,73 @@
 
     <script>
         const API_BASE_URL = 'https://ludorium.store/api';
+
+        // 이미지 업로드 처리 함수
+        async function uploadImage() {
+            const fileInput = document.getElementById('profile-image-upload');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/file/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('이미지 업로드 실패');
+                }
+
+                const result = await response.json();
+                
+                // 업로드된 이미지의 URL을 업데이트
+                const imageUrl = result.fileUrl;
+                document.getElementById('profile-image').src = imageUrl;
+
+                // 사용자 프로필 업데이트 (서버에 URL 저장 로직 필요)
+                await updateProfileImage(imageUrl);
+
+            } catch (error) {
+                console.error('이미지 업로드 중 오류:', error);
+                alert('이미지 업로드에 실패했습니다.');
+            }
+        }
+
+        // 사용자 정보 업데이트 처리 (이미지 URL 포함)
+        async function updateProfileImage(imageUrl) {
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                alert('로그인이 필요합니다.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/user/mypage`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ profileImage: imageUrl })
+                });
+
+                if (!response.ok) {
+                    throw new Error('프로필 이미지 업데이트 실패');
+                }
+
+                alert('프로필 이미지가 성공적으로 업데이트되었습니다.');
+            } catch (error) {
+                console.error('프로필 이미지 업데이트 중 오류:', error);
+                alert('프로필 이미지 업데이트에 실패했습니다.');
+            }
+        }
 
         // 로그인 상태 확인 및 유저 정보 불러오기
         async function checkLoginStatus() {
@@ -146,81 +214,14 @@
                 document.getElementById('user-tel').innerText = data.tel || 'N/A';
                 document.getElementById('user-gender').innerText = data.gender === 'M' ? '남자' : (data.gender === 'W' ? '여자' : 'N/A');
                 document.getElementById('user-birthdate').innerText = data.birthDate || 'N/A';
+
+                // 프로필 이미지 출력
                 document.getElementById('profile-image').src = data.profileImage || 'https://via.placeholder.com/100';
+
             } catch (error) {
                 console.error('Error:', error);
                 throw error;
             }
-        }
-
-        // 이미지 업로드 함수
-        async function uploadImage(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const formData = new FormData();
-            formData.append('file', file);
-
-            const token = localStorage.getItem('token');
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/file/upload`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: formData
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    document.getElementById('profile-image').src = result.fileUrl; // 이미지 미리보기
-                    alert('이미지가 성공적으로 업로드되었습니다.');
-                } else {
-                    alert('이미지 업로드 실패');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('이미지 업로드 중 오류가 발생했습니다.');
-            }
-        }
-
-        // 토큰 갱신 함수
-        async function refreshTokenHandler(refreshToken) {
-            if (!refreshToken) {
-                alert('리프레시 토큰이 없습니다. 다시 로그인해 주세요.');
-                window.location.href = 'login.html';
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/user/auth/refresh-token`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization-Refresh': `${refreshToken}`
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('토큰 갱신 실패');
-                }
-
-                const data = await response.json();
-                localStorage.setItem('token', data.accessToken);
-                await getUserInfo(data.accessToken);
-            } catch (error) {
-                console.error('토큰 갱신 오류:', error);
-                alert('토큰 갱신 중 오류가 발생했습니다. 다시 로그인해 주세요.');
-                window.location.href = 'login.html';
-            }
-        }
-
-        // 로그아웃 처리 함수
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('refresh_token');
-            window.location.href = 'login.html';
         }
 
         // 페이지 로드 시 로그인 상태 및 유저 정보 확인
