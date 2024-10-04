@@ -1,13 +1,24 @@
+/* 전체적인 폰트 및 배경 */
 body {
   font-family: "Noto Sans KR", sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
 }
 
+/* 헤더 스타일 */
 header {
+  background-color: #fff;
   font-weight: 500;
   font-style: normal;
   color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
+/* 네비게이션 바 */
 .top-nav {
   display: flex;
   justify-content: space-between;
@@ -16,31 +27,38 @@ header {
   color: #333;
 }
 
+/* 로고 */
 .logo {
-  margin-left: 150px;
   font-size: 24px;
   font-weight: bold;
+  margin-left: 150px;
 }
 
+/* 메인 메뉴 */
 .main-menu {
   list-style-type: none;
   margin: 0;
   padding: 0;
   display: flex;
-  gap: 30px; /* 링크 간격 조정 */
-  justify-content: center; /* 중앙 정렬 */
-  flex: 1; /* 중간 네비게이션 바가 가로로 더 많은 공간을 차지하도록 설정 */
+  gap: 30px;
+  justify-content: center;
+  flex: 1;
 }
 
 .main-menu li a {
   color: #333;
   text-decoration: none;
   font-size: 16px;
-  padding: 5px 10px; /* 여백 추가 */
+  padding: 5px 10px;
   font-weight: 500;
-  font-style: normal;
+  transition: color 0.3s ease;
 }
 
+.main-menu li a:hover {
+  color: #555;
+}
+
+/* 로그인 버튼 */
 .auth-buttons {
   display: flex;
   gap: 10px;
@@ -53,19 +71,24 @@ header {
   text-decoration: none;
   color: white;
   background-color: #889491;
+  transition: background-color 0.3s ease;
+}
+
+.auth-buttons a:hover {
+  background-color: #777;
 }
 
 /* 서브메뉴 */
 .sub-nav {
   background-color: #889491;
-  margin: 0 150px;
+  margin: 20px 150px;
   padding: 15px 45px;
   border-radius: 30px;
 }
 
 .submenu {
   list-style-type: none;
-  margin: 0 10px;
+  margin: 0;
   padding: 0;
   display: flex;
   gap: 30px;
@@ -84,6 +107,7 @@ header {
   color: #fff;
 }
 
+/* 마이페이지 정보 섹션 */
 .profile-section {
   margin-top: 50px;
   display: flex;
@@ -93,11 +117,10 @@ header {
 .profile-info {
   border: 1px solid #ddd;
   border-radius: 15px;
-  padding: 20px;
-  width: 50%;
-  max-width: 600px;
-  text-align: left;
-  background-color: #f9f9f9;
+  padding: 30px;
+  width: 40%;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .profile-info h2 {
@@ -107,20 +130,11 @@ header {
 }
 
 .profile-info p {
-  margin: 10px 0;
+  margin: 15px 0;
   font-size: 18px;
 }
 
-.profile-info .label {
-  font-weight: bold;
-  color: #333;
-}
-
-.profile-info .value {
-  margin-left: 10px;
-  color: #555;
-}
-
+/* 푸터 */
 footer {
   background-color: #333;
   color: white;
@@ -129,4 +143,34 @@ footer {
   position: relative;
   bottom: 0;
   width: 100%;
+}
+
+/* 반응형 스타일 */
+@media screen and (max-width: 768px) {
+  .top-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 20px;
+  }
+
+  .logo {
+    margin-left: 0;
+  }
+
+  .auth-buttons {
+    margin-right: 0;
+    margin-top: 10px;
+  }
+
+  .sub-nav {
+    margin: 20px;
+  }
+
+  .profile-info {
+    width: 90%;
+  }
+
+  .main-menu {
+    gap: 10px;
+  }
 }
