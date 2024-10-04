@@ -97,6 +97,7 @@ header {
   width: 50%;
   max-width: 600px;
   text-align: left;
+  background-color: #f9f9f9;
 }
 
 .profile-info h2 {
