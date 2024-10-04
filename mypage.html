@@ -28,11 +28,22 @@
         </div>
     </header>
 
+    <nav>
+        <ul class="menu">
+            <li><a href="mypage.html">내정보</a></li>
+            <li><a href="#">주문내역</a></li>
+            <li><a href="#">쿠폰</a></li>
+            <li><a href="info.html">정보수정</a></li>
+            <li><a href="modpwd.html">비밀번호 수정</a></li>
+            <li><a href="#">회원탈퇴</a></li>
+        </ul>
+    </nav>
+
     <main>
         <section class="profile-section">
             <div class="profile-container">
                 <div class="profile-header">
-                    <!-- 프로필 이미지 (클릭하면 파일 선택 창이 열림) -->
+                    <!-- 프로필 이미지 클릭 시 파일 선택 창 열기 -->
                     <img
                         id="profile-image"
                         src="https://via.placeholder.com/100"
@@ -77,7 +88,7 @@
 
     <script>
         const API_BASE_URL = 'https://ludorium.store/api';
-        
+
         // 로그인 상태 확인 및 유저 정보 불러오기
         async function checkLoginStatus() {
             const token = localStorage.getItem('token');
