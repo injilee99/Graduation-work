@@ -44,14 +44,15 @@
         <section class="profile-section">
             <div class="profile-container">
                 <div class="profile-header">
-                    <img
-                        id="profile-image"
-                        src="https://via.placeholder.com/100"
-                        alt="Profile Icon"
-                        class="profile-image"
-                        onclick="document.getElementById('profile-image-upload').click()"
-                    />
-                    <input type="file" id="profile-image-upload" style="display: none;" accept="image/*" onchange="uploadImage()">
+                    <label for="profile-image-upload">
+                        <img
+                            id="profile-image"
+                            src="https://via.placeholder.com/100"
+                            alt="Profile Icon"
+                            class="profile-image"
+                        />
+                    </label>
+                    <input type="file" id="profile-image-upload" style="display: none;" accept="image/*" onchange="uploadImage(event)">
                     <h1 id="user-nickname">닉네임 님 안녕하세요!</h1>
                 </div>
 
@@ -147,88 +148,13 @@
                 document.getElementById('user-gender').innerText = data.gender === 'M' ? '남자' : (data.gender === 'W' ? '여자' : 'N/A');
                 document.getElementById('user-birthdate').innerText = data.birthDate || 'N/A';
 
-                // 프로필 이미지 설정 (기본 이미지가 아닌 경우)
+                // 프로필 이미지 설정
                 if (data.profileImageUrl) {
                     document.getElementById('profile-image').src = data.profileImageUrl;
                 }
             } catch (error) {
                 console.error('Error:', error);
                 throw error;
-            }
-        }
-
-        // 이미지 업로드 처리 함수
-        async function uploadImage() {
-            const fileInput = document.getElementById('profile-image-upload');
-            const file = fileInput.files[0];
-            
-            if (!file) {
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('file', file);
-
-            const token = localStorage.getItem('token');
-            if (!token) {
-                alert('로그인이 필요합니다.');
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/file/upload`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: formData
-                });
-
-                if (!response.ok) {
-                    throw new Error('이미지 업로드 실패');
-                }
-
-                const result = await response.json();
-                
-                // 업로드된 이미지의 URL을 업데이트
-                const imageUrl = result.fileUrl;
-                document.getElementById('profile-image').src = imageUrl;
-
-                // 사용자 프로필 업데이트 (서버에 URL 저장 로직 필요)
-                await updateProfileImage(imageUrl);
-
-            } catch (error) {
-                console.error('이미지 업로드 중 오류:', error);
-                alert('이미지 업로드에 실패했습니다.');
-            }
-        }
-
-        // 프로필 이미지 URL 서버에 저장
-        async function updateProfileImage(imageUrl) {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                alert('로그인이 필요합니다.');
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/user/update-profile-image`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ profileImageUrl: imageUrl })
-                });
-
-                if (!response.ok) {
-                    throw new Error('프로필 이미지 업데이트 실패');
-                }
-
-                alert('프로필 이미지가 성공적으로 업데이트되었습니다.');
-            } catch (error) {
-                console.error('프로필 이미지 업데이트 중 오류:', error);
-                alert('프로필 이미지 업데이트에 실패했습니다.');
             }
         }
 
@@ -269,6 +195,65 @@
             localStorage.removeItem('token');
             localStorage.removeItem('refresh_token');
             checkLoginStatus();
+        }
+
+        // 이미지 업로드 함수
+        async function uploadImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_BASE_URL}/file/upload`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('이미지 업로드 실패');
+                }
+
+                const data = await response.json();
+                const imageUrl = data.url;
+
+                // 업로드된 이미지 URL을 프로필 이미지로 설정
+                document.getElementById('profile-image').src = imageUrl;
+
+                // 서버에 저장된 사용자 프로필 이미지 URL 업데이트
+                await updateUserProfileImage(imageUrl);
+            } catch (error) {
+                console.error('이미지 업로드 중 오류:', error);
+                alert('이미지 업로드 중 오류가 발생했습니다.');
+            }
+        }
+
+        // 사용자 프로필 이미지 URL 업데이트 함수
+        async function updateUserProfileImage(imageUrl) {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_BASE_URL}/user/mypage/update-profile-image`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ profileImageUrl: imageUrl })
+                });
+
+                if (!response.ok) {
+                    throw new Error('프로필 이미지 업데이트 실패');
+                }
+
+            } catch (error) {
+                console.error('프로필 이미지 업데이트 중 오류:', error);
+                alert('프로필 이미지 업데이트 중 오류가 발생했습니다.');
+            }
         }
 
         // 페이지 로드 시 로그인 상태 및 유저 정보 확인
