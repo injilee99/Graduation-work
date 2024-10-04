@@ -207,6 +207,8 @@
 
             try {
                 const token = localStorage.getItem('token');
+                console.log("토큰:", token);
+                console.log("파일:", file);
                 const response = await fetch(`${API_BASE_URL}/file/upload`, {
                     method: 'POST',
                     headers: {
@@ -215,6 +217,7 @@
                     body: formData
                 });
 
+                console.log("서버 응답:", response);
                 if (!response.ok) {
                     throw new Error('이미지 업로드 실패');
                 }
