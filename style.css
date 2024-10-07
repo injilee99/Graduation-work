@@ -8,41 +8,6 @@
         background-color: #fff;
         color: #333;
       }
-      .main-menu {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        gap: 30px; /* 링크 간격 조정 */
-        justify-content: center; /* 중앙 정렬 */
-        flex: 1; /* 중간 네비게이션 바가 가로로 더 많은 공간을 차지하도록 설정 */
-      }
-
-      .main-menu li a {
-        color: #333;
-        text-decoration: none;
-        font-size: 16px;
-
-        padding: 5px 10px; /* 여백 추가 */
-
-        font-weight: 500;
-        font-style: normal;
-      }
-
-      .auth-buttons {
-        display: flex;
-        gap: 10px;
-        margin-right: 150px;
-      }
-
-      .auth-buttons a {
-        padding: 10px 20px;
-        border-radius: 5px;
-        text-decoration: none;
-        color: white;
-        background-color: #889491;
-      }
-
       /* 서브메뉴 */
       .sub-nav {
         background-color: #889491;
