@@ -45,11 +45,9 @@
       <!-- Filter and sorting section -->
       <div class="filters">
         <div class="sort">
-          <select>
-            <option>인기순</option>
-            <option>출시일순</option>
-            <option>낮은 가격순</option>
-            <option>높은 가격순</option>
+          <select id="sortOrder">
+            <option value="rating">평점순</option>
+            <option value="recent">최신순</option>
           </select>
         </div>
         <div class="genre-filter">
@@ -69,7 +67,7 @@
         <!-- 검색 창 추가 -->
         <div class="search-bar">
           <i class="material-icons">search</i>
-          <input type="text" placeholder="게임 검색" />
+          <input type="text" id="searchKeyword" placeholder="게임 검색" />
         </div>
       </div>
 
@@ -99,10 +97,16 @@
       const pageSize = 8;
 
       // Function to fetch game list by category ID
-      async function fetchGamesByCategory(categoryId, page = 0) {
+      async function fetchGamesByCategory(categoryId, page = 0, orderBy = 'rating', searchKeyword = '') {
         try {
+          // Construct the API URL with parameters
+          let apiUrl = `${serverUrl}/api/user/game/${categoryId}/list?page=${page}&size=${pageSize}&orderBy=${orderBy}`;
+          if (searchKeyword) {
+            apiUrl += `&searchKeyword=${encodeURIComponent(searchKeyword)}`;
+          }
+
           // Fetch data from the API
-          const response = await fetch(`${serverUrl}/api/user/game/${categoryId}/list?page=${page}&size=${pageSize}`);
+          const response = await fetch(apiUrl);
           if (!response.ok) {
             throw new Error('네트워크 응답에 문제가 있습니다.');
           }
@@ -156,8 +160,33 @@
         radio.addEventListener('change', function () {
           const categoryId = this.value;
           currentPage = 0;
-          fetchGamesByCategory(categoryId, currentPage);
+          const orderBy = document.getElementById('sortOrder').value;
+          const searchKeyword = document.getElementById('searchKeyword').value;
+          fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
+          document.getElementById('currentPage').innerText = currentPage + 1;
         });
+      });
+
+      // Event listener for sort order changes
+      document.getElementById('sortOrder').addEventListener('change', function () {
+        const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
+        currentPage = 0;
+        const orderBy = this.value;
+        const searchKeyword = document.getElementById('searchKeyword').value;
+        fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
+        document.getElementById('currentPage').innerText = currentPage + 1;
+      });
+
+      // Event listener for search input
+      document.getElementById('searchKeyword').addEventListener('keyup', function (event) {
+        if (event.key === 'Enter') {
+          const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
+          currentPage = 0;
+          const orderBy = document.getElementById('sortOrder').value;
+          const searchKeyword = this.value;
+          fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
+          document.getElementById('currentPage').innerText = currentPage + 1;
+        }
       });
 
       // Pagination event listeners
@@ -165,7 +194,9 @@
         if (currentPage > 0) {
           currentPage--;
           const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
-          fetchGamesByCategory(categoryId, currentPage);
+          const orderBy = document.getElementById('sortOrder').value;
+          const searchKeyword = document.getElementById('searchKeyword').value;
+          fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
           document.getElementById('currentPage').innerText = currentPage + 1;
         }
       });
@@ -173,7 +204,9 @@
       document.getElementById('nextPage').addEventListener('click', () => {
         currentPage++;
         const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
-        fetchGamesByCategory(categoryId, currentPage);
+        const orderBy = document.getElementById('sortOrder').value;
+        const searchKeyword = document.getElementById('searchKeyword').value;
+        fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
         document.getElementById('currentPage').innerText = currentPage + 1;
       });
 
