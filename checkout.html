@@ -102,7 +102,7 @@
         async function completePayment() {
             const paymentMethod = document.getElementById('payment-method').value;
 
-            // 사용자로부터 imp_uid 값을 입력받거나 생성 (실제 환경에서는 Iamport 등 결제 모듈을 통해 받게 됩니다)
+            // 사용자로부터 imp_uid 값을 입력받거나 생성
             const imp_uid = prompt("결제 고유 번호를 입력해주세요 (imp_uid):");
 
             if (!imp_uid) {
