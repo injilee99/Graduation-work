@@ -79,6 +79,11 @@
         <div class="product-grid">
           <!-- 게임 리스트가 여기에 동적으로 추가됩니다 -->
         </div>
+        <div class="pagination">
+          <button id="prevPage">이전 페이지</button>
+          <span id="currentPage">1</span>
+          <button id="nextPage">다음 페이지</button>
+        </div>
       </div>
     </div>
     <footer>
@@ -90,12 +95,14 @@
     <script>
       // Store the server URL
       const serverUrl = 'https://ludorium.store';
+      let currentPage = 0;
+      const pageSize = 8;
 
       // Function to fetch game list by category ID
-      async function fetchGamesByCategory(categoryId) {
+      async function fetchGamesByCategory(categoryId, page = 0) {
         try {
           // Fetch data from the API
-          const response = await fetch(`${serverUrl}/api/user/game/${categoryId}/list`);
+          const response = await fetch(`${serverUrl}/api/user/game/${categoryId}/list?page=${page}&size=${pageSize}`);
           if (!response.ok) {
             throw new Error('네트워크 응답에 문제가 있습니다.');
           }
@@ -108,8 +115,6 @@
           let games = [];
           if (result.data && Array.isArray(result.data.content)) {
             games = result.data.content;
-          } else if (Array.isArray(result.data)) {
-            games = result.data;
           } else {
             console.error('Error: 응답의 data 필드가 올바른 배열이 아닙니다.', result);
             return;
@@ -130,7 +135,7 @@
         games.forEach((game) => {
           const gameCard = `
             <div class="product-card">
-              <img src="${(game.gameImageList && game.gameImageList.length > 0) ? game.gameImageList[0] : 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
+              <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
               <p class="product-title">${game.gameName || '제목 없음'}</p>
               <p class="product-price">정상가: ₩ ${game.originalPrice || 0}</p>
               <p class="sale-price">
@@ -150,8 +155,26 @@
       document.querySelectorAll('.genre-filter input[type="radio"]').forEach((radio) => {
         radio.addEventListener('change', function () {
           const categoryId = this.value;
-          fetchGamesByCategory(categoryId);
+          currentPage = 0;
+          fetchGamesByCategory(categoryId, currentPage);
         });
+      });
+
+      // Pagination event listeners
+      document.getElementById('prevPage').addEventListener('click', () => {
+        if (currentPage > 0) {
+          currentPage--;
+          const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
+          fetchGamesByCategory(categoryId, currentPage);
+          document.getElementById('currentPage').innerText = currentPage + 1;
+        }
+      });
+
+      document.getElementById('nextPage').addEventListener('click', () => {
+        currentPage++;
+        const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
+        fetchGamesByCategory(categoryId, currentPage);
+        document.getElementById('currentPage').innerText = currentPage + 1;
       });
 
       // Initial fetch for the default category
