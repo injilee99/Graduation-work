@@ -1,3 +1,5 @@
+// auth.js
+
 // JWT 토큰 디코딩 함수 (Base64 디코딩)
 function decodeJWT(token) {
     const base64Url = token.split('.')[1];
