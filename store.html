@@ -130,11 +130,11 @@
         games.forEach((game) => {
           const gameCard = `
             <div class="product-card">
-              <img src="${game.thumbnail || 'https://via.placeholder.com/150'}" alt="${game.name || '게임 이미지'}" />
-              <p class="product-title">${game.name || '제목 없음'}</p>
-              <p class="product-price">정상가: ₩ ${game.price || 0}</p>
+              <img src="${game.thumbnail || game.image || 'https://via.placeholder.com/150'}" alt="${game.name || game.title || '게임 이미지'}" />
+              <p class="product-title">${game.name || game.title || '제목 없음'}</p>
+              <p class="product-price">정상가: ₩ ${game.price || game.originalPrice || 0}</p>
               <p class="sale-price">
-                판매가: ₩ ${game.discountPrice || 0} <span class="discount">${game.discountRate || 0}%</span>
+                판매가: ₩ ${game.discountPrice || game.salePrice || 0} <span class="discount">${game.discountRate || 0}%</span>
               </p>
               <div class="rating">
                 <i class="material-icons">star</i><span>${game.rating || 0}</span>
