@@ -1,4 +1,3 @@
-
 body {
   font-family: "Noto Sans KR";
   background-color: #f8f8f8;
@@ -20,12 +19,11 @@ body {
 }
 
 h2 {
-    font-family: "Noto Sans KR";
+  font-family: "Noto Sans KR";
   margin-bottom: 20px;
   font-size: 24px;
   font-weight: bold;
 }
-
 
 form {
   display: flex;
@@ -43,30 +41,30 @@ label {
   display: inline-block;
 }
 
-
 .input-group {
   display: flex;
   align-items: center;
 }
 
 .input-group input[type="text"],
-.input-group input[type="email"] {
+.input-group input[type="email"],
+.input-group input[type="tel"] {
   flex: 1;
   padding: 10px;
-  border: none; 
-  border-bottom: 1px solid #dadada; 
+  border: none;
+  border-bottom: 1px solid #dadada;
   font-size: 14px;
   box-sizing: border-box;
 }
 
 .input-group button {
-  padding: 10px 0;
+  padding: 10px;
   background-color: #889491;
   color: white;
-
-  border-radius: 15px; 
+  border-radius: 15px;
   cursor: pointer;
   font-size: 12px;
+  margin-left: 20px;
 }
 
 .input-group button:disabled {
@@ -82,7 +80,7 @@ input[type="date"],
 select {
   width: 100%;
   padding: 5px;
-  border: none; 
+  border: none;
   border-bottom: 1px solid #dadada;
   font-size: 14px;
   box-sizing: border-box;
@@ -102,11 +100,11 @@ button:disabled {
   background-color: #ccc;
   cursor: pointer;
 }
-#check-email-btn {
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+
+#check-email-btn,
+#check-nickname-btn,
+#check-tel-btn {
+  padding: 10px;
   background-color: #889491;
   color: white;
   border-radius: 15px;
@@ -115,23 +113,18 @@ button:disabled {
   width: auto;
   margin-left: 20px;
 }
+
 #send-verification-btn {
   margin-top: 0px;
   margin-bottom: 0px;
   padding-left: 15px;
   padding-right: 15px;
 }
-#check-email-btn,
-#send-verification-btn {
-  width: auto;
-  background-color: #889491;
-  color: white;
-  font-size: 12px;
-  border-radius: 15px;
-}
 
-#check-email-btn,
-#send-verification-btn:disabled {
+#send-verification-btn:disabled,
+#check-email-btn:disabled,
+#check-nickname-btn:disabled,
+#check-tel-btn:disabled {
   background-color: #ccc;
   cursor: pointer;
 }
@@ -142,6 +135,8 @@ button:disabled {
 }
 
 #email-status,
+#nickname-status,
+#tel-status,
 #verification-status,
 #password-status {
   font-size: 12px;
@@ -160,10 +155,14 @@ button[type="submit"]:hover {
   background-color: #889491;
 }
 
-input[type="email"]:read-only {
+input[type="email"]:read-only,
+input[type="text"]:read-only,
+input[type="tel"]:read-only {
   background-color: #f0f0f0;
 }
 
-input[type="email"]:disabled {
+input[type="email"]:disabled,
+input[type="text"]:disabled,
+input[type="tel"]:disabled {
   background-color: #e0e0e0;
 }
