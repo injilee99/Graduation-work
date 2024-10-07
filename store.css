@@ -1,149 +1,64 @@
 body {
-    font-family: "Noto Sans KR";
-    background-color: #f8f8f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+  font-family: "Noto Sans KR", sans-serif;
+  background-color: #f8f8f8;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .container {
-    padding: 20px;
+  max-width: 1200px; /* 페이지의 최대 너비 설정 */
+  margin: 0 auto; /* 중앙 정렬 */
+  padding: 20px; /* 패딩 추가 */
+}
+
+.header,
+.footer {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.top-nav,
+.sub-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+}
+
+.product-list {
+  margin-top: 20px; /* 상품 리스트와 필터 간격 조정 */
 }
 
 .product-card {
-    background-color: white;
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    padding: 15px;
-    margin-bottom: 20px;
-    transition: transform 0.3s;
+  width: 280px;
+  margin: 15px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 }
 
 .product-card:hover {
-    transform: translateY(-10px);
-}
-
-.product-card img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-}
-
-.product-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 10px;
-    margin-bottom: 10px;
+  transform: scale(1.05);
 }
 
 .product-price {
-    color: #666;
-    font-size: 16px;
-    margin-bottom: 5px;
-    font-weight: normal;
-}
-
-.original-price {
-    text-decoration: line-through; /* 정상가에만 취소선을 적용 */
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 5px;
+  text-decoration: line-through;
+  color: #888; /* 가격 텍스트 색상 수정 */
 }
 
 .sale-price {
-    color: #ff5c5c;
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 5px;
+  font-weight: bold;
+  color: #e74c3c;
+  margin-top: 5px;
 }
 
-.discount {
-    background-color: #ff5c5c;
-    color: white;
-    font-size: 14px;
-    padding: 3px 8px;
-    border-radius: 5px;
-    margin-left: 5px;
-}
-
-.rating {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-
-.rating i {
-    color: #ffd700;
-    margin-right: 5px;
-}
-
-.cart-btn {
-    background-color: #889491;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-.cart-btn:hover {
-    background-color: #677b78;
-    transform: scale(1.05);
-}
-
-.filters {
-    margin-bottom: 30px;
-}
-
-.filters .sort,
-.filters .genre-filter {
-    margin-bottom: 15px;
-}
-
-.search-bar {
-    display: flex;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.search-bar input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #dadada;
-    border-radius: 10px;
-    margin-left: 10px;
-}
-
-.pagination {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.pagination button {
-    background-color: #889491;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-.pagination button:hover {
-    background-color: #677b78;
-    transform: scale(1.05);
-}
-
-.pagination span {
-    font-size: 16px;
-    font-weight: bold;
-    padding: 8px 12px;
+.sale-price .discount {
+  background-color: #e74c3c;
+  color: white;
+  padding: 3px 5px;
+  border-radius: 4px;
+  font-size: 12px;
 }
