@@ -135,7 +135,7 @@
         games.forEach((game) => {
           const gameCard = `
             <div class="product-card">
-              <a href="gameDetail.html?gameId=${game.gameId}">
+              <a href="gameDetail.html?gameId=${game.gameId}" class="game-title-link">
                 <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
                 <p class="product-title">${game.gameName || '제목 없음'}</p>
               </a>
@@ -153,6 +153,12 @@
           `;
           productGrid.innerHTML += gameCard;
         });
+      }
+
+      // Function to add game to cart
+      function addToCart(gameId) {
+        console.log(`게임 ID ${gameId}이(가) 장바구니에 추가되었습니다.`);
+        // 장바구니 추가 로직 구현 필요
       }
 
       // Event listener for genre filter changes
@@ -207,11 +213,6 @@
       window.onload = () => {
         fetchGamesByCategory(4); // Default to RPG category on page load
       };
-
-      // Function to add to cart
-      function addToCart(gameId) {
-        alert(`게임 ID ${gameId}이 장바구니에 추가되었습니다.`);
-      }
     </script>
   </body>
 </html>
