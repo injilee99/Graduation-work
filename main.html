@@ -8,10 +8,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100&display=swap" rel="stylesheet">
-    <script src="auth.js"></script> <!-- 로그인 상태 관리를 위한 스크립트 추가 -->
 </head>
 <body>
-    <div id="header-placeholder"></div> <!-- 헤더를 위한 자리 표시자 -->
+    <!-- 헤더 자리 표시자 -->
+    <div id="header-placeholder"></div>
 
     <div class="banner-slider">
         <div class="slides">
@@ -99,15 +99,7 @@
         </div>
     </footer>
 
-    <script>
-        // header.html 파일을 동적으로 로드하여 헤더를 추가합니다.
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch("header.html")
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("header-placeholder").innerHTML = data;
-                });
-        });
-    </script>
+    <!-- auth.js 추가 - 페이지 로드 후 실행 -->
+    <script src="auth.js"></script>
 </body>
 </html>
