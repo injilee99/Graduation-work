@@ -1,60 +1,6 @@
 body {
     font-family: "Noto Sans KR", sans-serif;
 }
-
-header {
-    font-family: "Noto Sans KR", sans-serif;
-    font-weight: 500;
-    font-style: normal;
-    color: #333;
-}
-
-.top-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    color: #333;
-}
-
-.logo {
-    margin-left: 150px;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.main-menu {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 30px;
-    justify-content: center;
-    flex: 1;
-}
-
-.main-menu li a {
-    color: #333;
-    text-decoration: none;
-    font-size: 16px;
-    padding: 5px 10px;
-    font-weight: 500;
-}
-
-.auth-buttons {
-    display: flex;
-    gap: 10px;
-    margin-right: 150px;
-}
-
-.auth-buttons a {
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    color: white;
-    background-color: #889491;
-}
-
 /* 서브메뉴 */
 .sub-nav {
     background-color: #889491;
