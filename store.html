@@ -98,14 +98,12 @@
           // Log the result to understand the structure
           console.log('API 응답:', result);
 
-          // Modify this part based on the actual structure
+          // Extract the games array from the response
           let games = [];
-          if (result.data && Array.isArray(result.data)) {
-            games = result.data;
-          } else if (result.data && result.data.games && Array.isArray(result.data.games)) {
-            games = result.data.games;
+          if (result.data && Array.isArray(result.data.content)) {
+            games = result.data.content;
           } else {
-            console.error('Error: 응답의 data 필드가 배열이 아닙니다.', result);
+            console.error('Error: 응답의 data 필드가 올바른 배열이 아닙니다.', result);
             return;
           }
 
