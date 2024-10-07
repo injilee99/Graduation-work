@@ -1,281 +1,336 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>회원가입 - game forge</title>
-</head>
-<body>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="signup.css" />
+  </head>
+  <body>
     <div class="signup-container">
-        <h2>회원가입</h2>
-        <form id="signup-form" onsubmit="return handleSignup(event)">
-            <div class="form-group">
-                <label for="email">아이디 (이메일)</label>
-                <input type="email" id="email" name="email" required>
-                <button type="button" id="check-email-btn" onclick="checkEmail()">중복 확인</button>
-                <p id="email-status"></p>
-            </div>
+      <h2>회원가입</h2>
+      <form id="signup-form" onsubmit="return handleSignup(event)">
+        <div class="form-group">
+          <label for="email">아이디 (이메일)</label>
+          <div class="input-group">
+            <input type="email" id="email" name="email" required />
+            <button type="button" id="check-email-btn" onclick="checkEmail()">
+              중복 확인
+            </button>
+          </div>
+          <p id="email-status"></p>
+        </div>
 
-            <!-- 이메일 인증 버튼, 중복 확인 성공 후에만 보임 -->
-            <div class="form-group" id="email-auth-btn-group" style="display: none;">
-                <button type="button" id="send-verification-btn" onclick="sendEmailVerification()">이메일 인증 번호 전송</button>
-                <p id="verification-status"></p>
-            </div>
+        <!-- 이메일 인증 버튼, 중복 확인 성공 후에만 보임 -->
+        <div class="form-group" id="email-auth-btn-group" style="display: none">
+          <button
+            type="button"
+            id="send-verification-btn"
+            onclick="sendEmailVerification()"
+          >
+            이메일 인증 번호 전송
+          </button>
+          <p id="verification-status"></p>
+        </div>
 
-            <!-- 이메일 인증 입력란, 인증 번호 전송 후에 보임 -->
-            <div class="form-group" id="email-verification-group" style="display: none;">
-                <label for="verification-code">이메일로 발송된 인증번호</label>
-                <input type="text" id="verification-code" name="verification-code" required>
-                <button type="button" onclick="verifyCode()">인증하기</button>
-                <p id="verification-status"></p>
-            </div>
+        <!-- 이메일 인증 입력란, 인증 번호 전송 후에 보임 -->
+        <!-- 이메일 인증 입력란, 인증 번호 전송 후에 보임 -->
+        <div
+          class="form-group"
+          id="email-verification-group"
+          style="display: none"
+        >
+          <label for="verification-code">이메일로 발송된 인증번호</label>
+          <div class="input-group">
+            <input
+              type="text"
+              id="verification-code"
+              name="verification-code"
+              required
+            />
+            <button type="button" onclick="verifyCode()">인증하기</button>
+          </div>
+          <p id="verification-status"></p>
+        </div>
 
-            <div class="form-group">
-                <label for="password">비밀번호</label>
-                <input type="password" id="password" name="password" required>
-            </div>
+        <div class="form-group">
+          <label for="password">비밀번호</label>
+          <input type="password" id="password" name="password" required />
+        </div>
 
-            <div class="form-group">
-                <label for="confirm-password">비밀번호 확인</label>
-                <input type="password" id="confirm-password" name="confirm-password" required>
-                <p id="password-status"></p>
-            </div>
+        <div class="form-group">
+          <label for="confirm-password">비밀번호 확인</label>
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm-password"
+            required
+          />
+          <p id="password-status"></p>
+        </div>
 
-            <div class="form-group">
-                <label for="name">이름</label>
-                <input type="text" id="name" name="name" required>
-            </div>
+        <div class="form-group">
+          <label for="name">이름</label>
+          <input type="text" id="name" name="name" required />
+        </div>
 
-            <div class="form-group">
-                <label for="nickname">닉네임</label>
-                <input type="text" id="nickname" name="nickname" required>
-            </div>
+        <div class="form-group">
+          <label for="nickname">닉네임</label>
+          <input type="text" id="nickname" name="nickname" required />
+        </div>
 
-            <div class="form-group">
-                <label for="tel">전화번호</label>
-                <input type="tel" id="tel" name="tel" required placeholder="010-1234-5679" oninput="autoHyphen(this)">
-            </div>
+        <div class="form-group">
+          <label for="tel">전화번호</label>
+          <input
+            type="tel"
+            id="tel"
+            name="tel"
+            required
+            placeholder="010-1234-5679"
+            oninput="autoHyphen(this)"
+          />
+        </div>
 
-            <div class="form-group">
-                <label for="gender">성별</label>
-                <select id="gender" name="gender" required>
-                    <option value="M">남</option>
-                    <option value="W">여</option>
-                </select>
-            </div>
+        <div class="form-group">
+          <label for="gender">성별</label>
+          <select id="gender" name="gender" required>
+            <option value="M">남</option>
+            <option value="W">여</option>
+          </select>
+        </div>
 
-            <div class="form-group">
-                <label for="birthdate">생년월일</label>
-                <input type="date" id="birthdate" name="birthdate" required>
-            </div>
+        <div class="form-group">
+          <label for="birthdate">생년월일</label>
+          <input type="date" id="birthdate" name="birthdate" required />
+        </div>
 
-            <button type="submit">회원가입</button>
-        </form>
+        <button type="submit">회원가입</button>
+      </form>
     </div>
 
     <script>
-        const API_BASE_URL = 'https://ludorium.store/api'; // 서버 주소
+      const API_BASE_URL = "https://ludorium.store/api"; // 서버 주소
 
-        // 전화번호에 하이픈 자동 추가
-        function autoHyphen(target) {
-            let tel = target.value.replace(/[^0-9]/g, ''); // 숫자 이외의 값 제거
-            if (tel.length < 4) {
-                target.value = tel;
-            } else if (tel.length < 7) {
-                target.value = tel.substr(0, 3) + '-' + tel.substr(3);
-            } else if (tel.length < 11) {
-                target.value = tel.substr(0, 3) + '-' + tel.substr(3, 3) + '-' + tel.substr(6);
+      // 전화번호에 하이픈 자동 추가
+      function autoHyphen(target) {
+        let tel = target.value.replace(/[^0-9]/g, ""); // 숫자 이외의 값 제거
+        if (tel.length < 4) {
+          target.value = tel;
+        } else if (tel.length < 7) {
+          target.value = tel.substr(0, 3) + "-" + tel.substr(3);
+        } else if (tel.length < 11) {
+          target.value =
+            tel.substr(0, 3) + "-" + tel.substr(3, 3) + "-" + tel.substr(6);
+        } else {
+          target.value =
+            tel.substr(0, 3) + "-" + tel.substr(3, 4) + "-" + tel.substr(7);
+        }
+      }
+
+      // 이메일 중복 확인
+      function checkEmail() {
+        const email = document.getElementById("email").value.trim();
+        const emailStatus = document.getElementById("email-status");
+
+        if (!email) {
+          emailStatus.innerText = "이메일을 입력하세요.";
+          emailStatus.style.color = "red";
+          return;
+        }
+
+        emailStatus.innerText = "이메일 중복 확인 중...";
+
+        fetch(`${API_BASE_URL}/user/auth/email-check`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: email }),
+        })
+          .then((response) => {
+            if (response.status === 409) {
+              throw new Error("이미 사용 중인 이메일입니다.");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            emailStatus.innerText = "사용 가능한 이메일입니다.";
+            emailStatus.style.color = "green";
+            document.getElementById("email").readOnly = true;
+            document.getElementById("check-email-btn").disabled = true;
+
+            // 이메일 인증 버튼 표시
+            document.getElementById("email-auth-btn-group").style.display =
+              "block";
+          })
+          .catch((error) => {
+            emailStatus.innerText = error.message;
+            emailStatus.style.color = "red";
+          });
+      }
+
+      // 이메일 인증 번호 전송
+      function sendEmailVerification() {
+        const email = document.getElementById("email").value.trim();
+        const emailStatus = document.getElementById("email-status");
+
+        if (!email) {
+          emailStatus.innerText = "이메일을 입력하세요.";
+          emailStatus.style.color = "red";
+          return;
+        }
+
+        emailStatus.innerText = "이메일 인증 번호 전송 중...";
+
+        fetch(`${API_BASE_URL}/user/auth/email-authentication`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email: email }),
+        })
+          .then((response) => {
+            if (response.status === 200) {
+              return response.json();
+            } else if (response.status === 400) {
+              throw new Error("잘못된 요청입니다. 이메일을 다시 확인하세요.");
             } else {
-                target.value = tel.substr(0, 3) + '-' + tel.substr(3, 4) + '-' + tel.substr(7);
+              throw new Error("서버에서 문제가 발생했습니다.");
             }
-        }
+          })
+          .then((data) => {
+            emailStatus.innerText = "이메일로 인증번호를 전송했습니다.";
+            emailStatus.style.color = "green";
 
-        // 이메일 중복 확인
-        function checkEmail() {
-            const email = document.getElementById('email').value.trim();
-            const emailStatus = document.getElementById('email-status');
+            // 이메일 인증 입력란 표시
+            document.getElementById("email-verification-group").style.display =
+              "block";
+          })
+          .catch((error) => {
+            console.error("Error (이메일 전송):", error);
+            emailStatus.innerText = error.message;
+            emailStatus.style.color = "red";
+          });
+      }
 
-            if (!email) {
-                emailStatus.innerText = '이메일을 입력하세요.';
-                emailStatus.style.color = 'red';
-                return;
+      // 이메일 인증번호 확인
+      function verifyCode() {
+        const verificationCode = document
+          .getElementById("verification-code")
+          .value.trim();
+        const email = document.getElementById("email").value;
+        const verificationStatus = document.getElementById(
+          "verification-status"
+        );
+
+        verificationStatus.innerText = "인증번호 확인 중...";
+
+        fetch(`${API_BASE_URL}/user/auth/check-authentication`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            authenticationCode: verificationCode,
+          }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("인증번호가 잘못되었습니다.");
             }
-
-            emailStatus.innerText = '이메일 중복 확인 중...';
-
-            fetch(`${API_BASE_URL}/user/auth/email-check`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email: email })
-            })
-            .then(response => {
-                if (response.status === 409) {
-                    throw new Error('이미 사용 중인 이메일입니다.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                emailStatus.innerText = '사용 가능한 이메일입니다.';
-                emailStatus.style.color = 'green';
-                document.getElementById('email').readOnly = true;
-                document.getElementById('check-email-btn').disabled = true;
-
-                // 이메일 인증 버튼 표시
-                document.getElementById('email-auth-btn-group').style.display = 'block';
-            })
-            .catch(error => {
-                emailStatus.innerText = error.message;
-                emailStatus.style.color = 'red';
-            });
-        }
-
-        // 이메일 인증 번호 전송
-        function sendEmailVerification() {
-            const email = document.getElementById('email').value.trim();
-            const emailStatus = document.getElementById('email-status');
-
-            if (!email) {
-                emailStatus.innerText = '이메일을 입력하세요.';
-                emailStatus.style.color = 'red';
-                return;
+            return response.json();
+          })
+          .then((data) => {
+            if (data.message === "성공") {
+              verificationStatus.innerText = "인증 성공!";
+              verificationStatus.style.color = "green";
+            } else {
+              verificationStatus.innerText = "인증 실패. 다시 시도해주세요.";
+              verificationStatus.style.color = "red";
             }
+          })
+          .catch((error) => {
+            console.error("Error (인증번호 확인):", error);
+            verificationStatus.innerText = `인증 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
+            verificationStatus.style.color = "red";
+          });
+      }
 
-            emailStatus.innerText = '이메일 인증 번호 전송 중...';
+      // 회원가입 데이터 전송
+      function handleSignup(event) {
+        event.preventDefault();
 
-            fetch(`${API_BASE_URL}/user/auth/email-authentication`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ email: email })
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    return response.json();
-                } else if (response.status === 400) {
-                    throw new Error('잘못된 요청입니다. 이메일을 다시 확인하세요.');
-                } else {
-                    throw new Error('서버에서 문제가 발생했습니다.');
-                }
-            })
-            .then(data => {
-                emailStatus.innerText = '이메일로 인증번호를 전송했습니다.';
-                emailStatus.style.color = 'green';
+        const email = document.getElementById("email").value.trim();
+        const verificationCode =
+          document.getElementById("verification-code").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword =
+          document.getElementById("confirm-password").value;
+        const name = document.getElementById("name").value;
+        const nickname = document.getElementById("nickname").value;
+        let tel = document.getElementById("tel").value.replace(/-/g, "");
+        const gender = document.getElementById("gender").value;
+        const birthdate = document.getElementById("birthdate").value;
 
-                // 이메일 인증 입력란 표시
-                document.getElementById('email-verification-group').style.display = 'block';
-            })
-            .catch(error => {
-                console.error('Error (이메일 전송):', error);
-                emailStatus.innerText = error.message;
-                emailStatus.style.color = 'red';
-            });
+        // 비밀번호 확인
+        if (password !== confirmPassword) {
+          alert("비밀번호가 일치하지 않습니다.");
+          return;
         }
 
-        // 이메일 인증번호 확인
-        function verifyCode() {
-            const verificationCode = document.getElementById('verification-code').value.trim();
-            const email = document.getElementById('email').value;
-            const verificationStatus = document.getElementById('verification-status');
+        // 서버에 전송할 데이터 객체
+        const requestData = {
+          email: email,
+          authenticationCode: verificationCode,
+          password: password,
+          checkPassword: confirmPassword,
+          name: name,
+          nickname: nickname,
+          tel: tel,
+          gender: gender,
+          birthDate: birthdate, // 생년월일 (YYYY-MM-DD 형식)
+        };
 
-            verificationStatus.innerText = '인증번호 확인 중...';
+        console.log("전송되는 데이터:", requestData); // 전송 데이터를 콘솔에 출력하여 확인
 
-            fetch(`${API_BASE_URL}/user/auth/check-authentication`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: email,
-                    authenticationCode: verificationCode
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('인증번호가 잘못되었습니다.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.message === "성공") {
-                    verificationStatus.innerText = '인증 성공!';
-                    verificationStatus.style.color = 'green';
-                } else {
-                    verificationStatus.innerText = '인증 실패. 다시 시도해주세요.';
-                    verificationStatus.style.color = 'red';
-                }
-            })
-            .catch(error => {
-                console.error('Error (인증번호 확인):', error);
-                verificationStatus.innerText = `인증 중 오류가 발생했습니다. 오류 메시지: ${error.message}`;
-                verificationStatus.style.color = 'red';
-            });
-        }
-
-        // 회원가입 데이터 전송
-        function handleSignup(event) {
-            event.preventDefault();
-
-            const email = document.getElementById('email').value.trim();
-            const verificationCode = document.getElementById('verification-code').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-            const name = document.getElementById('name').value;
-            const nickname = document.getElementById('nickname').value;
-            let tel = document.getElementById('tel').value.replace(/-/g, '');
-            const gender = document.getElementById('gender').value;
-            const birthdate = document.getElementById('birthdate').value;
-
-            // 비밀번호 확인
-            if (password !== confirmPassword) {
-                alert("비밀번호가 일치하지 않습니다.");
-                return;
+        // 회원가입 요청
+        fetch(`${API_BASE_URL}/user/auth/join`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestData), // JSON 데이터 전송
+        })
+          .then((response) => {
+            if (!response.ok) {
+              return response.json().then((err) => {
+                throw new Error(
+                  err.message || "회원가입 중 문제가 발생했습니다."
+                );
+              });
             }
-
-            // 서버에 전송할 데이터 객체
-            const requestData = {
-                email: email,
-                authenticationCode: verificationCode,
-                password: password,
-                checkPassword: confirmPassword,
-                name: name,
-                nickname: nickname,
-                tel: tel,
-                gender: gender,
-                birthDate: birthdate // 생년월일 (YYYY-MM-DD 형식)
-            };
-
-            console.log("전송되는 데이터:", requestData); // 전송 데이터를 콘솔에 출력하여 확인
-
-            // 회원가입 요청
-            fetch(`${API_BASE_URL}/user/auth/join`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(requestData), // JSON 데이터 전송
-            })
-            .then(response => {
-                if (!response.ok) {
-                    return response.json().then(err => { throw new Error(err.message || '회원가입 중 문제가 발생했습니다.'); });
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.message === '회원가입 성공') {
-                    alert('회원가입이 성공했습니다.');
-                    window.location.href = 'login.html';
-                } else {
-                    alert(data.message); // 서버에서 응답된 메시지를 사용자에게 알림
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('서버 오류가 발생했습니다: ' + error.message);
-            });
-        }
+            return response.json();
+          })
+          .then((data) => {
+            if (data.message === "회원가입 성공") {
+              alert("회원가입이 성공했습니다.");
+              window.location.href = "login.html";
+            } else {
+              alert(data.message); // 서버에서 응답된 메시지를 사용자에게 알림
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("서버 오류가 발생했습니다: " + error.message);
+          });
+      }
     </script>
-</body>
+  </body>
 </html>
