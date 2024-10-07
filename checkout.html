@@ -5,36 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게임 결제 - game forge</title>
     <link rel="stylesheet" href="checkout.css">
-    <style>
-    </head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+</head>
 <body>
-    <header>
-        <div class="top-nav">
-            <div class="logo">Game Forge</div>
-            <nav>
-                <ul class="main-menu">
-                    <li><a href="store.html">상점</a></li>
-                    <li><a href="library.html">라이브러리</a></li>
-                    <li><a href="notice.html">공지사항</a></li>
-                    <li><a href="community.html">자유게시판</a></li>
-                </ul>
-            </nav>
-            <div class="auth-buttons" id="auth-buttons">
-                <a href="login.html" class="login-btn">로그인</a>
-                <a href="signup.html" class="signup-btn">회원가입</a>
-            </div>
-        </div>
-        <div class="sub-nav">
-            <ul class="submenu">
-                <li>내 상점</li>
-                <li>신규 및 특집</li>
-                <li>카테고리</li>
-                <li>포인트 상점</li>
-                <li>뉴스</li>
-                <li>실험실</li>
-            </ul>
-        </div>
-    </header>
+    <!-- 헤더 자리 표시자 -->
+    <div id="header-placeholder"></div>
 
     <main>
         <section class="checkout-container">
@@ -76,8 +60,18 @@
         </div>
     </footer>
 
+    <script src="auth.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // 헤더를 동적으로 로드
+            fetch("header.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("header-placeholder").innerHTML = data;
+                    checkLoginStatus();
+                })
+                .catch(error => console.error("헤더 로드 중 오류 발생:", error));
+
             loadCheckoutItems();
         });
 
