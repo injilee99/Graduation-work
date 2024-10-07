@@ -122,7 +122,7 @@
         games.forEach((game) => {
           const gameCard = `
             <div class="product-card">
-              <img src="${game.imageUrl || 'default-image.png'}" alt="${game.name || '게임 이미지'}" />
+              <img src="${game.imageUrl || 'https://via.placeholder.com/150'}" alt="${game.name || '게임 이미지'}" />
               <p class="product-title">${game.name || '제목 없음'}</p>
               <p class="product-price">정상가: ₩ ${game.originalPrice || 0}</p>
               <p class="sale-price">
