@@ -53,16 +53,16 @@
         <div class="genre-filter">
           <p>장르별 검색</p>
           <label><input type="radio" name="genre" value="0" /> 무료</label><br />
-          <label><input type="radio" name="genre" value="2" /> 액션</label><br />
-          <label><input type="radio" name="genre" value="3" /> 어드벤처</label><br />
-          <label><input type="radio" name="genre" value="4" checked /> RPG</label><br />
-          <label><input type="radio" name="genre" value="5" /> MMO</label><br />
-          <label><input type="radio" name="genre" value="6" /> 레이싱</label><br />
-          <label><input type="radio" name="genre" value="7" /> 스포츠</label><br />
-          <label><input type="radio" name="genre" value="8" /> 전략</label><br />
-          <label><input type="radio" name="genre" value="9" /> 시뮬레이션</label><br />
-          <label><input type="radio" name="genre" value="10" /> 인디</label><br />
-          <label><input type="radio" name="genre" value="11" /> 캐주얼</label>
+          <label><input type="radio" name="genre" value="1" /> 액션</label><br />
+          <label><input type="radio" name="genre" value="2" /> 어드벤처</label><br />
+          <label><input type="radio" name="genre" value="3" checked /> RPG</label><br />
+          <label><input type="radio" name="genre" value="4" /> MMO</label><br />
+          <label><input type="radio" name="genre" value="5" /> 레이싱</label><br />
+          <label><input type="radio" name="genre" value="6" /> 스포츠</label><br />
+          <label><input type="radio" name="genre" value="7" /> 전략</label><br />
+          <label><input type="radio" name="genre" value="8" /> 시뮬레이션</label><br />
+          <label><input type="radio" name="genre" value="9" /> 인디</label><br />
+          <label><input type="radio" name="genre" value="10" /> 캐주얼</label>
         </div>
         <!-- 검색 창 추가 -->
         <div class="search-bar">
@@ -139,20 +139,29 @@
                 <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
                 <p class="product-title">${game.gameName || '제목 없음'}</p>
               </a>
-              ${game.originalPrice === game.discountPrice ? `
-                <p class="product-price">${game.discountPrice === 0 ? '무료' : `₩ ${game.discountPrice}`}</p>
+              ${game.discountPrice === 0 ? `
+                <p class="product-price">무료</p>
+              ` : game.originalPrice === game.discountPrice ? `
+                <p class="product-price">₩ ${game.discountPrice}</p>
               ` : `
-                <p class="product-price">정상가: ₩ ${game.originalPrice}</p>
+                <p class="product-price"><del>₩ ${game.originalPrice}</del></p>
                 <p class="sale-price">판매가: ₩ ${game.discountPrice} <span class="discount">${game.discountPercentage || 0}%</span></p>
               `}
               <div class="rating">
                 <i class="material-icons">star</i><span>${game.rating || 0}</span>
               </div>
-              <button class="cart-btn" onclick="addToCart(${game.gameId})">장바구니</button>
+              <button class="cart-btn" onclick="addToCart(event, ${game.gameId})">장바구니</button>
             </div>
           `;
           productGrid.innerHTML += gameCard;
         });
+      }
+
+      // Add to cart function
+      function addToCart(event, gameId) {
+        event.stopPropagation(); // Prevent the game card from being clicked
+        // Logic to add the game to the cart
+        alert('장바구니에 추가되었습니다.');
       }
 
       // Event listener for genre filter changes
@@ -205,7 +214,7 @@
 
       // Initial fetch for the default category
       window.onload = () => {
-        fetchGamesByCategory(4); // Default to RPG category on page load
+        fetchGamesByCategory(3); // Default to RPG category on page load
       };
     </script>
   </body>
