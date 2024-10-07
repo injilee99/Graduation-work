@@ -15,7 +15,7 @@
   <body>
     <!-- 헤더 자리 표시자 -->
     <div id="header-placeholder"></div>
-    
+
     <div class="container">
       <!-- Filter and sorting section -->
       <div class="filters">
@@ -109,18 +109,27 @@
         productGrid.innerHTML = ''; // Clear existing games
 
         games.forEach((game) => {
+          let priceInfo = '';
+
+          // Determine price display
+          if (game.discountPrice === 0) {
+            priceInfo = `<p class="product-price free">무료</p>`;
+          } else if (game.originalPrice !== game.discountPrice) {
+            priceInfo = `
+              <p class="product-price original-price">정상가: ₩${game.originalPrice.toLocaleString()}</p>
+              <p class="sale-price">판매가: ₩${game.discountPrice.toLocaleString()} <span class="discount">${game.discountPercentage || 0}%</span></p>
+            `;
+          } else {
+            priceInfo = `<p class="product-price">₩${game.discountPrice.toLocaleString()}</p>`;
+          }
+
           const gameCard = `
             <div class="product-card">
               <a href="gameDetail.html?gameId=${game.gameId}" class="game-title-link">
                 <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
                 <p class="product-title">${game.gameName || '제목 없음'}</p>
               </a>
-              ${game.originalPrice === game.discountPrice ? `
-                <p class="product-price">${game.discountPrice === 0 ? '무료' : `₩ ${game.discountPrice}`}</p>
-              ` : `
-                <p class="product-price original-price">정상가: ₩ ${game.originalPrice}</p>
-                <p class="sale-price">판매가: ₩ ${game.discountPrice} <span class="discount">${game.discountPercentage || 0}%</span></p>
-              `}
+              ${priceInfo}
               <div class="rating">
                 <i class="material-icons">star</i><span>${game.rating || 0}</span>
               </div>
