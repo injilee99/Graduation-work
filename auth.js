@@ -1,5 +1,3 @@
-// auth.js
-
 // JWT 토큰 디코딩 함수 (Base64 디코딩)
 function decodeJWT(token) {
     const base64Url = token.split('.')[1];
@@ -61,8 +59,23 @@ function getTokenFromUrl() {
     }
 }
 
-// 페이지 로드 시 로그인 상태 확인
-window.onload = function() {
-    checkLoginStatus();
+// 페이지 로드 시 로그인 상태 확인 및 헤더 동적 로드
+document.addEventListener("DOMContentLoaded", function() {
+    fetch("header.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("header-placeholder").innerHTML = data;
+
+            // 헤더 로드 후 로그인 상태 확인
+            checkLoginStatus();
+
+            // 로그아웃 버튼에 이벤트 리스너 추가
+            const logoutButton = document.getElementById("logout-btn");
+            if (logoutButton) {
+                logoutButton.addEventListener("click", logout);
+            }
+        });
+
+    // OAuth 토큰 추출 및 저장
     getTokenFromUrl();
-};
+});
