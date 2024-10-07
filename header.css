@@ -9,15 +9,15 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 30px; /* 패딩을 줄여서 높이를 줄임 */
+    padding: 5px 20px; /* 패딩을 더 줄여서 헤더의 높이를 줄임 */
     color: #333;
     width: 100%;
     box-sizing: border-box;
 }
 
 .logo img {
-    margin-left: 50px;
-    width: 100px; /* 로고 크기를 줄임 */
+    margin-left: 20px; /* 왼쪽 마진 줄임 */
+    width: 100px; /* 로고 크기 감소 */
     height: auto;
     object-fit: cover;
 }
@@ -27,7 +27,7 @@ header {
     margin: 0;
     padding: 0;
     display: flex;
-    gap: 20px; /* 링크 간격 조정 */
+    gap: 15px; /* 링크 간격 줄임 */
     justify-content: center;
     flex: 1;
 }
@@ -36,7 +36,7 @@ header {
     color: #333;
     text-decoration: none;
     font-size: 14px; /* 폰트 크기를 줄임 */
-    padding: 5px 8px; /* 여백을 줄임 */
+    padding: 5px; /* 여백을 줄여서 공간 절약 */
     font-weight: 500;
     font-style: normal;
     transition: color 0.3s;
@@ -49,11 +49,11 @@ header {
 .auth-buttons {
     display: flex;
     gap: 5px; /* 버튼 간격 줄임 */
-    margin-right: 30px; /* 오른쪽 여백 줄임 */
+    margin-right: 20px; /* 오른쪽 여백 줄임 */
 }
 
 .auth-buttons a, .auth-buttons button {
-    padding: 5px 15px; /* 패딩을 줄여서 버튼 크기 감소 */
+    padding: 5px 10px; /* 패딩을 줄여서 버튼 크기 감소 */
     border-radius: 5px;
     text-decoration: none;
     color: white;
