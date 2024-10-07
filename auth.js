@@ -10,8 +10,8 @@ function decodeJWT(token) {
 
 // 로그인 상태 확인 함수
 function checkLoginStatus() {
-    const token = localStorage.getItem('token'); // localStorage에서 토큰 가져오기
-    const nickname = localStorage.getItem('nickname'); // localStorage에서 닉네임 가져오기
+    const token = localStorage.getItem('token');
+    const nickname = localStorage.getItem('nickname');
 
     const welcomeMessage = document.getElementById('welcome-message');
     const loginBtn = document.getElementById('login-btn');
@@ -77,5 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (logoutButton) {
                 logoutButton.addEventListener("click", logout);
             }
-        });
+        })
+        .catch(error => console.error("헤더 로드 중 오류 발생:", error));
 });
+
