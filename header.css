@@ -9,15 +9,17 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 30px;
+    padding: 15px 50px;
     color: #333;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .logo img {
     margin-left: 150px;
     width: 141.41px;
     height: 34.67px;
-    object-fit: cover; /* 이미지 크기가 변경될 때 왜곡 방지 */
+    object-fit: cover;
 }
 
 .main-menu {
@@ -37,31 +39,31 @@ header {
     padding: 5px 10px;
     font-weight: 500;
     font-style: normal;
-    transition: color 0.3s; /* 마우스 오버 시 부드러운 전환 효과 */
+    transition: color 0.3s;
 }
 
 .main-menu li a:hover {
-    color: #666; /* 마우스 오버 시 색 변경 */
+    color: #666;
 }
 
 .auth-buttons {
     display: flex;
     gap: 10px;
-    margin-right: 150px;
+    margin-right: 50px;
 }
 
-.auth-buttons a {
+.auth-buttons a, .auth-buttons button {
     padding: 10px 20px;
     border-radius: 5px;
     text-decoration: none;
     color: white;
     background-color: #889491;
-    transition: background-color 0.3s, transform 0.3s; /* 마우스 오버 시 부드러운 전환 효과 */
+    transition: background-color 0.3s, transform 0.3s;
 }
 
-.auth-buttons a:hover {
-    background-color: #677b78; /* 마우스 오버 시 배경색 변경 */
-    transform: scale(1.05); /* 마우스 오버 시 살짝 확대 */
+.auth-buttons a:hover, .auth-buttons button:hover {
+    background-color: #677b78;
+    transform: scale(1.05);
 }
 
 .auth-buttons .cart-btn {
@@ -69,5 +71,16 @@ header {
     padding: 10px;
     color: #333;
     background-color: transparent;
-    cursor: pointer; /* 마우스 커서가 포인터로 변경 */
+    cursor: pointer;
+}
+
+.auth-buttons .cart-btn:hover {
+    color: #555;
+}
+
+#welcome-message {
+    font-size: 16px;
+    font-weight: 500;
+    margin-left: 10px;
+    color: #333;
 }
