@@ -118,7 +118,7 @@
               ${game.originalPrice === game.discountPrice ? `
                 <p class="product-price">${game.discountPrice === 0 ? '무료' : `₩ ${game.discountPrice}`}</p>
               ` : `
-                <p class="product-price">정상가: ₩ ${game.originalPrice}</p>
+                <p class="product-price original-price">정상가: ₩ ${game.originalPrice}</p>
                 <p class="sale-price">판매가: ₩ ${game.discountPrice} <span class="discount">${game.discountPercentage || 0}%</span></p>
               `}
               <div class="rating">
