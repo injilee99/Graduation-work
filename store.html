@@ -95,14 +95,22 @@
           }
           const result = await response.json();
 
-          // Check if data field exists and is an array
-          if (!result.data || !Array.isArray(result.data)) {
+          // Log the result to understand the structure
+          console.log('API 응답:', result);
+
+          // Modify this part based on the actual structure
+          let games = [];
+          if (result.data && Array.isArray(result.data)) {
+            games = result.data;
+          } else if (result.data && result.data.games && Array.isArray(result.data.games)) {
+            games = result.data.games;
+          } else {
             console.error('Error: 응답의 data 필드가 배열이 아닙니다.', result);
             return;
           }
 
           // Render game data
-          renderGameList(result.data);
+          renderGameList(games);
         } catch (error) {
           console.error('Error fetching games:', error);
         }
