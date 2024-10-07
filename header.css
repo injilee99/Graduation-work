@@ -17,8 +17,8 @@ header {
 
 .logo img {
     margin-left: 120px;
-    width: 141.41px;
-    height: 34.67px;
+    width: 100px; /* 이미지 크기를 조정하여 일관성 유지 */
+    height: auto;
     object-fit: cover;
 }
 
