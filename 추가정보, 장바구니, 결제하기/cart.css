@@ -1,0 +1,100 @@
+
+#empty-cart-icon {
+    margin-top: 150px;
+    display: none;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+#empty-cart-icon .material-symbols-outlined {
+    font-size: 10rem; /* 아이콘 크기를 4배로 늘림 */
+}
+#cart-items p {
+    text-align: center;
+    /* font-size: 30px; */
+}/* 장바구니 섹션 */
+.cart-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+   
+    position: relative;
+  }
+
+  /* 총 결제 금액 영역 스타일 */
+  .cart-summary {
+    border-top: 1px solid #ccc; /* 얇은 실선 추가 */
+    padding-top: 10px;
+    margin-top: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column; /* 버튼을 밑으로 배치 */
+    align-items: flex-end;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .cart-summary h3 {
+    align-self: flex-start;
+    margin: 0;
+    font-size: 16px;
+    font-weight: normal;
+    width: 100%;
+  }
+
+  .total-price {
+    font-size: 40px;
+    color: #000;
+    position: absolute;
+    bottom: -60px;
+    right: 0;
+  }
+
+
+  /* 결제하기 버튼 스타일 */
+#btn-primary {
+    background-color: #889491;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    color: white;
+    border-radius: 30px;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 80px; /* 버튼과 결제 금액 사이 여백 */
+  }
+
+#btn-primary:hover {
+    background-color: #778881;
+  }
+/* Cart item section styling */
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  
+  margin-bottom: 20px;
+}
+
+.cart-item p {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.btn.btn-secondary {
+  background-color: #889491;
+  color: #fff;
+  margin-left:250px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn.btn-secondary:hover {
+  background-color: #5a3d99;
+}
+
