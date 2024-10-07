@@ -55,18 +55,21 @@ function getTokenFromUrl() {
         localStorage.setItem('token', token);
         const decodedToken = decodeJWT(token);
         localStorage.setItem('nickname', decodedToken.nickname);
-        checkLoginStatus();
     }
 }
 
 // 페이지 로드 시 로그인 상태 확인 및 헤더 동적 로드
 document.addEventListener("DOMContentLoaded", function() {
+    // OAuth 토큰 추출 및 저장
+    getTokenFromUrl();
+
+    // 헤더를 동적으로 로드
     fetch("header.html")
         .then(response => response.text())
         .then(data => {
             document.getElementById("header-placeholder").innerHTML = data;
 
-            // 헤더 로드 후 로그인 상태 확인
+            // 헤더가 로드된 후 로그인 상태 확인
             checkLoginStatus();
 
             // 로그아웃 버튼에 이벤트 리스너 추가
@@ -75,7 +78,4 @@ document.addEventListener("DOMContentLoaded", function() {
                 logoutButton.addEventListener("click", logout);
             }
         });
-
-    // OAuth 토큰 추출 및 저장
-    getTokenFromUrl();
 });
