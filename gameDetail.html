@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Game Forge - 게임 상세</title>
-    <link rel="stylesheet" href="store.css" />
+    <link rel="stylesheet" href="gameDetail.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -30,29 +30,27 @@
           <a href="login.html" class="login-btn">로그인</a>
         </div>
       </div>
-      <div class="sub-nav">
-        <ul class="submenu">
-          <li>내 상점</li>
-          <li>최근에 본 제품</li>
-          <li>내 태그</li>
-          <li>추천 제품</li>
-          <li>카테고리 검색</li>
-          <li>장르별 검색</li>
-        </ul>
-      </div>
     </header>
     <div class="container">
       <div class="game-detail">
-        <h1 class="game-title">undefined</h1>
-        <p class="game-category">카테고리: undefined</p>
+        <div class="game-header">
+          <h1 id="gameName">undefined</h1>
+          <p id="categoryName">카테고리: undefined</p>
+        </div>
         <div class="game-content">
-          <img class="game-image" src="https://via.placeholder.com/150" alt="게임 이미지" />
-          <div class="game-info">
-            <p class="game-price">가격: ₩ undefined</p>
+          <div class="game-left">
+            <img id="gameImage" src="https://via.placeholder.com/150" alt="게임 이미지" />
+            <video id="gameVideo" controls style="display: none;">
+              <source id="videoSource" src="" type="video/webm" />
+              동영상을 재생할 수 없습니다.
+            </video>
+          </div>
+          <div class="game-right">
+            <p id="gameDescription">undefined</p>
+            <p id="gamePrice">가격: ₩ undefined</p>
             <button class="cart-btn">장바구니에 담기</button>
           </div>
         </div>
-        <div class="game-description">게임 설명 없음</div>
       </div>
     </div>
     <footer>
@@ -62,39 +60,63 @@
     </footer>
 
     <script>
-      document.addEventListener("DOMContentLoaded", async () => {
-        // URL에서 gameId 가져오기
-        const urlParams = new URLSearchParams(window.location.search);
-        const gameId = urlParams.get('gameId');
+      // Store the server URL
+      const serverUrl = 'https://ludorium.store';
 
-        if (gameId) {
-          try {
-            // 서버에서 게임 정보 가져오기
-            const response = await fetch(`https://ludorium.store/api/user/game/${gameId}`);
-            if (!response.ok) {
-              throw new Error('게임 정보를 가져오는 데 실패했습니다.');
-            }
-            const result = await response.json();
-
-            // 게임 정보를 받아와서 화면에 표시
-            const gameData = result.data;
-
-            if (gameData) {
-              document.querySelector('.game-title').innerText = gameData.gameName || '제목 없음';
-              document.querySelector('.game-category').innerText = `카테고리: ${gameData.categoryName || '미정'}`;
-              document.querySelector('.game-image').src = gameData.gameImageUrl || 'https://via.placeholder.com/150';
-              document.querySelector('.game-description').innerHTML = gameData.gameDc || '게임 설명 없음';
-              document.querySelector('.game-price').innerText = gameData.discountPrice === 0 ? '무료' : `가격: ₩ ${gameData.discountPrice}`;
-            } else {
-              console.error('게임 데이터를 찾을 수 없습니다.');
-            }
-          } catch (error) {
-            console.error('Error fetching game details:', error);
+      // Function to fetch game details by game ID
+      async function fetchGameDetails(gameId) {
+        try {
+          const response = await fetch(`${serverUrl}/api/user/game/detail/${gameId}`);
+          if (!response.ok) {
+            throw new Error('네트워크 응답에 문제가 있습니다.');
           }
-        } else {
-          console.error('게임 ID가 제공되지 않았습니다.');
+          const result = await response.json();
+
+          // Log the result to understand the structure
+          console.log('API 응답:', result);
+
+          // Extract game details from the response
+          if (result.data) {
+            const game = result.data;
+
+            // Update game detail elements
+            document.getElementById('gameName').innerText = game.gameName || '제목 없음';
+            document.getElementById('categoryName').innerText = `카테고리: ${game.categoryName || '알 수 없음'}`;
+            document.getElementById('gameDescription').innerHTML = game.gameDc || '게임 설명 없음';
+
+            // Set price information
+            if (game.originalPrice !== game.discountPrice) {
+              document.getElementById('gamePrice').innerHTML = `정상가: ₩ ${game.originalPrice}<br>판매가: ₩ ${game.discountPrice}`;
+            } else {
+              document.getElementById('gamePrice').innerText = game.discountPrice === 0 ? '무료' : `가격: ₩ ${game.discountPrice}`;
+            }
+
+            // Set image and video
+            if (game.gameImageList && game.gameImageList.length > 0) {
+              document.getElementById('gameImage').src = game.gameImageList[0];
+              if (game.gameImageList.length > 1) {
+                document.getElementById('gameVideo').style.display = 'block';
+                document.getElementById('videoSource').src = game.gameImageList[1];
+              }
+            }
+          } else {
+            console.error('Error: 응답의 data 필드가 비어 있습니다.', result);
+          }
+        } catch (error) {
+          console.error('Error fetching game details:', error);
         }
-      });
+      }
+
+      // Get gameId from URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const gameId = urlParams.get('gameId');
+
+      // Fetch game details on page load
+      if (gameId) {
+        fetchGameDetails(gameId);
+      } else {
+        console.error('Error: gameId가 URL에 없습니다.');
+      }
     </script>
   </body>
 </html>
