@@ -1,6 +1,11 @@
 body {
     font-family: "Noto Sans KR", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    color: #333;
 }
+
 /* 서브메뉴 */
 .sub-nav {
     background-color: #889491;
@@ -29,30 +34,31 @@ body {
     background-color: #777;
     color: #fff;
 }
- .menu {
-        height: 20px;
-        background-color: #778881;
-        display: flex;
-        justify-content: space-around;
-        margin: 50px 150px;
-        padding: 15px 45px;
-        list-style-type: none;
-      }
 
-      .menu li {
-        padding: 0 20px;
-      }
+.menu {
+    height: 20px;
+    background-color: #778881;
+    display: flex;
+    justify-content: space-around;
+    margin: 50px 150px;
+    padding: 15px 45px;
+    list-style-type: none;
+}
 
-      .menu li a {
-        text-decoration: none;
-        color: #fff;
-        font-weight: bold;
-        display: block;
-      }
+.menu li {
+    padding: 0 20px;
+}
 
-      .menu li a:hover {
-        background-color: #889491;
-      }
+.menu li a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    display: block;
+}
+
+.menu li a:hover {
+    background-color: #889491;
+}
 
 .profile-container {
     display: flex;
