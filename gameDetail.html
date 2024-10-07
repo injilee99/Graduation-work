@@ -13,9 +13,24 @@
     />
   </head>
   <body>
-    <!-- 헤더 자리 표시자 -->
-    <div id="header-placeholder"></div>
-
+    <header>
+      <div class="top-nav">
+        <div class="logo">
+          <a href="main.html">Game Forge</a> <!-- main 페이지로 이동 -->
+        </div>
+        <nav>
+          <ul class="main-menu">
+            <li><a href="store.html">상점</a></li>
+            <li><a href="mypage.html">마이페이지</a></li>
+            <li><a href="community.html">자유게시판</a></li>
+            <li><a href="support.html">지원</a></li>
+          </ul>
+        </nav>
+        <div class="auth-buttons">
+          <a href="login.html" class="login-btn">로그인</a>
+        </div>
+      </div>
+    </header>
     <div class="container">
       <div class="game-detail">
         <div class="game-header">
@@ -33,7 +48,7 @@
           <div class="game-right">
             <p id="gameDescription">undefined</p>
             <p id="gamePrice">가격: ₩ undefined</p>
-            <button class="cart-btn" onclick="addToCart()">장바구니에 담기</button>
+            <button class="cart-btn">장바구니에 담기</button>
           </div>
         </div>
       </div>
@@ -44,99 +59,63 @@
       </div>
     </footer>
 
-    <script src="auth.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        // 헤더를 동적으로 로드
-        fetch("header.html")
-          .then((response) => response.text())
-          .then((data) => {
-            document.getElementById("header-placeholder").innerHTML = data;
-            checkLoginStatus();
-          })
-          .catch((error) => console.error("헤더 로드 중 오류 발생:", error));
-
-        // 게임 상세 정보 로드
-        const urlParams = new URLSearchParams(window.location.search);
-        const gameId = urlParams.get("gameId");
-        if (gameId) {
-          fetchGameDetails(gameId);
-        } else {
-          console.error("Error: gameId가 URL에 없습니다.");
-        }
-      });
-
       // Store the server URL
-      const serverUrl = "https://ludorium.store";
+      const serverUrl = 'https://ludorium.store';
 
       // Function to fetch game details by game ID
       async function fetchGameDetails(gameId) {
         try {
-          const response = await fetch(`${serverUrl}/api/user/game/detail/${gameId}`);
+          const response = await fetch(`${serverUrl}/api/user/game/${gameId}`);
           if (!response.ok) {
-            throw new Error("네트워크 응답에 문제가 있습니다.");
+            throw new Error('네트워크 응답에 문제가 있습니다.');
           }
           const result = await response.json();
 
           // Log the result to understand the structure
-          console.log("API 응답:", result);
+          console.log('API 응답:', result);
 
           // Extract game details from the response
-          if (result && result.data) {
+          if (result.data) {
             const game = result.data;
 
             // Update game detail elements
-            document.getElementById("gameName").innerText = game.gameName || "제목 없음";
-            document.getElementById("categoryName").innerText = `카테고리: ${game.categoryName || "알 수 없음"}`;
-            document.getElementById("gameDescription").innerHTML = game.gameDc || "게임 설명 없음";
+            document.getElementById('gameName').innerText = game.gameName || '제목 없음';
+            document.getElementById('categoryName').innerText = `카테고리: ${game.categoryName || '알 수 없음'}`;
+            document.getElementById('gameDescription').innerHTML = game.gameDc || '게임 설명 없음';
 
             // Set price information
             if (game.originalPrice !== game.discountPrice) {
-              document.getElementById("gamePrice").innerHTML = `정상가: ₩ ${game.originalPrice}<br>판매가: ₩ ${game.discountPrice}`;
+              document.getElementById('gamePrice').innerHTML = `정상가: ₩ ${game.originalPrice}<br>판매가: ₩ ${game.discountPrice}`;
             } else {
-              document.getElementById("gamePrice").innerText = game.discountPrice === 0 ? "무료" : `가격: ₩ ${game.discountPrice}`;
+              document.getElementById('gamePrice').innerText = game.discountPrice === 0 ? '무료' : `가격: ₩ ${game.discountPrice}`;
             }
 
             // Set image and video
             if (game.gameImageList && game.gameImageList.length > 0) {
-              document.getElementById("gameImage").src = game.gameImageList[0] || "https://via.placeholder.com/150";
+              document.getElementById('gameImage').src = game.gameImageList[0];
               if (game.gameImageList.length > 1) {
-                document.getElementById("gameVideo").style.display = "block";
-                document.getElementById("videoSource").src = game.gameImageList[1];
+                document.getElementById('gameVideo').style.display = 'block';
+                document.getElementById('videoSource').src = game.gameImageList[1];
               }
-            } else {
-              document.getElementById("gameImage").src = "https://via.placeholder.com/150";
             }
           } else {
-            console.error("Error: 응답의 data 필드가 비어 있습니다.", result);
+            console.error('Error: 응답의 data 필드가 비어 있습니다.', result);
           }
         } catch (error) {
-          console.error("Error fetching game details:", error);
+          console.error('Error fetching game details:', error);
         }
       }
 
-      // Function to add game to cart
-      function addToCart() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const gameId = urlParams.get("gameId");
-        if (!gameId) {
-          alert("게임 ID가 유효하지 않습니다.");
-          return;
-        }
+      // Get gameId from URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const gameId = urlParams.get('gameId');
 
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
-        // 중복 추가 방지
-        if (cart.some((item) => item.id === gameId)) {
-          alert("이미 장바구니에 담긴 게임입니다.");
-          return;
-        }
-
-        // 게임 정보를 장바구니에 추가
-        const gameTitle = document.getElementById("gameName").innerText;
-        const gamePrice = document.getElementById("gamePrice").innerText.replace(/[^0-9]/g, "");
-        cart.push({ id: gameId, title: gameTitle, price: parseInt(gamePrice) });
-        localStorage.setItem("cart", JSON.stringify(cart));
-        alert("장바구니에 게임이 추가되었습니다.");
+      // Fetch game details on page load
+      if (gameId) {
+        fetchGameDetails(gameId);
+      } else {
+        console.error('Error: gameId가 URL에 없습니다.');
       }
     </script>
   </body>
