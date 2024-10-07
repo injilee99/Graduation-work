@@ -1,135 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>header</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-    />
-    <link rel="stylesheet" href="header.css" />
-  </head>
-  <body>
-    <header>
-      <div class="top-nav">
-        <div class="logo">
-          <a href="main.html"><img src="logo.jpg" alt="Game Forge Logo" /></a>
-          <!-- main 페이지로 이동 -->
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Forge - Main</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 헤더 자리 표시자 -->
+    <div id="header-placeholder"></div>
+
+    <div class="banner-slider">
+        <div class="slides">
+            <div class="slide">
+                <img src="./images/core_keeeper.jpg" alt="core keeper" />
+            </div>
+            <div class="slide">
+                <img src="./images/eternal_return.jpg" alt="eternal return" />
+            </div>
+            <div class="slide">
+                <img src="./images/once_human.jpg" alt="once human" />
+            </div>
+            <div class="slide">
+                <img src="./images/60_seconds.jpg" alt="60 seconds" />
+            </div>
         </div>
-        <nav>
-          <ul class="main-menu">
-            <li><a href="store.html">상점</a></li>
-            <li><a href="mypage.html">마이페이지</a></li>
-            <li><a href="community.html">자유게시판</a></li>
-          </ul>
-        </nav>
-        <div class="auth-buttons">
-          <span id="welcome-message"></span>
-          <button id="logout-btn" style="display:none;" onclick="logout()">로그아웃</button>
-          <a href="cart.html" class="cart-btn">
-            <span class="material-symbols-outlined"> shopping_cart </span>
-          </a>
-          <a href="login.html" class="login-btn" id="login-btn">로그인</a>
+        <div class="controls">
+            <span class="material-symbols-outlined prev">arrow_back_ios</span>
+            <span class="material-symbols-outlined next">arrow_forward_ios</span>
         </div>
-      </div>
-    </header>
-    <script src="auth.js"></script> <!-- 로그인 상태 관리를 위한 스크립트 추가 -->
-  </body>
+    </div>
+
+    <main>
+        <section class="content">
+            <div class="search-bar">
+                <input type="text" placeholder="스타듀밸리의 최근 업데이트를 확인하세요!" class="search-input">
+                <button class="search-btn">검색</button>
+            </div>
+
+            <!-- 이달의 추천 게임 -->
+            <section class="featured-games">
+                <h2>이달의 추천게임</h2>
+                <div class="game-grid">
+                    <div class="game-card">
+                        <a href="eternal_return.html">
+                            <img src="./images/eternal_return.jpg" alt="Eternal Return">
+                        <p>Eternal Return</p>
+                    </div>
+                    <div class="game-card">
+                        <a href="The_sims4.html">
+                            <img src="./images/sims.jpg" alt="The Sims4">
+                        <p>The Sims4</p>
+                    </div>
+                    <div class="game-card">
+                        <a href="stardew_valley.html">
+                            <img src="./images/stardew_valley.jpg" alt="Stardew Valley">
+                        <p>Stardew Valley</p>
+                    </div>
+                    <div class="game-card">
+                        <a href="core_keeper.html">
+                            <img src="./images/core_keeeper.jpg" alt="Core Keeper">
+                        <p>Core Keeper</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 이달의 할인 게임 -->
+            <section class="discounted-games">
+                <h2>이달의 할인게임</h2>
+                <div class="game-grid">
+                    <div class="game-card">
+                        <img src="./images/battlegrounds.jpg" alt="Battlegrounds">
+                        <p>Battlegrounds</p>
+                    </div>
+                    <div class="game-card">
+                        <img src="./images/astroneer.jpg" alt="Astroneer">
+                        <p>Astroneer</p>
+                    </div>
+                    <div class="game-card">
+                        <img src="./images/60_seconds.jpg" alt="60 Seconds">
+                        <p>60 Seconds!</p>
+                    </div>
+                    <div class="game-card">
+                        <img src="./images/once_human.jpg" alt="Once Human">
+                        <p>Once Human</p>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 대진대학교 벤처 졸업작품.</p>
+        </div>
+    </footer>
+
+    <!-- auth.js 추가 - 페이지 로드 후 실행 -->
+    <script src="auth.js"></script>
+</body>
 </html>
-
-/* header.css 파일 */
-
-header {
-    font-family: "Noto Sans KR", sans-serif;
-    font-weight: 500;
-    font-style: normal;
-    color: #333;
-}
-
-.top-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 50px;
-    color: #333;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.logo img {
-    margin-left: 150px;
-    width: 141.41px;
-    height: 34.67px;
-    object-fit: cover;
-}
-
-.main-menu {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 30px;
-    justify-content: center;
-    flex: 1;
-}
-
-.main-menu li a {
-    color: #333;
-    text-decoration: none;
-    font-size: 16px;
-    padding: 5px 10px;
-    font-weight: 500;
-    font-style: normal;
-    transition: color 0.3s;
-}
-
-.main-menu li a:hover {
-    color: #666;
-}
-
-.auth-buttons {
-    display: flex;
-    gap: 10px;
-    margin-right: 50px;
-    align-items: center;
-}
-
-.auth-buttons a, .auth-buttons button {
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    color: white;
-    background-color: #889491;
-    transition: background-color 0.3s, transform 0.3s;
-}
-
-.auth-buttons a:hover, .auth-buttons button:hover {
-    background-color: #677b78;
-    transform: scale(1.05);
-}
-
-.auth-buttons .cart-btn {
-    font-size: 20px;
-    padding: 10px;
-    color: #333;
-    background-color: transparent;
-    cursor: pointer;
-}
-
-.auth-buttons .cart-btn:hover {
-    color: #555;
-}
-
-#welcome-message {
-    font-size: 16px;
-    font-weight: 500;
-    margin-left: 10px;
-    color: #333;
-}
