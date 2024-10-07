@@ -97,10 +97,12 @@
       const pageSize = 8;
 
       // Function to fetch game list by category ID
-      async function fetchGamesByCategory(categoryId, page = 0, orderBy = 'rating', keyword = '') {
+      async function fetchGamesByCategory(categoryId, page = 0, orderBy = 'rating', searchKeyword = '') {
         try {
           // Fetch data from the API
-          const response = await fetch(`${serverUrl}/api/user/game/${categoryId}/list?page=${page}&size=${pageSize}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(keyword)}`);
+          const response = await fetch(
+            `${serverUrl}/api/user/game/${categoryId}/list?page=${page}&size=${pageSize}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}`
+          );
           if (!response.ok) {
             throw new Error('네트워크 응답에 문제가 있습니다.');
           }
@@ -132,14 +134,15 @@
 
         games.forEach((game) => {
           const gameCard = `
-            <div class="product-card" onclick="goToGameDetail(${game.gameId})">
+            <div class="product-card" onclick="location.href='gameDetail.html?gameId=${game.gameId}'">
               <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
               <p class="product-title">${game.gameName || '제목 없음'}</p>
-              ${game.originalPrice !== game.discountPrice ?
-                `<p class="product-price">정상가: ₩ ${game.originalPrice || 0}</p>` : ''}
-              <p class="sale-price">
-                ${game.discountPrice === 0 ? '무료' : `판매가: ₩ ${game.discountPrice || 0} <span class="discount">${game.discountPercentage || 0}%</span>`}
-              </p>
+              ${game.originalPrice !== game.discountPrice ? `
+                <p class="product-price">정상가: ₩ ${game.originalPrice}</p>
+                <p class="sale-price">판매가: ₩ ${game.discountPrice} <span class="discount">${game.discountPercentage || 0}%</span></p>
+              ` : `
+                <p class="product-price">${game.discountPrice === 0 ? '무료' : `₩ ${game.discountPrice}`}</p>
+              `}
               <div class="rating">
                 <i class="material-icons">star</i><span>${game.rating || 0}</span>
               </div>
@@ -150,36 +153,31 @@
         });
       }
 
-      // Function to navigate to game detail page
-      function goToGameDetail(gameId) {
-        window.location.href = `gameDetail.html?gameId=${gameId}`;
-      }
-
       // Event listener for genre filter changes
       document.querySelectorAll('.genre-filter input[type="radio"]').forEach((radio) => {
         radio.addEventListener('change', function () {
           const categoryId = this.value;
           currentPage = 0;
           const orderBy = document.getElementById('sortOrder').value;
-          const keyword = document.getElementById('searchKeyword').value;
-          fetchGamesByCategory(categoryId, currentPage, orderBy, keyword);
+          const searchKeyword = document.getElementById('searchKeyword').value;
+          fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
         });
       });
 
-      // Event listener for sorting changes
+      // Event listener for sort order changes
       document.getElementById('sortOrder').addEventListener('change', function () {
         const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
         const orderBy = this.value;
-        const keyword = document.getElementById('searchKeyword').value;
-        fetchGamesByCategory(categoryId, currentPage, orderBy, keyword);
+        const searchKeyword = document.getElementById('searchKeyword').value;
+        fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
       });
 
       // Event listener for search input
       document.getElementById('searchKeyword').addEventListener('input', function () {
         const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
         const orderBy = document.getElementById('sortOrder').value;
-        const keyword = this.value;
-        fetchGamesByCategory(categoryId, currentPage, orderBy, keyword);
+        const searchKeyword = this.value;
+        fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
       });
 
       // Pagination event listeners
@@ -188,8 +186,8 @@
           currentPage--;
           const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
           const orderBy = document.getElementById('sortOrder').value;
-          const keyword = document.getElementById('searchKeyword').value;
-          fetchGamesByCategory(categoryId, currentPage, orderBy, keyword);
+          const searchKeyword = document.getElementById('searchKeyword').value;
+          fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
           document.getElementById('currentPage').innerText = currentPage + 1;
         }
       });
@@ -198,8 +196,8 @@
         currentPage++;
         const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
         const orderBy = document.getElementById('sortOrder').value;
-        const keyword = document.getElementById('searchKeyword').value;
-        fetchGamesByCategory(categoryId, currentPage, orderBy, keyword);
+        const searchKeyword = document.getElementById('searchKeyword').value;
+        fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
         document.getElementById('currentPage').innerText = currentPage + 1;
       });
 
