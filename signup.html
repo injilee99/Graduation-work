@@ -3,263 +3,210 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>회원가입 - game forge</title>
+    <title>Game Forge - 상점</title>
+    <link rel="stylesheet" href="store.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Material+Icons&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="signup.css" />
   </head>
   <body>
-    <div class="signup-container">
-      <h2>회원가입</h2>
-      <form id="signup-form" onsubmit="return handleSignup(event)">
-        <div class="form-group">
-          <label for="email">아이디 (이메일)</label>
-          <div class="input-group">
-            <input type="email" id="email" name="email" required />
-            <button type="button" id="check-email-btn" onclick="checkEmail()">
-              중복 확인
-            </button>
-          </div>
-          <p id="email-status"></p>
-        </div>
-
-        <!-- 이메일 인증 버튼, 중복 확인 성공 후에만 보임 -->
-        <div class="form-group" id="email-auth-btn-group" style="display: none">
-          <button
-            type="button"
-            id="send-verification-btn"
-            onclick="sendEmailVerification()"
-          >
-            이메일 인증 번호 전송
-          </button>
-          <p id="verification-status"></p>
-        </div>
-
-        <!-- 이메일 인증 입력란, 인증 번호 전송 후에 보임 -->
-        <div
-          class="form-group"
-          id="email-verification-group"
-          style="display: none"
-        >
-          <label for="verification-code">이메일로 발송된 인증번호</label>
-          <div class="input-group">
-            <input
-              type="text"
-              id="verification-code"
-              name="verification-code"
-              required
-            />
-            <button type="button" onclick="verifyCode()">인증하기</button>
-          </div>
-          <p id="verification-status"></p>
-        </div>
-
-        <div class="form-group">
-          <label for="password">비밀번호</label>
-          <input type="password" id="password" name="password" required />
-        </div>
-
-        <div class="form-group">
-          <label for="confirm-password">비밀번호 확인</label>
-          <input
-            type="password"
-            id="confirm-password"
-            name="confirm-password"
-            required
-          />
-          <p id="password-status"></p>
-        </div>
-
-        <div class="form-group">
-          <label for="name">이름</label>
-          <input type="text" id="name" name="name" required />
-        </div>
-
-        <div class="form-group">
-          <label for="nickname">닉네임</label>
-          <div class="input-group">
-            <input type="text" id="nickname" name="nickname" required />
-            <button type="button" id="check-nickname-btn" onclick="checkNickname()">
-              중복 확인
-            </button>
-          </div>
-          <p id="nickname-status"></p>
-        </div>
-
-        <div class="form-group">
-          <label for="tel">전화번호</label>
-          <div class="input-group">
-            <input
-              type="tel"
-              id="tel"
-              name="tel"
-              required
-              placeholder="010-1234-5679"
-              oninput="autoHyphen(this)"
-            />
-            <button type="button" id="check-tel-btn" onclick="checkTel()">
-              중복 확인
-            </button>
-          </div>
-          <p id="tel-status"></p>
-        </div>
-
-        <div class="form-group">
-          <label for="gender">성별</label>
-          <select id="gender" name="gender" required>
-            <option value="M">남</option>
-            <option value="W">여</option>
+    <!-- 헤더 자리 표시자 -->
+    <div id="header-placeholder"></div>
+    
+    <div class="container">
+      <!-- Filter and sorting section -->
+      <div class="filters">
+        <div class="sort">
+          <select id="sortOrder">
+            <option value="rating">평점순</option>
+            <option value="recent">최신순</option>
           </select>
         </div>
-
-        <div class="form-group">
-          <label for="birthdate">생년월일</label>
-          <input type="date" id="birthdate" name="birthdate" required />
+        <div class="genre-filter">
+          <p>장르별 검색</p>
+          <label><input type="radio" name="genre" value="1" /> 무료</label><br />
+          <label><input type="radio" name="genre" value="2" /> 액션</label><br />
+          <label><input type="radio" name="genre" value="3" /> 어드벤처</label><br />
+          <label><input type="radio" name="genre" value="4" checked /> RPG</label><br />
+          <label><input type="radio" name="genre" value="5" /> MMO</label><br />
+          <label><input type="radio" name="genre" value="6" /> 레이싱</label><br />
+          <label><input type="radio" name="genre" value="7" /> 스포츠</label><br />
+          <label><input type="radio" name="genre" value="8" /> 전략</label><br />
+          <label><input type="radio" name="genre" value="9" /> 시뮬레이션</label><br />
+          <label><input type="radio" name="genre" value="10" /> 인디</label><br />
+          <label><input type="radio" name="genre" value="11" /> 캐주얼</label>
         </div>
+        <!-- 검색 창 추가 -->
+        <div class="search-bar">
+          <i class="material-icons">search</i>
+          <input type="text" id="searchKeyword" placeholder="게임 검색" />
+        </div>
+      </div>
 
-        <button type="submit">회원가입</button>
-      </form>
+      <!-- Product listing section -->
+      <div class="product-list">
+        <h2>구름 님을 위한 추천 게임</h2>
+        <div class="product-grid">
+          <!-- 게임 리스트가 여기에 동적으로 추가됩니다 -->
+        </div>
+        <div class="pagination">
+          <button id="prevPage">이전 페이지</button>
+          <span id="currentPage">1</span>
+          <button id="nextPage">다음 페이지</button>
+        </div>
+      </div>
     </div>
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 대진대학교 벤처 졸업작품.</p>
+      </div>
+    </footer>
 
+    <script src="auth.js"></script>
     <script>
-      const API_BASE_URL = "https://ludorium.store/api"; // 서버 주소
+      // Store the server URL
+      const serverUrl = 'https://ludorium.store';
+      let currentPage = 0;
+      const pageSize = 8;
 
-      // 전화번호에 하이픈 자동 추가
-      function autoHyphen(target) {
-        let tel = target.value.replace(/[^0-9]/g, ""); // 숫자 이외의 값 제거
-        if (tel.length < 4) {
-          target.value = tel;
-        } else if (tel.length < 7) {
-          target.value = tel.substr(0, 3) + "-" + tel.substr(3);
-        } else if (tel.length < 11) {
-          target.value =
-            tel.substr(0, 3) + "-" + tel.substr(3, 3) + "-" + tel.substr(6);
-        } else {
-          target.value =
-            tel.substr(0, 3) + "-" + tel.substr(3, 4) + "-" + tel.substr(7);
+      // Function to fetch game list by category ID
+      async function fetchGamesByCategory(categoryId, page = 0, orderBy = 'rating', searchKeyword = '') {
+        try {
+          // Fetch data from the API
+          const response = await fetch(
+            `${serverUrl}/api/user/game/${categoryId}/list?page=${page}&size=${pageSize}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}`
+          );
+          if (!response.ok) {
+            throw new Error('네트워크 응답에 문제가 있습니다.');
+          }
+          const result = await response.json();
+
+          // Log the result to understand the structure
+          console.log('API 응답:', result);
+
+          // Extract the games array from the response
+          let games = [];
+          if (result.data && Array.isArray(result.data.content)) {
+            games = result.data.content;
+          } else {
+            console.error('Error: 응답의 data 필드가 올바른 배열이 아닙니다.', result);
+            return;
+          }
+
+          // Render game data
+          renderGameList(games);
+        } catch (error) {
+          console.error('Error fetching games:', error);
         }
       }
 
-      // 이메일 중복 확인
-      function checkEmail() {
-        const email = document.getElementById("email").value.trim();
-        const emailStatus = document.getElementById("email-status");
+      // Function to render game list
+      function renderGameList(games) {
+        const productGrid = document.querySelector('.product-grid');
+        productGrid.innerHTML = ''; // Clear existing games
 
-        if (!email) {
-          emailStatus.innerText = "이메일을 입력하세요.";
-          emailStatus.style.color = "red";
-          return;
-        }
+        games.forEach((game) => {
+          let priceHtml = '';
+          if (game.discountPrice === 0) {
+            // 무료인 경우
+            priceHtml = `<p class="product-price">무료</p>`;
+          } else if (game.originalPrice !== game.discountPrice) {
+            // 정상가와 판매가가 다른 경우 (할인 중)
+            priceHtml = `
+              <p class="product-price original-price">정상가: ₩ ${game.originalPrice}</p>
+              <p class="sale-price">판매가: ₩ ${game.discountPrice} <span class="discount">${game.discountPercentage || 0}%</span></p>
+            `;
+          } else {
+            // 정상가와 판매가가 같은 경우 (할인 없음)
+            priceHtml = `<p class="product-price">가격: ₩ ${game.discountPrice}</p>`;
+          }
 
-        emailStatus.innerText = "이메일 중복 확인 중...";
-
-        fetch(`${API_BASE_URL}/user/auth/email-check`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email: email }),
-        })
-          .then((response) => {
-            if (response.status === 409) {
-              throw new Error("이미 사용 중인 이메일입니다.");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            emailStatus.innerText = "사용 가능한 이메일입니다.";
-            emailStatus.style.color = "green";
-            document.getElementById("email").readOnly = true;
-            document.getElementById("check-email-btn").disabled = true;
-
-            // 이메일 인증 버튼 표시
-            document.getElementById("email-auth-btn-group").style.display = "block";
-          })
-          .catch((error) => {
-            emailStatus.innerText = error.message;
-            emailStatus.style.color = "red";
-          });
+          const gameCard = `
+            <div class="product-card">
+              <a href="gameDetail.html?gameId=${game.gameId}" class="game-title-link">
+                <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
+                <p class="product-title">${game.gameName || '제목 없음'}</p>
+              </a>
+              ${priceHtml}
+              <div class="rating">
+                <i class="material-icons">star</i><span>${game.rating || 0}</span>
+              </div>
+              <button class="cart-btn" onclick="addToCart(${game.gameId})">장바구니</button>
+            </div>
+          `;
+          productGrid.innerHTML += gameCard;
+        });
       }
 
-      // 닉네임 중복 확인
-      function checkNickname() {
-        const nickname = document.getElementById("nickname").value.trim();
-        const nicknameStatus = document.getElementById("nickname-status");
-
-        if (!nickname) {
-          nicknameStatus.innerText = "닉네임을 입력하세요.";
-          nicknameStatus.style.color = "red";
-          return;
-        }
-
-        nicknameStatus.innerText = "닉네임 중복 확인 중...";
-
-        fetch(`${API_BASE_URL}/user/auth/check-nickname`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ nickname: nickname }),
-        })
-          .then((response) => {
-            if (response.status === 409) {
-              throw new Error("이미 사용 중인 닉네임입니다.");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            nicknameStatus.innerText = "사용 가능한 닉네임입니다.";
-            nicknameStatus.style.color = "green";
-            document.getElementById("nickname").readOnly = true;
-            document.getElementById("check-nickname-btn").disabled = true;
-          })
-          .catch((error) => {
-            nicknameStatus.innerText = error.message;
-            nicknameStatus.style.color = "red";
-          });
+      // Function to add game to cart
+      function addToCart(gameId) {
+        console.log(`게임 ${gameId}을(를) 장바구니에 추가합니다.`);
+        // 여기에 장바구니에 게임을 추가하는 로직을 구현하세요
       }
 
-      // 전화번호 중복 확인
-      function checkTel() {
-        const tel = document.getElementById("tel").value.replace(/-/g, "");
-        const telStatus = document.getElementById("tel-status");
+      // Event listener for genre filter changes
+      document.querySelectorAll('.genre-filter input[type="radio"]').forEach((radio) => {
+        radio.addEventListener('change', function () {
+          const categoryId = this.value;
+          currentPage = 0;
+          const orderBy = document.getElementById('sortOrder').value;
+          const searchKeyword = document.getElementById('searchKeyword').value;
+          fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
+        });
+      });
 
-        if (!tel) {
-          telStatus.innerText = "전화번호를 입력하세요.";
-          telStatus.style.color = "red";
-          return;
+      // Event listener for sort order changes
+      document.getElementById('sortOrder').addEventListener('change', function () {
+        const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
+        const orderBy = this.value;
+        const searchKeyword = document.getElementById('searchKeyword').value;
+        fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
+      });
+
+      // Event listener for search input
+      document.getElementById('searchKeyword').addEventListener('input', function () {
+        const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
+        const orderBy = document.getElementById('sortOrder').value;
+        const searchKeyword = this.value;
+        fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
+      });
+
+      // Pagination event listeners
+      document.getElementById('prevPage').addEventListener('click', () => {
+        if (currentPage > 0) {
+          currentPage--;
+          const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
+          const orderBy = document.getElementById('sortOrder').value;
+          const searchKeyword = document.getElementById('searchKeyword').value;
+          fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
+          document.getElementById('currentPage').innerText = currentPage + 1;
         }
+      });
 
-        telStatus.innerText = "전화번호 중복 확인 중...";
+      document.getElementById('nextPage').addEventListener('click', () => {
+        currentPage++;
+        const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
+        const orderBy = document.getElementById('sortOrder').value;
+        const searchKeyword = document.getElementById('searchKeyword').value;
+        fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
+        document.getElementById('currentPage').innerText = currentPage + 1;
+      });
 
-        fetch(`${API_BASE_URL}/user/auth/check-tel`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ tel: tel }),
-        })
-          .then((response) => {
-            if (response.status === 409) {
-              throw new Error("이미 사용 중인 전화번호입니다.");
-            }
-            return response.json();
+      // Initial fetch for the default category
+      document.addEventListener("DOMContentLoaded", function() {
+        fetch("header.html")
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById("header-placeholder").innerHTML = data;
+            checkLoginStatus();
           })
-          .then((data) => {
-            telStatus.innerText = "사용 가능한 전화번호입니다.";
-            telStatus.style.color = "green";
-            document.getElementById("tel").readOnly = true;
-            document.getElementById("check-tel-btn").disabled = true;
-          })
-          .catch((error) => {
-            telStatus.innerText = error.message;
-            telStatus.style.color = "red";
-          });
-      }
+          .catch(error => console.error("헤더 로드 중 오류 발생:", error));
+
+        fetchGamesByCategory(4); // Default to RPG category on page load
+      });
     </script>
   </body>
 </html>
