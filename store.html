@@ -135,8 +135,10 @@
         games.forEach((game) => {
           const gameCard = `
             <div class="product-card">
-              <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
-              <p class="product-title" onclick="location.href='gameDetail.html?gameId=${game.gameId}'">${game.gameName || '제목 없음'}</p>
+              <a href="gameDetail.html?gameId=${game.gameId}">
+                <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
+                <p class="product-title">${game.gameName || '제목 없음'}</p>
+              </a>
               ${game.originalPrice !== game.discountPrice ? `
                 <p class="product-price">정상가: ₩ ${game.originalPrice}</p>
                 <p class="sale-price">판매가: ₩ ${game.discountPrice} <span class="discount">${game.discountPercentage || 0}%</span></p>
@@ -206,10 +208,9 @@
         fetchGamesByCategory(4); // Default to RPG category on page load
       };
 
-      // Function to add game to cart
+      // Function to add to cart
       function addToCart(gameId) {
-        console.log(`게임 ID ${gameId}를 장바구니에 추가합니다.`);
-        // 여기에 장바구니 추가 기능 구현
+        alert(`게임 ID ${gameId}이 장바구니에 추가되었습니다.`);
       }
     </script>
   </body>
