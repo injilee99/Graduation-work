@@ -13,34 +13,9 @@
     />
   </head>
   <body>
-    <header>
-      <div class="top-nav">
-        <div class="logo">
-          <a href="main.html">Game Forge</a> <!-- main 페이지로 이동 -->
-        </div>
-        <nav>
-          <ul class="main-menu">
-            <li><a href="store.html">상점</a></li>
-            <li><a href="mypage.html">마이페이지</a></li>
-            <li><a href="community.html">자유게시판</a></li>
-            <li><a href="support.html">지원</a></li>
-          </ul>
-        </nav>
-        <div class="auth-buttons">
-          <a href="login.html" class="login-btn">로그인</a>
-        </div>
-      </div>
-      <div class="sub-nav">
-        <ul class="submenu">
-          <li>내 상점</li>
-          <li>최근에 본 제품</li>
-          <li>내 태그</li>
-          <li>추천 제품</li>
-          <li>카테고리 검색</li>
-          <li>장르별 검색</li>
-        </ul>
-      </div>
-    </header>
+    <!-- 헤더 자리 표시자 -->
+    <div id="header-placeholder"></div>
+    
     <div class="container">
       <!-- Filter and sorting section -->
       <div class="filters">
@@ -90,6 +65,7 @@
       </div>
     </footer>
 
+    <script src="auth.js"></script>
     <script>
       // Store the server URL
       const serverUrl = 'https://ludorium.store';
@@ -210,9 +186,17 @@
       });
 
       // Initial fetch for the default category
-      window.onload = () => {
+      document.addEventListener("DOMContentLoaded", function() {
+        fetch("header.html")
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById("header-placeholder").innerHTML = data;
+            checkLoginStatus();
+          })
+          .catch(error => console.error("헤더 로드 중 오류 발생:", error));
+
         fetchGamesByCategory(4); // Default to RPG category on page load
-      };
+      });
     </script>
   </body>
 </html>
