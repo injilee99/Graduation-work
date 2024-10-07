@@ -125,13 +125,13 @@
       // Function to render game list
       function renderGameList(games) {
         const productGrid = document.querySelector('.product-grid');
-        productGrid.innerHTML = ''; // Clear existing games
+        productGrid.innerHTML = ''; // 기존 게임들을 제거합니다.
 
         games.forEach((game) => {
           const gameCard = `
             <div class="product-card">
-              <img src="${game.imageUrl || game.thumbnail || 'https://via.placeholder.com/150'}" alt="${game.title || game.name || '게임 이미지'}" />
-              <p class="product-title">${game.title || game.name || '제목 없음'}</p>
+              <img src="${game.imageUrl || game.thumbnail || 'https://via.placeholder.com/150'}" alt="${game.name || game.title || '게임 이미지'}" />
+              <p class="product-title">${game.name || game.title || '제목 없음'}</p>
               <p class="product-price">정상가: ₩ ${game.originalPrice || game.price || 0}</p>
               <p class="sale-price">
                 판매가: ₩ ${game.salePrice || game.discountPrice || 0} <span class="discount">${game.discountRate || 0}%</span>
