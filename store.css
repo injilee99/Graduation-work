@@ -1,144 +1,168 @@
 body {
-    font-family: "Noto Sans KR";
-    background-color: #f8f8f8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+  font-family: "Noto Sans KR";
+  background-color: #f8f8f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
 }
 
-.container {
-    padding: 20px;
+.signup-container {
+  font-family: "Noto Sans KR";
+  background-color: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  width: 400px;
+  text-align: center;
 }
 
-.product-card {
-    background-color: white;
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    padding: 15px;
-    margin-bottom: 20px;
-    transition: transform 0.3s;
+h2 {
+  font-family: "Noto Sans KR";
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
 }
 
-.product-card:hover {
-    transform: translateY(-10px);
+form {
+  display: flex;
+  flex-direction: column;
 }
 
-.product-card img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
 }
 
-.product-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 10px;
-    margin-bottom: 10px;
+label {
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: inline-block;
 }
 
-.product-price {
-    color: #666;
-    font-size: 16px;
-    margin-bottom: 5px;
-    text-decoration: none; /* 취소선 제거 */
-    font-weight: normal; /* 글자 두께 조정 */
+.input-group {
+  display: flex;
+  align-items: center;
 }
 
-.sale-price {
-    color: #ff5c5c;
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    text-decoration: none; /* 취소선 제거 */
+.input-group input[type="text"],
+.input-group input[type="email"],
+.input-group input[type="tel"] {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid #dadada;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
-.discount {
-    background-color: #ff5c5c;
-    color: white;
-    font-size: 14px;
-    padding: 3px 8px;
-    border-radius: 5px;
-    margin-left: 5px;
+.input-group button {
+  padding: 10px;
+  background-color: #889491;
+  color: white;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-left: 20px;
 }
 
-.rating {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    margin-bottom: 10px;
+.input-group button:disabled {
+  background-color: #ccc;
+  cursor: pointer;
 }
 
-.rating i {
-    color: #ffd700;
-    margin-right: 5px;
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="tel"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 5px;
+  border: none;
+  border-bottom: 1px solid #dadada;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
-.cart-btn {
-    background-color: #889491;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
+button {
+  padding: 10px;
+  font-size: 14px;
+  background-color: #889491;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
 }
 
-.cart-btn:hover {
-    background-color: #677b78;
-    transform: scale(1.05);
+button:disabled {
+  background-color: #ccc;
+  cursor: pointer;
 }
 
-.filters {
-    margin-bottom: 30px;
+#check-email-btn,
+#check-nickname-btn,
+#check-tel-btn {
+  padding: 10px;
+  background-color: #889491;
+  color: white;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 12px;
+  width: auto;
+  margin-left: 20px;
 }
 
-.filters .sort,
-.filters .genre-filter {
-    margin-bottom: 15px;
+#send-verification-btn {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
-.search-bar {
-    display: flex;
-    align-items: center;
-    margin-top: 20px;
+#send-verification-btn:disabled,
+#check-email-btn:disabled,
+#check-nickname-btn:disabled,
+#check-tel-btn:disabled {
+  background-color: #ccc;
+  cursor: pointer;
 }
 
-.search-bar input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #dadada;
-    border-radius: 10px;
-    margin-left: 10px;
+#email-auth-btn-group,
+#email-verification-group {
+  margin-top: 10px;
 }
 
-.pagination {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
+#email-status,
+#nickname-status,
+#tel-status,
+#verification-status,
+#password-status {
+  font-size: 12px;
+  color: red;
+  margin-top: 5px;
 }
 
-.pagination button {
-    background-color: #889491;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.3s;
+button[type="submit"] {
+  margin-top: 20px;
+  background-color: #889491;
+  color: white;
+  width: 100%;
 }
 
-.pagination button:hover {
-    background-color: #677b78;
-    transform: scale(1.05);
+button[type="submit"]:hover {
+  background-color: #889491;
 }
 
-.pagination span {
-    font-size: 16px;
-    font-weight: bold;
-    padding: 8px 12px;
+input[type="email"]:read-only,
+input[type="text"]:read-only,
+input[type="tel"]:read-only {
+  background-color: #f0f0f0;
+}
+
+input[type="email"]:disabled,
+input[type="text"]:disabled,
+input[type="tel"]:disabled {
+  background-color: #e0e0e0;
 }
