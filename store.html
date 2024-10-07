@@ -106,7 +106,9 @@
 
           // Extract the games array from the response
           let games = [];
-          if (result.data && Array.isArray(result.data)) {
+          if (result.data && Array.isArray(result.data.content)) {
+            games = result.data.content;
+          } else if (Array.isArray(result.data)) {
             games = result.data;
           } else {
             console.error('Error: 응답의 data 필드가 올바른 배열이 아닙니다.', result);
