@@ -80,4 +80,3 @@ document.addEventListener("DOMContentLoaded", function() {
         })
         .catch(error => console.error("헤더 로드 중 오류 발생:", error));
 });
-
