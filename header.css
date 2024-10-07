@@ -1,87 +1,59 @@
 header {
-    font-family: "Noto Sans KR", sans-serif;
-    font-weight: 500;
-    font-style: normal;
-    color: #333;
+    font-family: "Noto Sans KR", sans-serif !important;
+    font-weight: 500 !important;
+    font-style: normal !important;
+    color: #333 !important;
 }
 
 .top-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px 20px; /* 패딩을 더 줄여서 헤더의 높이를 줄임 */
-    color: #333;
-    width: 100%;
-    box-sizing: border-box;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 5px 20px !important; /* 패딩을 줄임 */
+    color: #333 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .logo img {
-    margin-left: 20px; /* 왼쪽 마진 줄임 */
-    width: 100px; /* 로고 크기 감소 */
-    height: auto;
-    object-fit: cover;
+    margin-left: 20px !important; /* 마진 줄임 */
+    width: 80px !important; /* 로고 크기 줄임 */
+    height: auto !important;
+    object-fit: cover !important;
 }
 
 .main-menu {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 15px; /* 링크 간격 줄임 */
-    justify-content: center;
-    flex: 1;
+    list-style-type: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    gap: 15px !important; /* 링크 간격 줄임 */
+    justify-content: center !important;
+    flex: 1 !important;
 }
 
 .main-menu li a {
-    color: #333;
-    text-decoration: none;
-    font-size: 14px; /* 폰트 크기를 줄임 */
-    padding: 5px; /* 여백을 줄여서 공간 절약 */
-    font-weight: 500;
-    font-style: normal;
-    transition: color 0.3s;
-}
-
-.main-menu li a:hover {
-    color: #666;
+    color: #333 !important;
+    text-decoration: none !important;
+    font-size: 14px !important; /* 폰트 크기 줄임 */
+    padding: 5px !important; /* 여백 줄임 */
+    font-weight: 500 !important;
+    font-style: normal !important;
+    transition: color 0.3s !important;
 }
 
 .auth-buttons {
-    display: flex;
-    gap: 5px; /* 버튼 간격 줄임 */
-    margin-right: 20px; /* 오른쪽 여백 줄임 */
+    display: flex !important;
+    gap: 5px !important; /* 버튼 간격 줄임 */
+    margin-right: 20px !important; /* 오른쪽 여백 줄임 */
 }
 
 .auth-buttons a, .auth-buttons button {
-    padding: 5px 10px; /* 패딩을 줄여서 버튼 크기 감소 */
-    border-radius: 5px;
-    text-decoration: none;
-    color: white;
-    background-color: #889491;
-    transition: background-color 0.3s, transform 0.3s;
-    font-size: 14px; /* 버튼 텍스트 크기 감소 */
-}
-
-.auth-buttons a:hover, .auth-buttons button:hover {
-    background-color: #677b78;
-    transform: scale(1.05);
-}
-
-.auth-buttons .cart-btn {
-    font-size: 18px; /* 아이콘 크기 감소 */
-    padding: 5px;
-    color: #333;
-    background-color: transparent;
-    cursor: pointer;
-}
-
-.auth-buttons .cart-btn:hover {
-    color: #555;
-}
-
-#welcome-message {
-    font-size: 14px; /* 폰트 크기 감소 */
-    font-weight: 500;
-    margin-left: 10px;
-    color: #333;
+    padding: 5px 10px !important; /* 패딩을 줄여서 버튼 크기 줄임 */
+    border-radius: 5px !important;
+    text-decoration: none !important;
+    color: white !important;
+    background-color: #889491 !important;
+    transition: background-color 0.3s, transform 0.3s !important;
+    font-size: 14px !important; /* 버튼 텍스트 크기 줄임 */
 }
