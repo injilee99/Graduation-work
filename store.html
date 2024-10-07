@@ -15,7 +15,7 @@
   <body>
     <!-- 헤더 자리 표시자 -->
     <div id="header-placeholder"></div>
-
+    
     <div class="container">
       <!-- Filter and sorting section -->
       <div class="filters">
@@ -109,18 +109,19 @@
         productGrid.innerHTML = ''; // Clear existing games
 
         games.forEach((game) => {
-          let priceInfo = '';
-
-          // Determine price display
+          let priceHtml = '';
           if (game.discountPrice === 0) {
-            priceInfo = `<p class="product-price free">무료</p>`;
+            // 무료인 경우
+            priceHtml = `<p class="product-price">무료</p>`;
           } else if (game.originalPrice !== game.discountPrice) {
-            priceInfo = `
-              <p class="product-price original-price">정상가: ₩${game.originalPrice.toLocaleString()}</p>
-              <p class="sale-price">판매가: ₩${game.discountPrice.toLocaleString()} <span class="discount">${game.discountPercentage || 0}%</span></p>
+            // 정상가와 판매가가 다른 경우 (할인 중)
+            priceHtml = `
+              <p class="product-price original-price">정상가: ₩ ${game.originalPrice}</p>
+              <p class="sale-price">판매가: ₩ ${game.discountPrice} <span class="discount">${game.discountPercentage || 0}%</span></p>
             `;
           } else {
-            priceInfo = `<p class="product-price">₩${game.discountPrice.toLocaleString()}</p>`;
+            // 정상가와 판매가가 같은 경우 (할인 없음)
+            priceHtml = `<p class="product-price">가격: ₩ ${game.discountPrice}</p>`;
           }
 
           const gameCard = `
@@ -129,7 +130,7 @@
                 <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
                 <p class="product-title">${game.gameName || '제목 없음'}</p>
               </a>
-              ${priceInfo}
+              ${priceHtml}
               <div class="rating">
                 <i class="material-icons">star</i><span>${game.rating || 0}</span>
               </div>
