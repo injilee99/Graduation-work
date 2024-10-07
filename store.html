@@ -95,6 +95,12 @@
           }
           const games = await response.json();
 
+          // Check if games is an array
+          if (!Array.isArray(games)) {
+            console.error('Error: 응답이 배열이 아닙니다.', games);
+            return;
+          }
+
           // Render game data
           renderGameList(games);
         } catch (error) {
