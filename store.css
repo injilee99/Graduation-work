@@ -1,168 +1,116 @@
 body {
   font-family: "Noto Sans KR";
   background-color: #f8f8f8;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
   margin: 0;
 }
 
-.signup-container {
-  font-family: "Noto Sans KR";
-  background-color: white;
-  padding: 30px;
-  border-radius: 15px;
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.filters {
+  width: 20%;
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  width: 400px;
+}
+
+.sort {
+  margin-bottom: 20px;
+}
+
+.genre-filter {
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-bar i {
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.product-list {
+  width: 75%;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.product-card {
+  background-color: #ffffff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-h2 {
-  font-family: "Noto Sans KR";
-  margin-bottom: 20px;
-  font-size: 24px;
+.product-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.product-title {
   font-weight: bold;
+  margin: 10px 0;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
+.product-price {
+  text-decoration: line-through;
+  color: #888;
 }
 
-.form-group {
-  margin-bottom: 20px;
-  text-align: left;
-}
-
-label {
-  font-size: 14px;
-  margin-bottom: 8px;
-  display: inline-block;
-}
-
-.input-group {
-  display: flex;
-  align-items: center;
-}
-
-.input-group input[type="text"],
-.input-group input[type="email"],
-.input-group input[type="tel"] {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-bottom: 1px solid #dadada;
-  font-size: 14px;
-  box-sizing: border-box;
-}
-
-.input-group button {
-  padding: 10px;
-  background-color: #889491;
-  color: white;
-  border-radius: 15px;
-  cursor: pointer;
-  font-size: 12px;
-  margin-left: 20px;
-}
-
-.input-group button:disabled {
-  background-color: #ccc;
-  cursor: pointer;
-}
-
-input[type="email"],
-input[type="password"],
-input[type="text"],
-input[type="tel"],
-input[type="date"],
-select {
-  width: 100%;
-  padding: 5px;
-  border: none;
-  border-bottom: 1px solid #dadada;
-  font-size: 14px;
-  box-sizing: border-box;
-}
-
-button {
-  padding: 10px;
-  font-size: 14px;
-  background-color: #889491;
-  color: white;
-  border: none;
-  border-radius: 15px;
-  cursor: pointer;
-}
-
-button:disabled {
-  background-color: #ccc;
-  cursor: pointer;
-}
-
-#check-email-btn,
-#check-nickname-btn,
-#check-tel-btn {
-  padding: 10px;
-  background-color: #889491;
-  color: white;
-  border-radius: 15px;
-  cursor: pointer;
-  font-size: 12px;
-  width: auto;
-  margin-left: 20px;
-}
-
-#send-verification-btn {
-  margin-top: 0px;
-  margin-bottom: 0px;
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
-#send-verification-btn:disabled,
-#check-email-btn:disabled,
-#check-nickname-btn:disabled,
-#check-tel-btn:disabled {
-  background-color: #ccc;
-  cursor: pointer;
-}
-
-#email-auth-btn-group,
-#email-verification-group {
-  margin-top: 10px;
-}
-
-#email-status,
-#nickname-status,
-#tel-status,
-#verification-status,
-#password-status {
-  font-size: 12px;
-  color: red;
+.sale-price {
+  color: #e74c3c;
+  font-weight: bold;
   margin-top: 5px;
 }
 
-button[type="submit"] {
-  margin-top: 20px;
+.rating {
+  margin: 10px 0;
+}
+
+.cart-btn {
   background-color: #889491;
   color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 15px;
+  cursor: pointer;
   width: 100%;
 }
 
-button[type="submit"]:hover {
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 10px;
+  margin: 0 5px;
   background-color: #889491;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
 }
 
-input[type="email"]:read-only,
-input[type="text"]:read-only,
-input[type="tel"]:read-only {
-  background-color: #f0f0f0;
-}
-
-input[type="email"]:disabled,
-input[type="text"]:disabled,
-input[type="tel"]:disabled {
-  background-color: #e0e0e0;
+.footer-content {
+  text-align: center;
+  padding: 20px;
+  font-size: 14px;
+  color: #888;
 }
