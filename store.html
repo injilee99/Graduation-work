@@ -91,7 +91,7 @@
                 }
               }
             }
-            renderGameList(allGames);
+            renderGameList(allGames.slice(0, pageSize));
           } else {
             // 특정 카테고리의 게임을 가져오는 경우
             const response = await fetch(
