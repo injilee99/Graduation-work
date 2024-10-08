@@ -12,8 +12,8 @@ body {
 }
 
 .filters {
-  width: auto;
-  padding: 0;
+  width: 20%;
+  padding: 15px;
   margin-right: 20px;
 }
 
@@ -42,7 +42,7 @@ body {
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr); /* 4 columns for consistent 4x2 layout */
   gap: 20px;
 }
 
