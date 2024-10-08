@@ -4,20 +4,30 @@ body {
   margin: 0;
 }
 
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #f8f8f8;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
 .container {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding: 20px;
+  margin-top: 20px;
 }
 
 .filters {
-  width: 15%;
+  width: 20%;
   background-color: #ffffff;
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  margin-right: 20px;
 }
 
 .sort {
@@ -40,13 +50,14 @@ body {
 }
 
 .product-list {
-  width: 80%;
+  width: 75%;
 }
 
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
+  width: 100%;
 }
 
 .product-card {
@@ -55,6 +66,11 @@ body {
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
+  transition: transform 0.2s ease-in-out;
+}
+
+.product-card:hover {
+  transform: scale(1.05);
 }
 
 .product-card img {
@@ -114,27 +130,4 @@ body {
   padding: 20px;
   font-size: 14px;
   color: #888;
-}
-
-/* 헤더와 필터 간의 거리 확보 */
-.filters {
-  margin-top: 20px;
-}
-
-/* 전체적으로 카드 크기를 균형 있게 조정 */
-.product-card {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.product-card img {
-  height: 150px;
-  object-fit: cover;
-}
-
-/* 페이지네이션 버튼 간격 조정 */
-.pagination {
-  margin-bottom: 20px;
 }
