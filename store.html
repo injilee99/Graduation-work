@@ -135,11 +135,11 @@
                 <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
                 <p class="product-title">${game.gameName || '제목 없음'}</p>
               </a>
-              ${game.originalPrice !== game.discountPrice ? `
+              ${game.originalPrice === game.discountPrice ? `
+                <p class="product-price">₩ ${game.originalPrice}</p>
+              ` : `
                 <p class="product-price">정상가: ₩ ${game.originalPrice}</p>
                 <p class="sale-price">판매가: ₩ ${game.discountPrice} <span class="discount">${game.discountPercentage || 0}%</span></p>
-              ` : `
-                <p class="product-price">${game.discountPrice === 0 ? '무료' : `₩ ${game.originalPrice}`}</p>
               `}
               <div class="rating">
                 <i class="material-icons">star</i><span>${game.rating || 0}</span>
