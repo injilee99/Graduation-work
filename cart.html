@@ -85,9 +85,10 @@
         const emptyCartIcon = document.getElementById("empty-cart-icon");
         let totalPrice = 0;
 
-        if (cart.length === 0) {
+        if (!cart || cart.length === 0) {
           emptyCartIcon.style.display = "block"; // 아이콘 표시
           cartItemsContainer.innerHTML = "<p>장바구니가 비어 있습니다.</p>";
+          totalPriceEl.textContent = '0';
           return;
         }
 
@@ -98,11 +99,11 @@
           const cartItem = document.createElement("div");
           cartItem.classList.add("cart-item");
           cartItem.innerHTML = `
-            <p>${item.gameName} - ${item.gamePrice}원</p>
-            <button class="btn btn-secondary" onclick="removeFromCart('${item.gameId}')">삭제</button>
+            <p>${item.gameName || '제목 없음'} - ${item.gamePrice || 0}원</p>
+            <button class="btn btn-secondary" onclick="removeFromCart(${item.gameId})">삭제</button>
           `;
           cartItemsContainer.appendChild(cartItem);
-          totalPrice += item.gamePrice;
+          totalPrice += item.gamePrice || 0;
         });
 
         totalPriceEl.textContent = totalPrice;
