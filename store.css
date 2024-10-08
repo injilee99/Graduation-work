@@ -43,19 +43,19 @@ body {
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  gap: 15px;
 }
 
 .product-card {
   background-color: #ffffff;
-  padding: 15px;
+  padding: 10px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
 .product-card img {
-  max-width: 100%;
+  max-width: 90%;
   height: auto;
   border-radius: 10px;
 }
@@ -84,7 +84,7 @@ body {
   background-color: #889491;
   color: white;
   border: none;
-  padding: 10px;
+  padding: 8px;
   border-radius: 15px;
   cursor: pointer;
   width: 100%;
