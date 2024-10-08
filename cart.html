@@ -60,12 +60,6 @@
       async function loadCartItemsFromAPI() {
         try {
           const token = localStorage.getItem('token');
-          if (!token) {
-            alert('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
-            window.location.href = 'login.html';
-            return;
-          }
-
           const response = await fetch(`${serverUrl}/api/user/cart/list`, {
             method: 'GET',
             headers: {
@@ -91,7 +85,7 @@
         const emptyCartIcon = document.getElementById("empty-cart-icon");
         let totalPrice = 0;
 
-        if (!cart || cart.length === 0) {
+        if (cart.length === 0) {
           emptyCartIcon.style.display = "block"; // 아이콘 표시
           cartItemsContainer.innerHTML = "<p>장바구니가 비어 있습니다.</p>";
           return;
@@ -105,7 +99,7 @@
           cartItem.classList.add("cart-item");
           cartItem.innerHTML = `
             <p>${item.gameName} - ${item.gamePrice}원</p>
-            <button class="btn btn-secondary" onclick="removeFromCart('${item.gameId}')">삭제</button>
+            <button class="btn btn-secondary" onclick="removeFromCart('${item.cartId}')">삭제</button>
           `;
           cartItemsContainer.appendChild(cartItem);
           totalPrice += item.gamePrice;
@@ -114,32 +108,25 @@
         totalPriceEl.textContent = totalPrice;
       }
 
-      async function removeFromCart(gameId) {
+      async function removeFromCart(cartId) {
         try {
           const token = localStorage.getItem('token');
-          if (!token) {
-            alert('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
-            window.location.href = 'login.html';
-            return;
-          }
-
-          const response = await fetch(`${serverUrl}/api/user/cart/${gameId}`, {
+          const response = await fetch(`${serverUrl}/api/user/cart`, {
             method: 'DELETE',
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({ cartList: [cartId] })
           });
 
           if (!response.ok) {
             throw new Error('장바구니에서 아이템을 삭제하는 중 오류가 발생했습니다.');
           }
 
-          alert('장바구니에서 삭제되었습니다.');
           loadCartItemsFromAPI();
         } catch (error) {
           console.error('Error removing item from cart:', error);
-          alert('장바구니에서 삭제하는 데 실패했습니다. 다시 시도해주세요.');
         }
       }
 
