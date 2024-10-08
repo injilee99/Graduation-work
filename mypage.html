@@ -78,7 +78,10 @@
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("header-placeholder").innerHTML = data;
+                    
+                    // 헤더가 로드된 후 로그인 상태 확인 및 사용자 정보 가져오기
                     checkLoginStatus();
+                    fetchUserInfo();
                 })
                 .catch(error => console.error("헤더 로드 중 오류 발생:", error));
         });
