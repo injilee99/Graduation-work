@@ -7,9 +7,9 @@ body {
 .container {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  align-items: flex-start; /* 카테고리 필터와 게임 리스트를 같은 높이에서 시작하도록 */
 }
 
 .filters {
@@ -18,8 +18,7 @@ body {
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  margin-right: 20px;
-  height: fit-content;
+  margin-top: 20px; /* 헤더와 떨어지도록 상단 마진 추가 */
 }
 
 .sort {
@@ -42,12 +41,12 @@ body {
 }
 
 .product-list {
-  width: 80%;
+  width: 75%;
 }
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개의 카드 */
   gap: 20px;
 }
 
