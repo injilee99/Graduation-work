@@ -133,7 +133,7 @@
               <div class="rating">
                 <i class="material-icons">star</i><span>${game.rating || 0}</span>
               </div>
-              <button class="cart-btn" onclick="addToCart('${game.gameId}', '${game.gameName}', ${game.discountPrice})">장바구니</button>
+              <button class="cart-btn" onclick="addToCart('${game.gameId}')">장바구니</button>
             </div>
           `;
           productGrid.innerHTML += gameCard;
@@ -141,25 +141,30 @@
       }
 
       // Function to add game to cart
-      function addToCart(gameId, gameName, gamePrice) {
+      async function addToCart(gameId) {
         console.log(`게임 ${gameId}을(를) 장바구니에 추가합니다.`);
-        
-        // 로컬 저장소에 장바구니 데이터 저장
-        let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-        
-        // 중복 추가 방지
-        if (!cartItems.find(item => item.gameId === gameId)) {
-          cartItems.push({
-            gameId,
-            gameName,
-            gamePrice
+
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch(`${serverUrl}/api/user/cart/${gameId}`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
           });
+
+          if (!response.ok) {
+            throw new Error('장바구니에 추가하는 중 오류가 발생했습니다.');
+          }
+
+          alert('장바구니에 추가되었습니다.');
+          // 장바구니 페이지로 이동
+          window.location.href = 'cart.html';
+        } catch (error) {
+          console.error('Error adding game to cart:', error);
+          alert('장바구니에 추가하는 데 실패했습니다. 다시 시도해주세요.');
         }
-        
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
-        
-        // 장바구니 페이지로 이동
-        window.location.href = 'cart.html';
       }
 
       // Event listener for genre filter changes
