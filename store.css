@@ -18,7 +18,7 @@ body {
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  margin-top: 20px; /* 헤더와 떨어지도록 상단 마진 추가 */
+  margin-top: 40px; /* 헤더와 떨어지도록 상단 마진 증가 */
 }
 
 .sort {
