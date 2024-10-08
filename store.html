@@ -50,7 +50,7 @@
         </div>
       </div>
 
-      <!-- 제품 목록 섹션 -->
+      <!-- 상품 목록 섹션 -->
       <div class="product-list">
         <h2>구름 님을 위한 추천 게임</h2>
         <div class="product-grid">
@@ -79,29 +79,44 @@
       // 카테고리 ID로 게임 목록을 가져오는 함수
       async function fetchGamesByCategory(categoryId, page = 0, orderBy = 'rating', searchKeyword = '') {
         try {
-          // API에서 데이터 가져오기
-          const response = await fetch(
-            `${serverUrl}/api/user/game/${categoryId}/list?page=${page}&size=${pageSize}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}`
-          );
-          if (!response.ok) {
-            throw new Error('네트워크 응답에 문제가 있습니다.');
-          }
-          const result = await response.json();
-
-          // 구조를 이해하기 위해 결과를 로그에 출력
-          console.log('API 응답:', result);
-
-          // 응답에서 게임 배열 추출
-          let games = [];
-          if (result.data && Array.isArray(result.data.content)) {
-            games = result.data.content;
+          // 모든 카테고리의 게임을 가져오는 경우
+          if (categoryId == 0) {
+            let allGames = [];
+            for (let i = 1; i <= 11; i++) {
+              const response = await fetch(`${serverUrl}/api/user/game/${i}/list?page=${page}&size=${pageSize}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}`);
+              if (response.ok) {
+                const result = await response.json();
+                if (result.data && Array.isArray(result.data.content)) {
+                  allGames = allGames.concat(result.data.content);
+                }
+              }
+            }
+            renderGameList(allGames);
           } else {
-            console.error('Error: 응답의 data 필드가 올바른 배열이 아닙니다.', result);
-            return;
-          }
+            // 특정 카테고리의 게임을 가져오는 경우
+            const response = await fetch(
+              `${serverUrl}/api/user/game/${categoryId}/list?page=${page}&size=${pageSize}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}`
+            );
+            if (!response.ok) {
+              throw new Error('네트워크 응답에 문제가 있습니다.');
+            }
+            const result = await response.json();
 
-          // 게임 데이터 렌더링
-          renderGameList(games);
+            // API 응답 로그 확인
+            console.log('API 응답:', result);
+
+            // 응답에서 게임 배열 추출
+            let games = [];
+            if (result.data && Array.isArray(result.data.content)) {
+              games = result.data.content;
+            } else {
+              console.error('Error: 응답의 data 필드가 올바른 배열이 아닙니다.', result);
+              return;
+            }
+
+            // 게임 데이터 렌더링
+            renderGameList(games);
+          }
         } catch (error) {
           console.error('게임 데이터를 가져오는 중 오류 발생:', error);
         }
@@ -110,7 +125,7 @@
       // 게임 목록을 렌더링하는 함수
       function renderGameList(games) {
         const productGrid = document.querySelector('.product-grid');
-        productGrid.innerHTML = ''; // 기존 게임 목록 지우기
+        productGrid.innerHTML = ''; // 기존 게임 목록 삭제
 
         games.forEach((game) => {
           let priceInfo = '';
@@ -144,7 +159,7 @@
         });
       }
 
-      // 장바구니에 게임을 추가하는 함수
+      // 게임을 장바구니에 추가하는 함수
       async function addToCart(gameId) {
         try {
           const token = localStorage.getItem('token');
@@ -168,7 +183,7 @@
 
           alert('장바구니에 추가되었습니다.');
         } catch (error) {
-          console.error('장바구니에 게임을 추가하는 중 오류 발생:', error);
+          console.error('장바구니에 게임 추가 중 오류 발생:', error);
           alert('장바구니에 추가하는 데 실패했습니다. 다시 시도해주세요.');
         }
       }
@@ -200,7 +215,7 @@
         fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
       });
 
-      // 페이지네이션 이전 버튼 이벤트 리스너
+      // 페이지네이션 이벤트 리스너
       document.getElementById('prevPage').addEventListener('click', () => {
         if (currentPage > 0) {
           currentPage--;
@@ -212,7 +227,6 @@
         }
       });
 
-      // 페이지네이션 다음 버튼 이벤트 리스너
       document.getElementById('nextPage').addEventListener('click', () => {
         currentPage++;
         const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
@@ -222,7 +236,7 @@
         document.getElementById('currentPage').innerText = currentPage + 1;
       });
 
-      // 페이지 로드 시 기본 카테고리로 초기 데이터 가져오기
+      // 페이지 로드 시 기본 카테고리(전체)로 게임 목록 가져오기
       document.addEventListener("DOMContentLoaded", function() {
         fetch("header.html")
           .then(response => response.text())
@@ -232,7 +246,7 @@
           })
           .catch(error => console.error("헤더 로드 중 오류 발생:", error));
 
-        fetchGamesByCategory(0); // 페이지 로드 시 전체 카테고리로 설정
+        fetchGamesByCategory(0); // 페이지 로드 시 전체 카테고리로 초기 게임 목록 가져오기
       });
     </script>
   </body>
