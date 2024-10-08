@@ -13,25 +13,20 @@
     />
   </head>
   <body>
-    <header>
-      <!-- 헤더 HTML을 외부 파일로부터 로드 -->
-      <div id="header-placeholder"></div>
-    </header>
+    <!-- 헤더 자리 표시자 -->
+    <div id="header-placeholder"></div>
+    
     <div class="container">
       <!-- Filter and sorting section -->
       <div class="filters">
         <div class="sort">
           <select id="sortOrder">
-            <option value="sales">판매순</option>
+            <option value="rating">평점순</option>
             <option value="recent">최신순</option>
-            <option value="review">후기순</option>
-            <option value="priceLow">낮은 가격순</option>
-            <option value="priceHigh">높은 가격순</option>
           </select>
         </div>
         <div class="genre-filter">
           <p>장르별 검색</p>
-          <label><input type="radio" name="genre" value="0" /> 전체</label><br />
           <label><input type="radio" name="genre" value="1" /> 무료</label><br />
           <label><input type="radio" name="genre" value="2" /> 액션</label><br />
           <label><input type="radio" name="genre" value="3" /> 어드벤처</label><br />
@@ -72,33 +67,18 @@
 
     <script src="auth.js"></script>
     <script>
-      // 헤더 로드
-      document.addEventListener('DOMContentLoaded', function() {
-        fetch('header.html')
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById('header-placeholder').innerHTML = data;
-          });
-      });
-
       // Store the server URL
       const serverUrl = 'https://ludorium.store';
       let currentPage = 0;
       const pageSize = 8;
 
       // Function to fetch game list by category ID
-      async function fetchGamesByCategory(categoryId, page = 0, orderBy = 'sales', searchKeyword = '') {
+      async function fetchGamesByCategory(categoryId, page = 0, orderBy = 'rating', searchKeyword = '') {
         try {
-          let url = '';
-          if (categoryId === '0') {
-            // Fetch all games if category is '전체'
-            url = `${serverUrl}/api/user/game/list?page=${page}&size=${pageSize}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}`;
-          } else {
-            // Fetch games by category
-            url = `${serverUrl}/api/user/game/${categoryId}/list?page=${page}&size=${pageSize}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}`;
-          }
-
-          const response = await fetch(url);
+          // Fetch data from the API
+          const response = await fetch(
+            `${serverUrl}/api/user/game/${categoryId}/list?page=${page}&size=${pageSize}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}`
+          );
           if (!response.ok) {
             throw new Error('네트워크 응답에 문제가 있습니다.');
           }
@@ -129,22 +109,31 @@
         productGrid.innerHTML = ''; // Clear existing games
 
         games.forEach((game) => {
+          let priceInfo = '';
+          if (game.originalPrice === game.discountPrice) {
+            if (game.discountPrice === 0) {
+              priceInfo = '<p class="sale-price" style="color: #4865dc">무료</p>';
+            } else {
+              priceInfo = `<p class="sale-price" style="color: #4865dc">₩ ${game.discountPrice}</p>`;
+            }
+          } else {
+            priceInfo = `
+              <p class="product-price">정상가: ₩ ${game.originalPrice}</p>
+              <p class="sale-price">판매가: ₩ ${game.discountPrice}</p>
+            `;
+          }
+
           const gameCard = `
             <div class="product-card">
               <a href="gameDetail.html?gameId=${game.gameId}" class="game-title-link">
                 <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
                 <p class="product-title">${game.gameName || '제목 없음'}</p>
               </a>
-              ${game.originalPrice === game.discountPrice ? `
-                <p class="product-price">₩ ${game.originalPrice}</p>
-              ` : `
-                <p class="product-price">정상가: ₩ ${game.originalPrice}</p>
-                <p class="sale-price">판매가: ₩ ${game.discountPrice} <span class="discount">${game.discountPercentage || 0}%</span></p>
-              `}
+              ${priceInfo}
               <div class="rating">
                 <i class="material-icons">star</i><span>${game.rating || 0}</span>
               </div>
-              <button class="cart-btn" onclick="addToCart(${game.gameId})">장바구니</button>
+              <button class="cart-btn" onclick="addToCart('${game.gameId}')">장바구니</button>
             </div>
           `;
           productGrid.innerHTML += gameCard;
@@ -152,20 +141,41 @@
       }
 
       // Function to add game to cart
-      function addToCart(gameId) {
-        console.log(`게임 ${gameId}을(를) 장바구니에 추가합니다.`);
-        // 여기에 장바구니에 게임을 추가하는 로직을 구현하세요
+      async function addToCart(gameId) {
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) {
+            alert('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
+            window.location.href = 'login.html';
+            return;
+          }
+
+          const response = await fetch(`${serverUrl}/api/user/cart/${gameId}`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error('장바구니에 추가하는 중 오류가 발생했습니다.');
+          }
+
+          alert('장바구니에 추가되었습니다.');
+        } catch (error) {
+          console.error('Error adding game to cart:', error);
+          alert('장바구니에 추가하는 데 실패했습니다. 다시 시도해주세요.');
+        }
       }
 
       // Event listener for genre filter changes
       document.querySelectorAll('.genre-filter input[type="radio"]').forEach((radio) => {
         radio.addEventListener('change', function () {
-          let categoryId = this.value;
+          const categoryId = this.value;
           currentPage = 0;
           const orderBy = document.getElementById('sortOrder').value;
           const searchKeyword = document.getElementById('searchKeyword').value;
-
-          // "전체" 카테고리를 선택한 경우 모든 게임 불러오기
           fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
         });
       });
@@ -208,9 +218,17 @@
       });
 
       // Initial fetch for the default category
-      window.onload = () => {
+      document.addEventListener("DOMContentLoaded", function() {
+        fetch("header.html")
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById("header-placeholder").innerHTML = data;
+            checkLoginStatus();
+          })
+          .catch(error => console.error("헤더 로드 중 오류 발생:", error));
+
         fetchGamesByCategory(4); // Default to RPG category on page load
-      };
+      });
     </script>
   </body>
 </html>
