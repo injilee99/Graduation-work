@@ -42,7 +42,7 @@
 
     <script src="auth.js"></script>
     <script>
-      const serverUrl = 'https://ludorium.store';
+      const API_BASE_URL = 'https://ludorium.store';
 
       document.addEventListener("DOMContentLoaded", () => {
         // 헤더를 동적으로 로드
@@ -60,7 +60,7 @@
       async function loadCartItemsFromAPI() {
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch(`${serverUrl}/api/user/cart/list`, {
+          const response = await fetch(`${API_BASE_URL}/api/user/cart/list`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -85,9 +85,10 @@
         const emptyCartIcon = document.getElementById("empty-cart-icon");
         let totalPrice = 0;
 
-        if (cart.length === 0) {
+        if (!cart || cart.length === 0) {
           emptyCartIcon.style.display = "block"; // 아이콘 표시
           cartItemsContainer.innerHTML = "<p>장바구니가 비어 있습니다.</p>";
+          totalPriceEl.textContent = "0";
           return;
         }
 
@@ -111,7 +112,7 @@
       async function removeFromCart(cartId) {
         try {
           const token = localStorage.getItem('token');
-          const response = await fetch(`${serverUrl}/api/user/cart`, {
+          const response = await fetch(`${API_BASE_URL}/api/user/cart`, {
             method: 'DELETE',
             headers: {
               'Authorization': `Bearer ${token}`,
