@@ -13,29 +13,13 @@
     />
   </head>
   <body>
-    <header>
-      <div class="top-nav">
-        <div class="logo">
-          <a href="main.html">Game Forge</a> <!-- main 페이지로 이동 -->
-        </div>
-        <nav>
-          <ul class="main-menu">
-            <li><a href="store.html">상점</a></li>
-            <li><a href="mypage.html">마이페이지</a></li>
-            <li><a href="community.html">자유게시판</a></li>
-            <li><a href="support.html">지원</a></li>
-          </ul>
-        </nav>
-        <div class="auth-buttons">
-          <a href="login.html" class="login-btn">로그인</a>
-        </div>
-      </div>
-    </header>
+    <!-- 헤더 자리 표시자 -->
+    <div id="header-placeholder"></div>
+
     <div class="container">
       <div class="game-detail">
         <div class="game-header">
-          <h1 id="gameName">undefined</h1>
-          <p id="categoryName">카테고리: undefined</p>
+          <h1 id="gameName">undefined</h1>          
         </div>
         <div class="game-content">
           <div class="game-left">
@@ -48,7 +32,7 @@
           <div class="game-right">
             <p id="gameDescription">undefined</p>
             <p id="gamePrice">가격: ₩ undefined</p>
-            <button class="cart-btn">장바구니에 담기</button>
+            <button class="cart-btn" onclick="addToCart()">장바구니에 담기</button>
           </div>
         </div>
       </div>
@@ -59,6 +43,7 @@
       </div>
     </footer>
 
+    <script src="auth.js"></script>
     <script>
       // Store the server URL
       const serverUrl = 'https://ludorium.store';
@@ -99,6 +84,13 @@
                 document.getElementById('videoSource').src = game.gameImageList[1];
               }
             }
+
+            // Store game details for adding to cart
+            window.currentGame = {
+              gameId: gameId,
+              gameName: game.gameName,
+              gamePrice: game.discountPrice,
+            };
           } else {
             console.error('Error: 응답의 data 필드가 비어 있습니다.', result);
           }
@@ -107,12 +99,43 @@
         }
       }
 
+      // Function to add game to cart
+      function addToCart() {
+        if (!window.currentGame) {
+          console.error('Error: 게임 정보가 없습니다.');
+          return;
+        }
+
+        const { gameId, gameName, gamePrice } = window.currentGame;
+        let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+        // 중복 추가 방지
+        if (!cartItems.find((item) => item.gameId === gameId)) {
+          cartItems.push({
+            gameId,
+            gameName,
+            gamePrice,
+          });
+        }
+
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        alert('장바구니에 추가되었습니다.');
+      }
+
       // Get gameId from URL parameters
       const urlParams = new URLSearchParams(window.location.search);
       const gameId = urlParams.get('gameId');
 
       // Fetch game details on page load
       if (gameId) {
+        fetch("header.html")
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById("header-placeholder").innerHTML = data;
+            checkLoginStatus();
+          })
+          .catch(error => console.error("헤더 로드 중 오류 발생:", error));
+        
         fetchGameDetails(gameId);
       } else {
         console.error('Error: gameId가 URL에 없습니다.');
