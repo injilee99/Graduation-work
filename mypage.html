@@ -78,13 +78,44 @@
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById("header-placeholder").innerHTML = data;
-                    
-                    // 헤더가 로드된 후 로그인 상태 확인 및 사용자 정보 가져오기
                     checkLoginStatus();
-                    fetchUserInfo();
                 })
                 .catch(error => console.error("헤더 로드 중 오류 발생:", error));
+
+            // 사용자 정보를 채우기 위한 함수 호출
+            fetchUserInfo();
         });
+
+        function fetchUserInfo() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('사용자 토큰이 없습니다.');
+                return;
+            }
+
+            fetch('https://ludorium.store/api/user/mypage', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('서버 응답이 좋지 않습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('서버로부터 받은 사용자 정보:', data);
+                document.getElementById('user-nickname').innerText = `${data.nickname} 님 안녕하세요!`;
+                document.getElementById('user-email').innerText = data.email || '정보 없음';
+                document.getElementById('user-social').innerText = data.socialType || '정보 없음';
+                document.getElementById('user-birthdate').innerText = data.birthDate || '정보 없음';
+                document.getElementById('user-tel').innerText = data.tel || '정보 없음';
+                document.getElementById('user-gender').innerText = data.gender === 'M' ? '남자' : (data.gender === 'W' ? '여자' : '정보 없음');
+            })
+            .catch(error => console.error('사용자 정보 가져오는 중 오류 발생:', error));
+        }
     </script>
 </body>
 </html>
