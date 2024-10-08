@@ -13,7 +13,7 @@
     />
   </head>
   <body>
-    <!-- 허더 자리 표시자 -->
+    <!-- 헤더 자리 표시자 -->
     <div id="header-placeholder"></div>
     
     <div class="container">
@@ -35,9 +35,9 @@
           <label><input type="radio" name="genre" value="6" /> 레이싱</label><br />
           <label><input type="radio" name="genre" value="7" /> 스포츠</label><br />
           <label><input type="radio" name="genre" value="8" /> 전략</label><br />
-          <label><input type="radio" name="genre" value="9" /> 시모레이션</label><br />
+          <label><input type="radio" name="genre" value="9" /> 시뮬레이션</label><br />
           <label><input type="radio" name="genre" value="10" /> 인디</label><br />
-          <label><input type="radio" name="genre" value="11" /> 캐조엘</label>
+          <label><input type="radio" name="genre" value="11" /> 캐주얼</label>
         </div>
         <!-- 검색 창 추가 -->
         <div class="search-bar">
@@ -92,7 +92,7 @@
           if (result.data && Array.isArray(result.data.content)) {
             games = result.data.content;
           } else {
-            console.error('Error: 응답의 data 필드가 올바르는 배열이 아닙니다.', result);
+            console.error('Error: 응답의 data 필드가 올바른 배열이 아닙니다.', result);
             return;
           }
 
@@ -118,7 +118,7 @@
               ${game.originalPrice === game.discountPrice ? `
                 <p class="product-price">${game.discountPrice === 0 ? '무료' : `₩ ${game.discountPrice}`}</p>
               ` : `
-                <p class="product-price">정산가: ₩ ${game.originalPrice}</p>
+                <p class="product-price">정상가: ₩ ${game.originalPrice}</p>
                 <p class="sale-price">판매가: ₩ ${game.discountPrice} <span class="discount">${game.discountPercentage || 0}%</span></p>
               `}
               <div class="rating">
