@@ -116,9 +116,9 @@
             document.getElementById('user-nickname').innerText = `${user.nickname} 님 안녕하세요!`;
             document.getElementById('user-email').innerText = user.email || '이메일 정보 없음';
             document.getElementById('user-social').innerText = user.social || '정보 없음';
-            document.getElementById('user-birthdate').innerText = user.birthDate || '생년월일 정보 없음'; // birthdate -> birthDate
+            document.getElementById('user-birthdate').innerText = user.birthDate || '생년월일 정보 없음';
             document.getElementById('user-tel').innerText = user.tel || '전화번호 정보 없음';
-            document.getElementById('user-gender').innerText = user.gender || '성별 정보 없음';
+            document.getElementById('user-gender').innerText = user.gender === 'M' ? '남자' : user.gender === 'W' ? '여자' : '성별 정보 없음';
         }
 
         // 로그아웃 처리 함수
