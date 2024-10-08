@@ -9,23 +9,46 @@ function decodeJWT(token) {
 }
 
 // 로그인 상태 확인 함수
-function checkLoginStatus() {
+async function checkLoginStatus() {
     const token = localStorage.getItem('token');
-    const nickname = localStorage.getItem('nickname');
-
     const welcomeMessage = document.getElementById('welcome-message');
     const loginBtn = document.getElementById('login-btn');
     const logoutBtn = document.getElementById('logout-btn');
 
-    if (token && nickname) {
-        if (welcomeMessage) {
-            welcomeMessage.innerText = `환영합니다, ${nickname}님!`;
-        }
-        if (loginBtn) {
-            loginBtn.style.display = 'none';
-        }
-        if (logoutBtn) {
-            logoutBtn.style.display = 'inline-block';
+    if (token) {
+        try {
+            // 서버에서 사용자 정보 가져오기
+            const response = await fetch('https://ludorium.store/api/user/mypage', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('네트워크 응답에 문제가 있습니다.');
+            }
+
+            const userData = await response.json();
+            const { nickname } = userData;
+
+            // 사용자 정보 업데이트
+            if (welcomeMessage) {
+                welcomeMessage.innerText = `환영합니다, ${nickname}님!`;
+            }
+            if (loginBtn) {
+                loginBtn.style.display = 'none';
+            }
+            if (logoutBtn) {
+                logoutBtn.style.display = 'inline-block';
+            }
+        } catch (error) {
+            console.error('사용자 정보를 가져오는 중 오류 발생:', error);
+            if (loginBtn) {
+                loginBtn.style.display = 'inline-block';
+            }
+            if (logoutBtn) {
+                logoutBtn.style.display = 'none';
+            }
         }
     } else {
         if (welcomeMessage) {
