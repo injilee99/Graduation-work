@@ -11,33 +11,27 @@ function decodeJWT(token) {
 // 로그인 상태 확인 함수
 function checkLoginStatus() {
     const token = localStorage.getItem('token');
-    const welcomeMessage = document.getElementById('welcome-message');
-    const loginBtn = document.getElementById('login-btn');
-    const logoutBtn = document.getElementById('logout-btn');
-
     if (token) {
         const decodedToken = decodeJWT(token);
         const nickname = decodedToken.nickname;
 
-        if (welcomeMessage) {
-            welcomeMessage.innerText = `환영합니다, ${nickname}님!`;
-        }
-        if (loginBtn) {
-            loginBtn.style.display = 'none';
-        }
-        if (logoutBtn) {
-            logoutBtn.style.display = 'inline-block';
+        const welcomeMessage = document.getElementById('welcome-message');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        if (nickname) {
+            if (welcomeMessage) {
+                welcomeMessage.innerText = `환영합니다, ${nickname}님!`;
+            }
+            if (loginBtn) {
+                loginBtn.style.display = 'none';
+            }
+            if (logoutBtn) {
+                logoutBtn.style.display = 'inline-block';
+            }
         }
     } else {
-        if (welcomeMessage) {
-            welcomeMessage.innerText = '';
-        }
-        if (loginBtn) {
-            loginBtn.style.display = 'inline-block';
-        }
-        if (logoutBtn) {
-            logoutBtn.style.display = 'none';
-        }
+        displayLoggedOutState();
     }
 }
 
@@ -81,10 +75,31 @@ async function fetchUserInfo() {
                 document.getElementById('user-gender').innerText = userData.gender === 'M' ? '남자' : userData.gender === 'W' ? '여자' : '성별 정보 없음';
             } else {
                 console.error('사용자 정보를 가져오는 중 오류 발생:', response.status);
+                displayLoggedOutState();
             }
         } catch (error) {
             console.error('사용자 정보를 가져오는 중 오류 발생:', error);
+            displayLoggedOutState();
         }
+    } else {
+        displayLoggedOutState();
+    }
+}
+
+// 로그아웃 상태 표시
+function displayLoggedOutState() {
+    const welcomeMessage = document.getElementById('welcome-message');
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    if (welcomeMessage) {
+        welcomeMessage.innerText = '';
+    }
+    if (loginBtn) {
+        loginBtn.style.display = 'inline-block';
+    }
+    if (logoutBtn) {
+        logoutBtn.style.display = 'none';
     }
 }
 
