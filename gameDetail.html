@@ -15,11 +15,11 @@
   <body>
     <!-- 헤더 자리 표시자 -->
     <div id="header-placeholder"></div>
-
     <div class="container">
       <div class="game-detail">
         <div class="game-header">
-          <h1 id="gameName">undefined</h1>          
+          <h1 id="gameName">undefined</h1>
+          <p id="categoryName">카테고리: undefined</p>
         </div>
         <div class="game-content">
           <div class="game-left">
@@ -61,7 +61,7 @@
           console.log('API 응답:', result);
 
           // Extract game details from the response
-          if (result.data) {
+          if (result && result.data) {
             const game = result.data;
 
             // Update game detail elements
@@ -127,7 +127,7 @@
       const gameId = urlParams.get('gameId');
 
       // Fetch game details on page load
-      if (gameId) {
+      document.addEventListener("DOMContentLoaded", function() {
         fetch("header.html")
           .then(response => response.text())
           .then(data => {
@@ -135,11 +135,13 @@
             checkLoginStatus();
           })
           .catch(error => console.error("헤더 로드 중 오류 발생:", error));
-        
-        fetchGameDetails(gameId);
-      } else {
-        console.error('Error: gameId가 URL에 없습니다.');
-      }
+
+        if (gameId) {
+          fetchGameDetails(gameId);
+        } else {
+          console.error('Error: gameId가 URL에 없습니다.');
+        }
+      });
     </script>
   </body>
 </html>
