@@ -13,24 +13,53 @@
     />
   </head>
   <body>
-    <!-- 헤더 자리 표시자 -->
-    <div id="header-placeholder"></div>
-    
+    <header>
+      <div class="top-nav">
+        <div class="logo">
+          <a href="main.html">Game Forge</a> <!-- main 페이지로 이동 -->
+        </div>
+        <nav>
+          <ul class="main-menu">
+            <li><a href="store.html">상점</a></li>
+            <li><a href="mypage.html">마이페이지</a></li>
+            <li><a href="community.html">자유게시판</a></li>
+            <li><a href="support.html">지원</a></li>
+          </ul>
+        </nav>
+        <div class="auth-buttons">
+          <a href="login.html" class="login-btn">로그인</a>
+        </div>
+      </div>
+      <div class="sub-nav">
+        <ul class="submenu">
+          <li>내 상점</li>
+          <li>최근에 본 제품</li>
+          <li>내 태그</li>
+          <li>추천 제품</li>
+          <li>카테고리 검색</li>
+          <li>장르별 검색</li>
+        </ul>
+      </div>
+    </header>
     <div class="container">
       <!-- Filter and sorting section -->
       <div class="filters">
         <div class="sort">
           <select id="sortOrder">
-            <option value="rating">평점순</option>
+            <option value="popular">판매순</option>
             <option value="recent">최신순</option>
+            <option value="review">후기순</option>
+            <option value="lowPrice">낮은 가격순</option>
+            <option value="highPrice">높은 가격순</option>
           </select>
         </div>
         <div class="genre-filter">
           <p>장르별 검색</p>
+          <label><input type="radio" name="genre" value="0" checked /> 전체</label><br />
           <label><input type="radio" name="genre" value="1" /> 무료</label><br />
           <label><input type="radio" name="genre" value="2" /> 액션</label><br />
           <label><input type="radio" name="genre" value="3" /> 어드벤처</label><br />
-          <label><input type="radio" name="genre" value="4" checked /> RPG</label><br />
+          <label><input type="radio" name="genre" value="4" /> RPG</label><br />
           <label><input type="radio" name="genre" value="5" /> MMO</label><br />
           <label><input type="radio" name="genre" value="6" /> 레이싱</label><br />
           <label><input type="radio" name="genre" value="7" /> 스포츠</label><br />
@@ -65,7 +94,6 @@
       </div>
     </footer>
 
-    <script src="auth.js"></script>
     <script>
       // Store the server URL
       const serverUrl = 'https://ludorium.store';
@@ -73,7 +101,7 @@
       const pageSize = 8;
 
       // Function to fetch game list by category ID
-      async function fetchGamesByCategory(categoryId, page = 0, orderBy = 'rating', searchKeyword = '') {
+      async function fetchGamesByCategory(categoryId, page = 0, orderBy = 'popular', searchKeyword = '') {
         try {
           // Fetch data from the API
           const response = await fetch(
@@ -109,31 +137,22 @@
         productGrid.innerHTML = ''; // Clear existing games
 
         games.forEach((game) => {
-          let priceInfo = '';
-          if (game.originalPrice === game.discountPrice) {
-            if (game.discountPrice === 0) {
-              priceInfo = '<p class="sale-price" style="color: #4865dc">무료</p>';
-            } else {
-              priceInfo = `<p class="sale-price" style="color: #4865dc">₩ ${game.discountPrice}</p>`;
-            }
-          } else {
-            priceInfo = `
-              <p class="product-price">정상가: ₩ ${game.originalPrice}</p>
-              <p class="sale-price">판매가: ₩ ${game.discountPrice}</p>
-            `;
-          }
-
           const gameCard = `
             <div class="product-card">
               <a href="gameDetail.html?gameId=${game.gameId}" class="game-title-link">
                 <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
                 <p class="product-title">${game.gameName || '제목 없음'}</p>
               </a>
-              ${priceInfo}
+              ${game.originalPrice !== game.discountPrice ? `
+                <p class="product-price">정상가: ₩ ${game.originalPrice}</p>
+                <p class="sale-price">판매가: ₩ ${game.discountPrice} <span class="discount">${game.discountPercentage || 0}%</span></p>
+              ` : `
+                <p class="product-price">${game.discountPrice === 0 ? '무료' : `₩ ${game.discountPrice}`}</p>
+              `}
               <div class="rating">
                 <i class="material-icons">star</i><span>${game.rating || 0}</span>
               </div>
-              <button class="cart-btn" onclick="addToCart('${game.gameId}')">장바구니</button>
+              <button class="cart-btn" onclick="addToCart(${game.gameId})">장바구니</button>
             </div>
           `;
           productGrid.innerHTML += gameCard;
@@ -141,32 +160,9 @@
       }
 
       // Function to add game to cart
-      async function addToCart(gameId) {
-        try {
-          const token = localStorage.getItem('token');
-          if (!token) {
-            alert('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
-            window.location.href = 'login.html';
-            return;
-          }
-
-          const response = await fetch(`${serverUrl}/api/user/cart/${gameId}`, {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
-
-          if (!response.ok) {
-            throw new Error('장바구니에 추가하는 중 오류가 발생했습니다.');
-          }
-
-          alert('장바구니에 추가되었습니다.');
-        } catch (error) {
-          console.error('Error adding game to cart:', error);
-          alert('장바구니에 추가하는 데 실패했습니다. 다시 시도해주세요.');
-        }
+      function addToCart(gameId) {
+        console.log(`게임 ${gameId}을(를) 장바구니에 추가합니다.`);
+        // 여기에 장바구니에 게임을 추가하는 로직을 구현하세요
       }
 
       // Event listener for genre filter changes
@@ -218,17 +214,9 @@
       });
 
       // Initial fetch for the default category
-      document.addEventListener("DOMContentLoaded", function() {
-        fetch("header.html")
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById("header-placeholder").innerHTML = data;
-            checkLoginStatus();
-          })
-          .catch(error => console.error("헤더 로드 중 오류 발생:", error));
-
-        fetchGamesByCategory(4); // Default to RPG category on page load
-      });
+      window.onload = () => {
+        fetchGamesByCategory(0); // Default to 전체 category on page load
+      };
     </script>
   </body>
 </html>
