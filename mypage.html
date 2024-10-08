@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Forge - 마이페이지</title>
     <link rel="stylesheet" href="mypage.css">
+    <script src="auth.js"></script>
 </head>
 <body>
     <!-- 헤더 자리 표시자 -->
@@ -71,74 +72,6 @@
     </footer>
 
     <script>
-        const API_BASE_URL = 'https://ludorium.store';
-
-        // JWT 토큰 디코딩 함수 (Base64 디코딩)
-        function decodeJWT(token) {
-            const base64Url = token.split('.')[1];
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-            return JSON.parse(jsonPayload);
-        }
-
-        // 로그인 상태 확인 함수
-        async function checkLoginStatus() {
-            const token = localStorage.getItem('token');
-
-            if (token) {
-                try {
-                    const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('사용자 정보를 불러오는 중 오류가 발생했습니다.');
-                    }
-
-                    const userData = await response.json();
-                    updateUserProfile(userData.data);
-                } catch (error) {
-                    console.error('Error fetching user profile:', error);
-                }
-            } else {
-                console.error('로그인되지 않은 상태입니다.');
-            }
-        }
-
-        // 사용자 프로필 업데이트 함수
-        function updateUserProfile(user) {
-            document.getElementById('user-nickname').innerText = `${user.nickname} 님 안녕하세요!`;
-            document.getElementById('user-email').innerText = user.email || '이메일 정보 없음';
-            document.getElementById('user-social').innerText = user.social || '정보 없음';
-            document.getElementById('user-birthdate').innerText = user.birthdate || '생년월일 정보 없음';
-            document.getElementById('user-tel').innerText = user.tel || '전화번호 정보 없음';
-            document.getElementById('user-gender').innerText = user.gender || '성별 정보 없음';
-        }
-
-        // 로그아웃 처리 함수
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('nickname');
-            checkLoginStatus();
-        }
-
-        // OAuth 로그인 시 URL에서 토큰을 추출하여 저장
-        function getTokenFromUrl() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const token = urlParams.get('access');
-            if (token) {
-                localStorage.setItem('token', token);
-                const decodedToken = decodeJWT(token);
-                localStorage.setItem('nickname', decodedToken.nickname);
-            }
-        }
-
         // 페이지 로드 시 로그인 상태 및 유저 정보 확인
         document.addEventListener("DOMContentLoaded", function() {
             // OAuth 토큰 추출 및 저장
