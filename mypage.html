@@ -45,7 +45,7 @@
                     </div>
                     <div class="profile-row">
                         <span class="label">소셜 로그인</span>
-                        <span class="value">네이버</span>
+                        <span class="value" id="user-social">정보 없음</span>
                     </div>
                     <div class="profile-row">
                         <span class="label">생년월일</span>
@@ -84,35 +84,41 @@
         }
 
         // 로그인 상태 확인 함수
-        function checkLoginStatus() {
+        async function checkLoginStatus() {
             const token = localStorage.getItem('token');
-            const nickname = localStorage.getItem('nickname');
 
-            const welcomeMessage = document.getElementById('welcome-message');
-            const loginBtn = document.getElementById('login-btn');
-            const logoutBtn = document.getElementById('logout-btn');
+            if (token) {
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
 
-            if (token && nickname) {
-                if (welcomeMessage) {
-                    welcomeMessage.innerText = `환영합니다, ${nickname}님!`;
-                }
-                if (loginBtn) {
-                    loginBtn.style.display = 'none';
-                }
-                if (logoutBtn) {
-                    logoutBtn.style.display = 'inline-block';
+                    if (!response.ok) {
+                        throw new Error('사용자 정보를 불러오는 중 오류가 발생했습니다.');
+                    }
+
+                    const userData = await response.json();
+                    updateUserProfile(userData.data);
+                } catch (error) {
+                    console.error('Error fetching user profile:', error);
                 }
             } else {
-                if (welcomeMessage) {
-                    welcomeMessage.innerText = '';
-                }
-                if (loginBtn) {
-                    loginBtn.style.display = 'inline-block';
-                }
-                if (logoutBtn) {
-                    logoutBtn.style.display = 'none';
-                }
+                console.error('로그인되지 않은 상태입니다.');
             }
+        }
+
+        // 사용자 프로필 업데이트 함수
+        function updateUserProfile(user) {
+            document.getElementById('user-nickname').innerText = `${user.nickname} 님 안녕하세요!`;
+            document.getElementById('user-email').innerText = user.email || '이메일 정보 없음';
+            document.getElementById('user-social').innerText = user.social || '정보 없음';
+            document.getElementById('user-birthdate').innerText = user.birthdate || '생년월일 정보 없음';
+            document.getElementById('user-tel').innerText = user.tel || '전화번호 정보 없음';
+            document.getElementById('user-gender').innerText = user.gender || '성별 정보 없음';
         }
 
         // 로그아웃 처리 함수
