@@ -75,10 +75,16 @@
       // 헤더 로드
       document.addEventListener('DOMContentLoaded', function() {
         fetch('header.html')
-          .then(response => response.text())
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('헤더를 로드하는 중 문제가 발생했습니다.');
+            }
+            return response.text();
+          })
           .then(data => {
             document.getElementById('header-placeholder').innerHTML = data;
-          });
+          })
+          .catch(error => console.error('헤더 로드 오류:', error));
       });
 
       // Store the server URL
@@ -100,7 +106,7 @@
 
           const response = await fetch(url);
           if (!response.ok) {
-            throw new Error('네트워크 응답에 문제가 있습니다.');
+            throw new Error(`API 요청 실패: ${response.statusText}`);
           }
           const result = await response.json();
 
