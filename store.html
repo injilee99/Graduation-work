@@ -79,11 +79,10 @@
       // 카테고리 ID로 게임 목록을 가져오는 함수
       async function fetchGamesByCategory(categoryId, page = 0, orderBy = 'rating', searchKeyword = '') {
         try {
-          // 모든 카테고리의 게임을 가져오는 경우
+          let allGames = [];
           if (categoryId == 0) {
-            let allGames = [];
             for (let i = 1; i <= 11; i++) {
-              const response = await fetch(`${serverUrl}/api/user/game/${i}/list?page=${page}&size=${pageSize}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}`);
+              const response = await fetch(`${serverUrl}/api/user/game/${i}/list?page=0&size=${pageSize * (page + 1)}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}`);
               if (response.ok) {
                 const result = await response.json();
                 if (result.data && Array.isArray(result.data.content)) {
@@ -91,9 +90,8 @@
                 }
               }
             }
-            renderGameList(allGames.slice(0, pageSize));
+            renderGameList(allGames.slice(page * pageSize, (page + 1) * pageSize));
           } else {
-            // 특정 카테고리의 게임을 가져오는 경우
             const response = await fetch(
               `${serverUrl}/api/user/game/${categoryId}/list?page=${page}&size=${pageSize}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}`
             );
