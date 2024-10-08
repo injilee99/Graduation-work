@@ -13,7 +13,7 @@
     />
   </head>
   <body>
-    <!-- 헤더 자리 표시자 -->
+    <!-- 허더 자리 표시자 -->
     <div id="header-placeholder"></div>
     
     <div class="container">
@@ -35,9 +35,9 @@
           <label><input type="radio" name="genre" value="6" /> 레이싱</label><br />
           <label><input type="radio" name="genre" value="7" /> 스포츠</label><br />
           <label><input type="radio" name="genre" value="8" /> 전략</label><br />
-          <label><input type="radio" name="genre" value="9" /> 시뮬레이션</label><br />
+          <label><input type="radio" name="genre" value="9" /> 시모레이션</label><br />
           <label><input type="radio" name="genre" value="10" /> 인디</label><br />
-          <label><input type="radio" name="genre" value="11" /> 캐주얼</label>
+          <label><input type="radio" name="genre" value="11" /> 캐조엘</label>
         </div>
         <!-- 검색 창 추가 -->
         <div class="search-bar">
@@ -61,7 +61,7 @@
     </div>
     <footer>
       <div class="footer-content">
-        <p>&copy; 대진대학교 벤처 졸업작품.</p>
+        <p>&copy; 대진대학교 베처 조료작품.</p>
       </div>
     </footer>
 
@@ -77,7 +77,7 @@
         try {
           // Fetch data from the API
           const response = await fetch(
-            ${serverUrl}/api/user/game/${categoryId}/list?page=${page}&size=${pageSize}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}
+            `${serverUrl}/api/user/game/${categoryId}/list?page=${page}&size=${pageSize}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}`
           );
           if (!response.ok) {
             throw new Error('네트워크 응답에 문제가 있습니다.');
@@ -92,7 +92,7 @@
           if (result.data && Array.isArray(result.data.content)) {
             games = result.data.content;
           } else {
-            console.error('Error: 응답의 data 필드가 올바른 배열이 아닙니다.', result);
+            console.error('Error: 응답의 data 필드가 올바르는 배열이 아닙니다.', result);
             return;
           }
 
@@ -109,31 +109,31 @@
         productGrid.innerHTML = ''; // Clear existing games
 
         games.forEach((game) => {
-          const gameCard = 
+          const gameCard = `
             <div class="product-card">
               <a href="gameDetail.html?gameId=${game.gameId}" class="game-title-link">
                 <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
                 <p class="product-title">${game.gameName || '제목 없음'}</p>
               </a>
-              ${game.originalPrice === game.discountPrice ? 
-                <p class="product-price">${game.discountPrice === 0 ? '무료' : ₩ ${game.discountPrice}}</p>
-               : 
-                <p class="product-price">정상가: ₩ ${game.originalPrice}</p>
+              ${game.originalPrice === game.discountPrice ? `
+                <p class="product-price">${game.discountPrice === 0 ? '무료' : `₩ ${game.discountPrice}`}</p>
+              ` : `
+                <p class="product-price">정산가: ₩ ${game.originalPrice}</p>
                 <p class="sale-price">판매가: ₩ ${game.discountPrice} <span class="discount">${game.discountPercentage || 0}%</span></p>
-              }
+              `}
               <div class="rating">
                 <i class="material-icons">star</i><span>${game.rating || 0}</span>
               </div>
               <button class="cart-btn" onclick="addToCart(${game.gameId})">장바구니</button>
             </div>
-          ;
+          `;
           productGrid.innerHTML += gameCard;
         });
       }
 
       // Function to add game to cart
       function addToCart(gameId) {
-        console.log(게임 ${gameId}을(를) 장바구니에 추가합니다.);
+        console.log(`게임 ${gameId}을(를) 장바구니에 추가합니다.`);
         // 여기에 장바구니에 게임을 추가하는 로직을 구현하세요
       }
 
