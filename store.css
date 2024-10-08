@@ -7,17 +7,15 @@ body {
 .container {
   display: flex;
   flex-direction: row;
-  justify-content: start;
+  justify-content: space-between;
   padding: 20px;
+  gap: 10px;
 }
 
 .filters {
-  width: 20%;
-  padding: 15px;
-  margin-right: 20px;
-  background-color: transparent;
-  box-shadow: none;
-  border: none;
+  width: 18%;
+  padding: 0;
+  margin-right: 10px;
 }
 
 .sort {
@@ -40,13 +38,12 @@ body {
 }
 
 .product-list {
-  width: 75%;
-  margin-left: -10px; /* 게임 목록을 왼쪽으로 붙임 */
+  width: 80%;
 }
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
 
