@@ -42,6 +42,8 @@
 
     <script src="auth.js"></script>
     <script>
+      const API_BASE_URL = 'https://ludorium.store';
+
       document.addEventListener("DOMContentLoaded", () => {
         // 헤더를 동적으로 로드
         fetch("header.html")
@@ -52,11 +54,32 @@
           })
           .catch((error) => console.error("헤더 로드 중 오류 발생:", error));
 
-        loadCartItems();
+        loadCartItemsFromAPI();
       });
 
-      function loadCartItems() {
-        const cart = JSON.parse(localStorage.getItem("cartItems")) || [];
+      async function loadCartItemsFromAPI() {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch(`${API_BASE_URL}/api/user/cart/list`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error('장바구니 데이터를 불러오는 중 오류가 발생했습니다.');
+          }
+
+          const result = await response.json();
+          renderCartItems(result.data);
+        } catch (error) {
+          console.error('Error loading cart items:', error);
+        }
+      }
+
+      function renderCartItems(cart) {
         const cartItemsContainer = document.getElementById("cart-items");
         const totalPriceEl = document.getElementById("total-price");
         const emptyCartIcon = document.getElementById("empty-cart-icon");
@@ -85,11 +108,26 @@
         totalPriceEl.textContent = totalPrice;
       }
 
-      function removeFromCart(gameId) {
-        let cart = JSON.parse(localStorage.getItem("cartItems")) || [];
-        cart = cart.filter((item) => item.gameId !== gameId);
-        localStorage.setItem("cartItems", JSON.stringify(cart));
-        loadCartItems();
+      async function removeFromCart(gameId) {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch(`${API_BASE_URL}/api/user/cart`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ gameId })
+          });
+
+          if (!response.ok) {
+            throw new Error('장바구니에서 아이템을 삭제하는 중 오류가 발생했습니다.');
+          }
+
+          loadCartItemsFromAPI();
+        } catch (error) {
+          console.error('Error removing item from cart:', error);
+        }
       }
 
       function goToCheckout() {
