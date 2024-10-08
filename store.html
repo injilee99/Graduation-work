@@ -109,41 +109,77 @@
         productGrid.innerHTML = ''; // Clear existing games
 
         games.forEach((game) => {
-          let priceHtml = '';
-
-          if (game.originalPrice === 0 && game.discountPrice === 0) {
-            priceHtml = '<p class="sale-price">무료</p>';
+          let gameCard;
+          if (game.originalPrice === game.discountPrice && game.discountPrice === 0) {
+            gameCard = `
+              <div class="product-card">
+                <a href="gameDetail.html?gameId=${game.gameId}" class="game-title-link">
+                  <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
+                  <p class="product-title">${game.gameName || '제목 없음'}</p>
+                </a>
+                <p class="sale-price">무료</p>
+                <div class="rating">
+                  <i class="material-icons">star</i><span>${game.rating || 0}</span>
+                </div>
+                <button class="cart-btn" onclick="addToCart(${game.gameId})">장바구니</button>
+              </div>
+            `;
           } else if (game.originalPrice === game.discountPrice) {
-            priceHtml = `<p class="sale-price">₩ ${game.discountPrice}</p>`;
+            gameCard = `
+              <div class="product-card">
+                <a href="gameDetail.html?gameId=${game.gameId}" class="game-title-link">
+                  <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
+                  <p class="product-title">${game.gameName || '제목 없음'}</p>
+                </a>
+                <p class="sale-price">₩ ${game.discountPrice}</p>
+                <div class="rating">
+                  <i class="material-icons">star</i><span>${game.rating || 0}</span>
+                </div>
+                <button class="cart-btn" onclick="addToCart(${game.gameId})">장바구니</button>
+              </div>
+            `;
           } else {
-            priceHtml = `
-              <p class="product-price">정상가: ₩ ${game.originalPrice}</p>
-              <p class="sale-price">판매가: ₩ ${game.discountPrice}</p>
+            gameCard = `
+              <div class="product-card">
+                <a href="gameDetail.html?gameId=${game.gameId}" class="game-title-link">
+                  <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
+                  <p class="product-title">${game.gameName || '제목 없음'}</p>
+                </a>
+                <p class="product-price">정상가: ₩ ${game.originalPrice}</p>
+                <p class="sale-price">판매가: ₩ ${game.discountPrice}</p>
+                <div class="rating">
+                  <i class="material-icons">star</i><span>${game.rating || 0}</span>
+                </div>
+                <button class="cart-btn" onclick="addToCart(${game.gameId})">장바구니</button>
+              </div>
             `;
           }
-
-          const gameCard = `
-            <div class="product-card">
-              <a href="gameDetail.html?gameId=${game.gameId}" class="game-title-link">
-                <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
-                <p class="product-title">${game.gameName || '제목 없음'}</p>
-              </a>
-              ${priceHtml}
-              <div class="rating">
-                <i class="material-icons">star</i><span>${game.rating || 0}</span>
-              </div>
-              <button class="cart-btn" onclick="addToCart(${game.gameId})">장바구니</button>
-            </div>
-          `;
           productGrid.innerHTML += gameCard;
         });
       }
 
       // Function to add game to cart
-      function addToCart(gameId) {
+      async function addToCart(gameId) {
         console.log(`게임 ${gameId}을(를) 장바구니에 추가합니다.`);
-        // 장바구니 페이지로 이동
-        window.location.href = 'cart.html';
+        const token = localStorage.getItem('token');
+        try {
+          const response = await fetch(`${serverUrl}/api/user/cart`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ gameId })
+          });
+
+          if (!response.ok) {
+            throw new Error('장바구니에 아이템을 추가하는 중 오류가 발생했습니다.');
+          }
+          alert('장바구니에 추가되었습니다!');
+          window.location.href = 'cart.html';
+        } catch (error) {
+          console.error('Error adding item to cart:', error);
+        }
       }
 
       // Event listener for genre filter changes
