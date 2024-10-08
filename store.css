@@ -7,19 +7,19 @@ body {
 .container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
   padding: 20px;
-  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .filters {
-  width: 25%;
-  max-width: 200px;
+  width: 20%;
   background-color: #ffffff;
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   margin-right: 20px;
+  height: fit-content;
 }
 
 .sort {
@@ -42,7 +42,7 @@ body {
 }
 
 .product-list {
-  width: 75%;
+  width: 80%;
 }
 
 .product-grid {
@@ -116,21 +116,4 @@ body {
   padding: 20px;
   font-size: 14px;
   color: #888;
-}
-
-@media (max-width: 768px) {
-  .product-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .filters {
-    width: 100%;
-    max-width: none;
-    margin-bottom: 20px;
-  }
-
-  .container {
-    flex-direction: column;
-    align-items: center;
-  }
 }
