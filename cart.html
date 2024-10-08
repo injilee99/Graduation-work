@@ -42,7 +42,7 @@
 
     <script src="auth.js"></script>
     <script>
-      const serverUrl = 'https://ludorium.store';
+      const API_BASE_URL = 'https://ludorium.store';
 
       document.addEventListener("DOMContentLoaded", () => {
         // 헤더를 동적으로 로드
@@ -60,18 +60,12 @@
       async function loadCartItems() {
         try {
           const token = localStorage.getItem('token');
-          if (!token) {
-            alert('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
-            window.location.href = 'login.html';
-            return;
-          }
-
-          const response = await fetch(`${serverUrl}/api/user/cart/list`, {
+          const response = await fetch(`${API_BASE_URL}/api/user/cart/list`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
+              'Content-Type': 'application/json',
+            },
           });
 
           if (!response.ok) {
@@ -91,7 +85,7 @@
         const emptyCartIcon = document.getElementById("empty-cart-icon");
         let totalPrice = 0;
 
-        if (!cart || cart.length === 0) {
+        if (cart.length === 0) {
           emptyCartIcon.style.display = "block"; // 아이콘 표시
           cartItemsContainer.innerHTML = "<p>장바구니가 비어 있습니다.</p>";
           return;
@@ -104,11 +98,11 @@
           const cartItem = document.createElement("div");
           cartItem.classList.add("cart-item");
           cartItem.innerHTML = `
-            <p>${item.gameName} - ${item.gamePrice}원</p>
+            <p>${item.gameName} - ${item.price}원</p>
             <button class="btn btn-secondary" onclick="removeFromCart('${item.cartId}')">삭제</button>
           `;
           cartItemsContainer.appendChild(cartItem);
-          totalPrice += item.gamePrice;
+          totalPrice += item.price;
         });
 
         totalPriceEl.textContent = totalPrice;
@@ -117,21 +111,15 @@
       async function removeFromCart(cartId) {
         try {
           const token = localStorage.getItem('token');
-          if (!token) {
-            alert('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
-            window.location.href = 'login.html';
-            return;
-          }
-
-          const response = await fetch(`${serverUrl}/api/user/cart`, {
+          const response = await fetch(`${API_BASE_URL}/api/user/cart`, {
             method: 'DELETE',
             headers: {
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              cartList: [cartId]
-            })
+              cartList: [cartId],
+            }),
           });
 
           if (!response.ok) {
