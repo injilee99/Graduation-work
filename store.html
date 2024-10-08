@@ -109,14 +109,26 @@
         productGrid.innerHTML = ''; // Clear existing games
 
         games.forEach((game) => {
+          let priceHTML = '';
+
+          if (game.originalPrice === 0 && game.discountPrice === 0) {
+            priceHTML = `<p class="sale-price">무료</p>`;
+          } else if (game.originalPrice === game.discountPrice) {
+            priceHTML = `<p class="sale-price">₩ ${game.discountPrice}</p>`;
+          } else {
+            priceHTML = `
+              <p class="product-price">정상가: ₩ ${game.originalPrice}</p>
+              <p class="sale-price">판매가: ₩ ${game.discountPrice} <span class="discount">${game.discountPercentage || 0}%</span></p>
+            `;
+          }
+
           const gameCard = `
             <div class="product-card">
               <a href="gameDetail.html?gameId=${game.gameId}" class="game-title-link">
                 <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
                 <p class="product-title">${game.gameName || '제목 없음'}</p>
               </a>
-              <p class="product-price">정상가: ₩ ${game.originalPrice}</p>
-              <p class="sale-price">판매가: ₩ ${game.discountPrice}</p>
+              ${priceHTML}
               <div class="rating">
                 <i class="material-icons">star</i><span>${game.rating || 0}</span>
               </div>
