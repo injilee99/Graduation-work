@@ -54,18 +54,18 @@
           })
           .catch((error) => console.error("헤더 로드 중 오류 발생:", error));
 
-        loadCartItems();
+        loadCartItemsFromAPI();
       });
 
-      async function loadCartItems() {
+      async function loadCartItemsFromAPI() {
         try {
           const token = localStorage.getItem('token');
           const response = await fetch(`${API_BASE_URL}/api/user/cart/list`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
+              'Content-Type': 'application/json'
+            }
           });
 
           if (!response.ok) {
@@ -98,11 +98,11 @@
           const cartItem = document.createElement("div");
           cartItem.classList.add("cart-item");
           cartItem.innerHTML = `
-            <p>${item.gameName} - ${item.price}원</p>
+            <p>${item.gameName} - ${item.gamePrice}원</p>
             <button class="btn btn-secondary" onclick="removeFromCart('${item.cartId}')">삭제</button>
           `;
           cartItemsContainer.appendChild(cartItem);
-          totalPrice += item.price;
+          totalPrice += item.gamePrice;
         });
 
         totalPriceEl.textContent = totalPrice;
@@ -115,19 +115,16 @@
             method: 'DELETE',
             headers: {
               'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-              cartList: [cartId],
-            }),
+            body: JSON.stringify({ cartIdList: [cartId] })
           });
 
           if (!response.ok) {
             throw new Error('장바구니에서 아이템을 삭제하는 중 오류가 발생했습니다.');
           }
 
-          alert('장바구니에서 아이템이 삭제되었습니다.');
-          loadCartItems();
+          loadCartItemsFromAPI();
         } catch (error) {
           console.error('Error removing item from cart:', error);
           alert('장바구니에서 아이템을 삭제하는 데 실패했습니다. 다시 시도해주세요.');
