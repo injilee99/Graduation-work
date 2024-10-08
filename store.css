@@ -7,17 +7,19 @@ body {
 .container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   padding: 20px;
+  gap: 20px;
 }
 
 .filters {
-  width: 15%;
+  width: 25%;
+  max-width: 200px;
   background-color: #ffffff;
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  align-self: flex-start;
+  margin-right: 20px;
 }
 
 .sort {
@@ -40,12 +42,12 @@ body {
 }
 
 .product-list {
-  width: 80%;
+  width: 75%;
 }
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
 
@@ -114,4 +116,21 @@ body {
   padding: 20px;
   font-size: 14px;
   color: #888;
+}
+
+@media (max-width: 768px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .filters {
+    width: 100%;
+    max-width: none;
+    margin-bottom: 20px;
+  }
+
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
 }
