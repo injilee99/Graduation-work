@@ -155,6 +155,35 @@ body {
   background-color: #5a54e8;
 }
 
+/* 페이지네이션 스타일 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 0; /* 위, 아래 여백 */
+  gap: 5px;
+}
+
+.pagination button {
+  padding: 10px 15px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #5a54e8;
+  color: #fff;
+}
+
+.pagination button.active {
+  background-color: #4865dc;
+  color: #fff;
+  font-weight: bold;
+}
+
 footer {
   background-color: #333;
   color: white;
