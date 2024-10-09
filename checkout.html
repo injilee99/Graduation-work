@@ -28,21 +28,12 @@
             <form class="checkout-form">
                 <div class="form-group">
                     <label for="name">이름</label>
-                    <input type="text" id="name" name="name" required>
+                    <input type="text" id="name" name="name" required readonly>
                 </div>
 
                 <div class="form-group">
                     <label for="email">이메일</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="payment-method">결제 방법</label>
-                    <select id="payment-method" name="payment-method" required>
-                        <option value="kakaopay">카카오페이</option>
-                        <option value="toss">토스</option>
-                        <option value="bank_transfer">계좌이체</option>
-                    </select>
+                    <input type="email" id="email" name="email" required readonly>
                 </div>
 
                 <div class="cart-summary">
@@ -73,6 +64,7 @@
                 .catch(error => console.error("헤더 로드 중 오류 발생:", error));
 
             loadCheckoutItems();
+            fetchUserInfo();
         });
 
         function loadCheckoutItems() {
@@ -99,9 +91,34 @@
             totalPriceEl.textContent = totalPrice;
         }
 
-        async function completePayment() {
-            const paymentMethod = document.getElementById('payment-method').value;
+        function fetchUserInfo() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('사용자 토큰이 없습니다.');
+                return;
+            }
 
+            fetch('https://ludorium.store/api/user/mypage', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('서버 응답이 좋지 않습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const userData = data.data;
+                document.getElementById('name').value = userData.name;
+                document.getElementById('email').value = userData.email;
+            })
+            .catch(error => console.error('사용자 정보 가져오는 중 오류 발생:', error));
+        }
+
+        async function completePayment() {
             // 사용자로부터 imp_uid 값을 입력받거나 생성
             const imp_uid = prompt("결제 고유 번호를 입력해주세요 (imp_uid):");
 
@@ -120,7 +137,7 @@
                 });
 
                 if (response.ok) {
-                    alert(`결제가 완료되었습니다. 결제 수단: ${paymentMethod}`);
+                    alert(`결제가 완료되었습니다.`);
                     localStorage.removeItem('cart'); // 결제 완료 후 장바구니 비우기
                     window.location.href = 'store.html'; // 결제 후 상점으로 이동
                 } else {
