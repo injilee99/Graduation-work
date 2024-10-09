@@ -9,7 +9,7 @@
   <body>
     <div class="findid-container">
       <h2>아이디 찾기</h2>
-      <form action="#" method="post">
+      <form id="findid-form">
         <label for="name">가입하신 이름을 입력해주세요</label>
         <input type="text" id="name" required />
 
@@ -18,6 +18,49 @@
 
         <button type="submit" id="submit-btn">이메일 찾기</button>
       </form>
+      <div id="result"></div> <!-- 응답 데이터를 표시할 영역 -->
     </div>
+
+    <script>
+      document.getElementById('findid-form').addEventListener('submit', function(event) {
+        event.preventDefault(); // 기본 폼 제출을 막음
+
+        // 입력값 가져오기
+        const name = document.getElementById('name').value;
+        const tel = document.getElementById('tel').value;
+
+        // 보낼 데이터 준비
+        const data = {
+          name: name,
+          tel: tel
+        };
+
+        // API 요청 보내기
+        fetch('https://ludorium.store/api/user/auth/find-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+          if (result.status === 200 && result.code === 'SUCCESS') {
+            // 이메일을 alert로 띄우기
+            // 또는 결과를 페이지에 표시하기
+            document.getElementById('result').innerHTML = `이메일: ${result.data}`;
+          } else {
+            // 에러 메시지 표시
+            document.getElementById('result').innerHTML = '이메일을 찾을 수 없습니다.';
+          }
+        })
+        .catch(error => {
+          // 오류 발생 시 메시지
+          alert('오류가 발생했습니다. 다시 시도해주세요.');
+          document.getElementById('result').innerHTML = '오류가 발생했습니다. 다시 시도해주세요.';
+          console.error('Error:', error);
+        });
+      });
+    </script>
   </body>
 </html>
