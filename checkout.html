@@ -159,7 +159,7 @@
                             if (rsp.success) {
                                 // 결제 성공 시 검증 요청
                                 try {
-                                    const validateResponse = await fetch(`http://localhost:8080/api/user/payment/validate/${rsp.imp_uid}`, {
+                                    const validateResponse = await fetch(`https://ludorium.store/api/user/payment/validate/${rsp.imp_uid}`, {
                                         method: 'POST',
                                         headers: {
                                             'Content-Type': 'application/json',
@@ -170,7 +170,7 @@
 
                                     if (validateData.status !== 200) {
                                         // 결제 검증에 실패 한 경우 주문내역 삭제 요청
-                                        await fetch(`http://localhost:8080/api/user/order/cancel/${newMerchantUid}`, {
+                                        await fetch(`https://ludorium.store/api/user/order/cancel/${newMerchantUid}`, {
                                             method: 'DELETE',
                                             headers: {
                                                 'Content-Type': 'application/json',
@@ -186,7 +186,7 @@
                                 } catch (error) {
                                     console.error('서버 검증 실패:', error);
                                     // 검증 실패 시 주문 취소 요청
-                                    await fetch(`http://localhost:8080/api/user/order/cancel/${newMerchantUid}`, {
+                                    await fetch(`https://ludorium.store/api/user/order/cancel/${newMerchantUid}`, {
                                         method: 'DELETE',
                                         headers: {
                                             'Content-Type': 'application/json',
@@ -197,7 +197,7 @@
                                 }
                             } else {
                                 // 결제 요청 자체 실패 시 주문 취소 요청
-                                await fetch(`http://localhost:8080/api/user/order/cancel/${newMerchantUid}`, {
+                                await fetch(`https://ludorium.store/api/user/order/cancel/${newMerchantUid}`, {
                                     method: 'DELETE',
                                     headers: {
                                         'Content-Type': 'application/json',
