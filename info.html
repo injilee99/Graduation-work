@@ -6,128 +6,11 @@
     <title>회원 정보 수정</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
     <style>
-      body{
+      body {
         font-family: "Noto Sans KR";
-      }
-      header {
-        font-family: "Noto Sans KR", sans-serif;
-        font-weight: 500;
-        font-style: normal;
-        color: #333;
-      }
-
-      .top-nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 30px;
-        color: #333;
-      }
-
-      .logo {
-        margin-left: 150px;
-        font-size: 24px;
-        font-weight: bold;
-      }
-
-      .main-menu {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        gap: 30px; /* 링크 간격 조정 */
-        justify-content: center; /* 중앙 정렬 */
-        flex: 1; /* 중간 네비게이션 바가 가로로 더 많은 공간을 차지하도록 설정 */
-      }
-
-      .main-menu li a {
-        color: #333;
-        text-decoration: none;
-        font-size: 16px;
-
-        padding: 5px 10px; /* 여백 추가 */
-
-        font-weight: 500;
-        font-style: normal;
-      }
-
-      .auth-buttons {
-        display: flex;
-        gap: 10px;
-        margin-right: 150px;
-      }
-
-      .auth-buttons a {
-        padding: 10px 20px;
-        border-radius: 5px;
-        text-decoration: none;
-        color: white;
-        background-color: #889491;
-      }
-
-      /* 서브메뉴 */
-      .sub-nav {
-        background-color: #889491;
-        margin: 0 150px;
-        padding: 15px 45px;
-        border-radius: 30px;
-      }
-
-      .submenu {
-        list-style-type: none;
-        margin: 0 10px;
-        padding: 0;
-        display: flex;
-        gap: 30px;
-      }
-
-      .submenu li {
-        color: white;
-        cursor: pointer;
-        padding: 5px 10px;
-
-        border-radius: 15px;
-        transition: background-color 0.3s, color 0.3s;
-      }
-
-      .submenu li:hover {
-        background-color: #777;
-        color: #fff;
-      }
-
-      .menu {
-        background-color: #778881;
-        display: flex;
-        justify-content: space-around;
-        margin: 50px 150px;
-        padding: 15px 45px;
-        list-style-type: none;
-      }
-
-      .menu li {
-        padding: 0 20px;
-      }
-      .menu li a {
-        text-decoration: none;
-        color: #fff;
-        font-weight: bold;
-        display: block;
-      }
-
-      .menu li a:hover {
-        background-color: #889491;
-      }
-      footer {
-        background-color: #333;
-        color: white;
-        text-align: center;
-        padding: 20px;
-        position: relative;
-        bottom: 0;
-        width: 100%;
       }
 
       .container {
@@ -137,7 +20,7 @@
         align-items: center;
         padding: 30px;
         width: 350px;
-        margin: 0 auto; /* 수평 중앙 정렬 */
+        margin: 0 auto;
       }
 
       .form-horizontal {
@@ -162,9 +45,8 @@
       input[type="text"] {
         padding: 25px;
         width: 200px;
-        border: none; /* 모든 테두리 제거 */
-        border-bottom: 1px solid grey; /* 아래쪽에만 1px 실선 추가 */
-
+        border: none;
+        border-bottom: 1px solid grey;
         font-size: 14px;
       }
 
@@ -192,85 +74,188 @@
       .btn-submit:hover {
         background-color: #778881;
       }
+
+      .input-group {
+        display: flex;
+        align-items: center;
+      }
+
+      .input-group input {
+        flex: 1;
+        margin-right: 10px;
+      }
     </style>
   </head>
   <body>
-    <header></header>
-      <div class="top-nav">
-        <div class="logo">Game Forge</div>
-        <nav>
-          <ul class="main-menu">
-            <li><a href="store.html">상점</a></li>
-            <li><a href="mypage.html">마이페이지</a></li>
-            <li><a href="community.html">자유게시판</a></li>
-            <li><a href="support.html">지원</a></li>
-          </ul>
-        </nav>
-        <div class="auth-buttons">
-          <a href="login.html" class="login-btn">로그인</a>
-        </div>
-      </div>
-      <div class="sub-nav">
-        <ul class="submenu">
-          <li>내 상점</li>
-          <li>최근에 본 제품</li>
-          <li>내 태그</li>
-          <li>추천 제품</li>
-          <li>카테고리 검색</li>
-          <li>장르별 검색</li>
-        </ul>
-      </div>
-    </header>
+    <!-- 헤더 자리 표시자 -->
+    <div id="header-placeholder"></div>
 
-    <nav>
-      <ul class="menu">
-        <li><a href="mypage.html">내정보</a></li>
-        <li><a href="#">주문내역</a></li>
-        <li><a href="#">쿠폰</a></li>
-        <li><a href="info.html">정보수정</a></li>
-        <li><a href="modpwd.html">비밀번호 수정</a></li>
-        <li><a href="#">회원탈퇴</a></li>
-      </ul>
-    </nav>
-    
     <div class="container">
       <form class="form-horizontal">
         <div class="form-group">
-          <label for="user_id">아이디</label>
-          <span id="user_id">사용자 아이디</span>
+          <label for="user_id">이메일</label>
+          <span id="user_id">사용자 이메일</span>
         </div>
 
         <div class="form-group">
-          <label for="nickname">닉네임</label>
-          <input type="text" id="nickname" value="구름" />
+            <label for="nickname">닉네임</label>
+            <div class="input-group">
+                <input type="text" id="nickname" value="구름" />
+                <button id="check-nickname" class="btn-submit">중복 체크</button>
+            </div>
         </div>
-
+        
         <div class="form-group">
-          <label for="birthdate">생년월일</label>
-          <input type="date" id="birthdate" value="0000-00-00" />
+            <label for="phone">전화번호</label>
+            <div class="input-group">
+                <input type="text" id="phone" value="010-0000-0000" />
+                <button id="check-phone" class="btn-submit">중복 체크</button>
+            </div>
         </div>
-
-        <div class="form-group">
-          <label for="phone">전화번호</label>
-          <input type="text" id="phone" value="010-0000-0000" />
-        </div>
-
-        <div class="form-group">
-          <label for="gender">성별</label>
-          <span id="gender">여</span>
-        </div>
-
+        
         <div class="form-actions">
-          <button type="submit" class="btn-submit">
-            <a href="mypage.html" style="color: white; text-decoration: none;">회원 정보 수정</a>
-          </button>
+          <button type="submit" class="btn-submit">회원 정보 수정</button>
         </div>
       </form>
     </div>
+
     <footer>
-      <div class="footer-content">
-        <p>&copy; 대진대학교 벤처 졸업작품.</p>
-      </div>
+        <div class="footer-content">
+          <p>&copy; 대진대학교 벤처 졸업작품.</p>
+        </div>
     </footer>
+
+    <script src="auth.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // 헤더를 동적으로 로드
+            fetch("header.html")
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("header-placeholder").innerHTML = data;
+                    checkLoginStatus();
+                })
+                .catch(error => console.error("헤더 로드 중 오류 발생:", error));
+
+            // 사용자 정보 불러오기
+            fetchUserInfo();
+        });
+
+        function fetchUserInfo() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('사용자 토큰이 없습니다.');
+                return;
+            }
+
+            fetch('https://ludorium.store/api/user/mypage', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('서버 응답이 좋지 않습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const userData = data.data;
+                document.getElementById('user_id').innerText = userData.email;
+                document.getElementById('nickname').value = userData.nickname;
+                document.getElementById('phone').value = userData.tel;
+            })
+            .catch(error => console.error('사용자 정보 가져오는 중 오류 발생:', error));
+        }
+
+        document.querySelector('form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            
+            // 폼 데이터 수집
+            const nickname = document.getElementById('nickname').value;
+            const phone = document.getElementById('phone').value;
+            
+            // 서버에 수정 요청
+            try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('https://ludorium.store/api/user/mypage', {
+                method: 'PATCH',
+                headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                nickname: nickname,
+                tel: phone
+                })
+            });
+            
+            if (response.ok) {
+                alert('회원 정보가 수정되었습니다.');
+            } else {
+                alert('회원 정보 수정에 실패했습니다.');
+            }
+            } catch (error) {
+            console.error('Error:', error);
+            }
+        });
+
+      // 닉네임 중복 체크 기능
+        document.getElementById('check-nickname').addEventListener('click', async function () {
+            const nickname = document.getElementById('nickname').value;
+
+            if (!nickname) {
+                alert('닉네임을 입력하세요.');
+                return;
+            }
+
+            try {
+                const response = await fetch('https://ludorium.store/api/user/auth/check-nickname', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ nickname: nickname })
+                });
+
+                if (response.ok) {
+                    alert('사용 가능한 닉네임입니다.');
+                } else {
+                    alert('닉네임이 이미 존재합니다.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+
+        // 전화번호 중복 체크 기능
+        document.getElementById('check-phone').addEventListener('click', async function () {
+            const phone = document.getElementById('phone').value.replace(/-/g, ''); // 하이픈 제거
+
+            if (!phone) {
+                alert('전화번호를 입력하세요.');
+                return;
+            }
+
+            try {
+                const response = await fetch('https://ludorium.store/api/user/auth/check-tel', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ tel: phone })
+                });
+
+                if (response.ok) {
+                    alert('사용 가능한 전화번호입니다.');
+                } else {
+                    alert('전화번호가 이미 존재합니다.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
   </body>
 </html>
