@@ -40,7 +40,7 @@
                     <h3>총 결제 금액: <span id="total-price">0</span>원</h3>
                 </div>
 
-                <button type="button" class="checkout-btn" onclick="completePayment()">결제하기</button>
+                <button type="button" class="checkout-btn" onclick="createOrderAndRequestPay()">결제하기</button>
             </form>
         </section>
     </main>
@@ -51,6 +51,7 @@
         </div>
     </footer>
 
+    <script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
     <script src="auth.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -118,46 +119,98 @@
             .catch(error => console.error('사용자 정보 가져오는 중 오류 발생:', error));
         }
 
-        async function completePayment() {
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const totalAmount = parseInt(document.getElementById('total-price').textContent);
-
-            if (cart.length === 0) {
-                alert("결제할 상품이 없습니다.");
-                return;
-            }
-
-            // 사용자로부터 imp_uid 값을 입력받기
-            const imp_uid = prompt("결제 고유 번호를 입력해주세요 (imp_uid):");
-
-            if (!imp_uid) {
-                alert("결제 고유 번호(imp_uid)가 필요합니다.");
-                return;
-            }
-
-            console.log("결제 요청 imp_uid:", imp_uid);
-
+        async function createOrderAndRequestPay() {
             try {
-                const response = await fetch(`https://ludorium.store/api/user/payment/validate/${imp_uid}`, {
+                // 1. 주문 정보 생성 요청
+                const response = await fetch('http://localhost:8080/api/user/order/create', {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                        'Content-Type': 'application/json'
-                    }
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({
+                        cartIdList: JSON.parse(localStorage.getItem('cart')).map(item => item.id),
+                        gamePriceList: JSON.parse(localStorage.getItem('cart')).map(item => item.price),
+                        totalAmount: parseInt(document.getElementById('total-price').textContent),
+                        email: document.getElementById('email').value
+                    }),
                 });
 
-                if (response.ok) {
-                    alert(`결제가 완료되었습니다.`);
-                    localStorage.removeItem('cart'); // 결제 완료 후 장바구니 비우기
-                    window.location.href = 'store.html'; // 결제 후 상점으로 이동
-                } else {
-                    const errorData = await response.json();
-                    console.error("결제 실패 응답 데이터:", errorData);
-                    alert(`결제에 실패했습니다: ${errorData.message || '내부 서버 오류입니다. 서버 로그를 확인해주세요.'}`);
+                const responseData = await response.json();
+                const newMerchantUid = responseData.data; // 서버에서 반환된 주문 번호 (data에서 추출)
+
+                // 2. Iamport 결제 창 띄우기
+                if (newMerchantUid) {
+                    const { IMP } = window;
+                    IMP.init('imp25057626'); // Iamport 식별 코드
+
+                    IMP.request_pay(
+                        {
+                            pg: 'html5_inicis',
+                            pay_method: 'card',
+                            merchant_uid: newMerchantUid,
+                            name: '게임 결제',
+                            amount: parseInt(document.getElementById('total-price').textContent),
+                            buyer_email: document.getElementById('email').value,
+                            buyer_name: document.getElementById('name').value,
+                            buyer_tel: '01042424242', // 예시 전화번호, 실제 사용자 정보로 변경 필요
+                        },
+                        async (rsp) => {
+                            if (rsp.success) {
+                                // 결제 성공 시 검증 요청
+                                try {
+                                    const validateResponse = await fetch(`http://localhost:8080/api/user/payment/validate/${rsp.imp_uid}`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                        },
+                                    });
+                                    const validateData = await validateResponse.json();
+
+                                    if (validateData.status !== 200) {
+                                        // 결제 검증에 실패 한 경우 주문내역 삭제 요청
+                                        await fetch(`http://localhost:8080/api/user/order/cancel/${newMerchantUid}`, {
+                                            method: 'DELETE',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                            },
+                                        });
+                                        alert(`결제에 실패하였습니다. 주문이 취소되었습니다.`);
+                                    } else {
+                                        alert('결제가 성공적으로 완료되었습니다.');
+                                        localStorage.removeItem('cart'); // 결제 완료 후 장바구니 비우기
+                                        window.location.href = 'store.html'; // 결제 후 상점으로 이동
+                                    }
+                                } catch (error) {
+                                    console.error('서버 검증 실패:', error);
+                                    // 검증 실패 시 주문 취소 요청
+                                    await fetch(`http://localhost:8080/api/user/order/cancel/${newMerchantUid}`, {
+                                        method: 'DELETE',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                        },
+                                    });
+                                    alert(`결제 검증 실패. 주문이 취소되었습니다.`);
+                                }
+                            } else {
+                                // 결제 요청 자체 실패 시 주문 취소 요청
+                                await fetch(`http://localhost:8080/api/user/order/cancel/${newMerchantUid}`, {
+                                    method: 'DELETE',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                    },
+                                });
+                                alert('결제가 취소되었습니다.');
+                            }
+                        }
+                    );
                 }
             } catch (error) {
-                console.error("결제 처리 중 오류 발생:", error);
-                alert("결제 처리 중 오류가 발생했습니다. 다시 시도해 주세요.");
+                console.error('주문 생성 실패:', error);
             }
         }
     </script>
