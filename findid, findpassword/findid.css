@@ -1,0 +1,55 @@
+body {
+    font-family: "Noto Sans KR";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.findid-container {
+    width: 500px;
+    padding: 20px;
+    text-align: center;
+}
+
+.findid-container h2 {
+    margin-bottom: 20px;
+    color: #333333;
+    font-size: 24px;
+}
+
+.findid-container label {
+    display: block;
+    margin-bottom: 5px;
+    color: #666666;
+    font-size: 14px;
+    text-align: left;
+}
+
+.findid-container input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: none;
+    border-bottom: 1px solid #dadada;
+    
+    box-sizing: border-box;
+}
+
+.findid-container button {
+    font-family: "Noto Sans KR";
+    width: 100%;
+    padding: 10px;
+    background-color: #889491;
+    color: #ffffff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.findid-container button:hover {
+    background-color: #778881;
+}
