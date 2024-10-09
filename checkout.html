@@ -122,13 +122,26 @@
         async function createOrderAndRequestPay() {
             try {
                 // 1. 주문 정보 생성 요청
-                const response = await console.log('주문 정보 생성 요청:', {
+                console.log('주문 정보 생성 요청:', {
   cartIdList: JSON.parse(localStorage.getItem('cart')).map(item => item.id),
   gamePriceList: JSON.parse(localStorage.getItem('cart')).map(item => item.price),
   totalAmount: parseInt(document.getElementById('total-price').textContent),
   email: document.getElementById('email').value
 });
-$1
+const response = await fetch('https://ludorium.store/api/user/order/create', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  },
+  body: JSON.stringify({
+    cartIdList: JSON.parse(localStorage.getItem('cart')).map(item => item.id),
+    gamePriceList: JSON.parse(localStorage.getItem('cart')).map(item => item.price),
+    totalAmount: parseInt(document.getElementById('total-price').textContent),
+    email: document.getElementById('email').value
+  })
+});
+
 
                 const responseData = await response.json();
                 const newMerchantUid = responseData.data; // 서버에서 반환된 주문 번호 (data에서 추출)
@@ -153,14 +166,28 @@ $1
                             if (rsp.success) {
                                 // 결제 성공 시 검증 요청
                                 try {
-                                    const validateResponse = await console.log('결제 검증 요청:', rsp.imp_uid);
-$1
+                                    console.log('결제 검증 요청:', rsp.imp_uid);
+const validateResponse = await fetch(`https://ludorium.store/api/user/payment/validate/${rsp.imp_uid}`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  }
+});
+
                                     const validateData = await validateResponse.json();
 
                                     if (validateData.status !== 200) {
                                         // 결제 검증에 실패 한 경우 주문내역 삭제 요청
-                                        await console.log('주문 취소 요청:', newMerchantUid);
-$1
+                                        console.log('주문 취소 요청:', newMerchantUid);
+await fetch(`https://ludorium.store/api/user/order/cancel/${newMerchantUid}`, {
+  method: 'DELETE',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${localStorage.getItem('token')}`
+  }
+});
+
                                         alert(`결제에 실패하였습니다. 주문이 취소되었습니다.`);
                                     } else {
                                         alert('결제가 성공적으로 완료되었습니다.');
