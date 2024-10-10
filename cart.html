@@ -101,15 +101,28 @@
           const cartItem = document.createElement("div");
           cartItem.classList.add("cart-item");
           cartItem.innerHTML = `
-            <input type="checkbox" class="cart-item-checkbox" value="${item.cartId}">
+            <input type="checkbox" class="cart-item-checkbox" value="${item.cartId}" data-price="${gamePrice}">
             <img src="${item.gameImageUrl}" alt="${item.gameName}" class="game-image">
             <p>${item.gameName} - ${gamePrice || 0}원</p>
           `;
           cartItemsContainer.appendChild(cartItem);
-          totalPrice += gamePrice;
         });
 
-        totalPriceEl.textContent = totalPrice;
+        // 체크박스 선택 시 가격 업데이트
+        document.querySelectorAll('.cart-item-checkbox').forEach(checkbox => {
+          checkbox.addEventListener('change', updateTotalPrice);
+        });
+      }
+
+      // 체크된 항목들의 가격만 합산하는 함수
+      function updateTotalPrice() {
+        const selectedCheckboxes = document.querySelectorAll('.cart-item-checkbox:checked');
+        let totalPrice = 0;
+        selectedCheckboxes.forEach(checkbox => {
+          const price = parseFloat(checkbox.getAttribute('data-price'));
+          totalPrice += price;
+        });
+        document.getElementById("total-price").textContent = totalPrice;
       }
 
       async function removeSelectedItems() {
