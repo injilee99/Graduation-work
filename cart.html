@@ -30,6 +30,7 @@
           <h3>총 결제 금액:</h3>
           <span id="total-price"></span>₩
           <button id="btn-primary" onclick="goToCheckout()">결제하기</button>
+          <button id="btn-delete" onclick="removeSelectedItems()">선택 삭제</button>
         </div>
       </section>
     </main>
@@ -100,8 +101,9 @@
           const cartItem = document.createElement("div");
           cartItem.classList.add("cart-item");
           cartItem.innerHTML = `
+            <input type="checkbox" class="cart-item-checkbox" value="${item.cartId}">
+            <img src="${item.gameImageUrl}" alt="${item.gameName}" class="game-image">
             <p>${item.gameName} - ${gamePrice || 0}원</p>
-            <button class="btn btn-secondary" onclick="removeFromCart('${item.cartId}')">삭제</button>
           `;
           cartItemsContainer.appendChild(cartItem);
           totalPrice += gamePrice;
@@ -110,7 +112,15 @@
         totalPriceEl.textContent = totalPrice;
       }
 
-      async function removeFromCart(cartId) {
+      async function removeSelectedItems() {
+        const selectedCheckboxes = document.querySelectorAll('.cart-item-checkbox:checked');
+        const selectedIds = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
+
+        if (selectedIds.length === 0) {
+          alert('삭제할 항목을 선택해주세요.');
+          return;
+        }
+
         try {
           const token = localStorage.getItem('token');
           const response = await fetch(`${API_BASE_URL}/api/user/cart`, {
@@ -119,7 +129,7 @@
               'Authorization': `Bearer ${token}`,
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ cartIdList: [cartId] })
+            body: JSON.stringify({ cartIdList: selectedIds })
           });
 
           if (!response.ok) {
@@ -128,13 +138,22 @@
 
           loadCartItemsFromAPI();
         } catch (error) {
-          console.error('Error removing item from cart:', error);
+          console.error('Error removing items from cart:', error);
           alert('장바구니에서 아이템을 삭제하는 데 실패했습니다. 다시 시도해주세요.');
         }
       }
 
       function goToCheckout() {
-        window.location.href = "checkout.html";
+        const selectedCheckboxes = document.querySelectorAll('.cart-item-checkbox:checked');
+        const selectedIds = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
+
+        if (selectedIds.length === 0) {
+          alert('결제할 항목을 선택해주세요.');
+          return;
+        }
+
+        // 선택된 항목으로 결제 페이지로 이동
+        window.location.href = `checkout.html?items=${selectedIds.join(',')}`;
       }
     </script>
   </body>
