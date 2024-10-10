@@ -1,27 +1,30 @@
-
+/* 장바구니가 비었을 때 아이콘 표시 */
 #empty-cart-icon {
     margin-top: 150px;
     display: none;
     text-align: center;
     margin-bottom: 10px;
-  }
-#empty-cart-icon .material-symbols-outlined {
-    font-size: 10rem; /* 아이콘 크기를 4배로 늘림 */
 }
-#cart-items p {
-    text-align: center;
-    /* font-size: 30px; */
-}/* 장바구니 섹션 */
+
+#empty-cart-icon .material-symbols-outlined {
+    font-size: 10rem; /* 아이콘 크기 설정 */
+}
+
+/* 장바구니 섹션 */
 .cart-container {
     max-width: 600px;
     margin: 50px auto;
     padding: 30px;
-   
     position: relative;
-  }
+}
 
-  /* 총 결제 금액 영역 스타일 */
-  .cart-summary {
+/* 장바구니 항목 표시 */
+#cart-items p {
+    text-align: center;
+}
+
+/* 총 결제 금액 영역 스타일 */
+.cart-summary {
     border-top: 1px solid #ccc; /* 얇은 실선 추가 */
     padding-top: 10px;
     margin-top: 20px;
@@ -31,26 +34,25 @@
     align-items: flex-end;
     font-size: 24px;
     font-weight: bold;
-  }
+}
 
-  .cart-summary h3 {
+.cart-summary h3 {
     align-self: flex-start;
     margin: 0;
     font-size: 16px;
     font-weight: normal;
     width: 100%;
-  }
+}
 
-  .total-price {
+.total-price {
     font-size: 40px;
     color: #000;
     position: absolute;
     bottom: -60px;
     right: 0;
-  }
+}
 
-
-  /* 결제하기 버튼 스타일 */
+/* 결제하기 버튼 스타일 */
 #btn-primary {
     background-color: #889491;
     border: none;
@@ -61,80 +63,66 @@
     text-align: center;
     cursor: pointer;
     width: 100%;
-    margin-top: 80px; /* 버튼과 결제 금액 사이 여백 */
-  }
+    margin-top: 20px; /* 결제 버튼과 선택 삭제 버튼 사이 여백 */
+}
 
 #btn-primary:hover {
     background-color: #778881;
-  }
-/* Cart item section styling */
+}
+
+/* 선택 삭제 버튼 스타일 */
+#btn-delete {
+    background-color: #ff6b6b; /* 선택 삭제 버튼을 붉은색으로 설정 */
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    color: white;
+    border-radius: 30px;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px; /* 결제 버튼 아래에 배치 */
+}
+
+#btn-delete:hover {
+    background-color: #ff4c4c; /* 선택 삭제 버튼 호버 시 색상 */
+}
+
+/* 장바구니 아이템 스타일 */
 .cart-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 0;
-  
-  margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    margin-bottom: 20px;
 }
 
 .cart-item p {
-  margin: 0;
-  font-size: 20px;
-  color: #333;
+    margin: 0;
+    font-size: 20px;
+    color: #333;
 }
 
+/* 삭제 버튼 스타일 */
 .btn.btn-secondary {
-  background-color: #889491;
-  color: #fff;
-  margin-left:250px;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 16px;
+    background-color: #889491;
+    color: #fff;
+    margin-left: 250px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
 }
 
 .btn.btn-secondary:hover {
-  background-color: #5a3d99;
-.game-image {
-  width: 30px; /* 이미지 크기를 30px로 설정 */
-  height: auto; /* 비율 유지 */
-  margin-right: 10px; /* 이미지와 텍스트 사이 간격 */
-  vertical-align: middle; /* 텍스트와 중앙 정렬 */
-  }
-
-#btn-primary {
-  background-color: #889491;
-  border: none;
-  padding: 15px;
-  font-size: 16px;
-  color: white;
-  border-radius: 30px;
-  text-align: center;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 20px; /* 결제 버튼과 선택 삭제 버튼 사이 여백 */
- }
-
-  #btn-primary:hover {
-  background-color: #778881;
-  }
-
-  #btn-delete {
-  background-color: #ff6b6b; /* 선택 삭제 버튼을 붉은색으로 설정 */
-  border: none;
-  padding: 10px;
-  font-size: 16px;
-  color: white;
-  border-radius: 30px;
-  text-align: center;
-  cursor: pointer;
-  width: 100%;
-  margin-top: 10px; /* 결제 버튼 아래에 배치 */
-  }
-
-      #btn-delete:hover {
-        background-color: #ff4c4c; /* 선택 삭제 버튼 호버 시 색상 */
-      }
+    background-color: #5a3d99;
 }
 
+/* 게임 이미지 스타일 */
+.game-image {
+    width: 20px; /* 이미지 크기를 작게 설정 */
+    height: auto; /* 비율 유지 */
+    margin-right: 10px; /* 이미지와 텍스트 사이 간격 */
+    vertical-align: middle; /* 텍스트와 중앙 정렬 */
+}
