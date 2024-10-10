@@ -58,6 +58,7 @@
         loadCartItemsFromAPI();
       });
 
+      // 장바구니 목록을 서버에서 불러옴
       async function loadCartItemsFromAPI() {
         try {
           const token = localStorage.getItem('token');
@@ -80,6 +81,7 @@
         }
       }
 
+      // 장바구니 항목 렌더링
       function renderCartItems(cart) {
         const cartItemsContainer = document.getElementById("cart-items");
         const totalPriceEl = document.getElementById("total-price");
@@ -126,6 +128,7 @@
         document.getElementById("total-price").textContent = totalPrice;
       }
 
+      // 결제 페이지로 이동 및 선택된 항목 로컬스토리지에 저장
       function goToCheckout() {
         const selectedCheckboxes = document.querySelectorAll('.cart-item-checkbox:checked');
         const selectedItems = Array.from(selectedCheckboxes).map(checkbox => {
@@ -146,6 +149,7 @@
         window.location.href = 'checkout.html'; // 결제 페이지로 이동
       }
 
+      // 장바구니에서 선택된 항목 삭제
       async function removeSelectedItems() {
         const selectedCheckboxes = document.querySelectorAll('.cart-item-checkbox:checked');
         const selectedIds = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
@@ -170,7 +174,7 @@
             throw new Error('장바구니에서 아이템을 삭제하는 중 오류가 발생했습니다.');
           }
 
-          loadCartItemsFromAPI();
+          loadCartItemsFromAPI();  // 목록 다시 불러오기
         } catch (error) {
           console.error('Error removing items from cart:', error);
           alert('장바구니에서 아이템을 삭제하는 데 실패했습니다. 다시 시도해주세요.');
