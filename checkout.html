@@ -68,6 +68,7 @@
             fetchUserInfo();
         });
 
+        // 장바구니 선택된 게임을 불러옴
         function loadCheckoutItems() {
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const checkoutItemsContainer = document.getElementById('checkout-items');
@@ -97,6 +98,7 @@
             totalPriceEl.textContent = totalPrice;
         }
 
+        // 사용자 정보를 서버에서 가져와서 입력
         function fetchUserInfo() {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -124,9 +126,9 @@
             .catch(error => console.error('사용자 정보 가져오는 중 오류 발생:', error));
         }
 
+        // 주문 생성 및 결제 요청
         async function createOrderAndRequestPay() {
             try {
-                // 1. 주문 정보 생성 요청
                 const cartItems = JSON.parse(localStorage.getItem('cart'));
                 const totalAmount = parseInt(document.getElementById('total-price').textContent);
                 const email = document.getElementById('email').value;
@@ -145,10 +147,10 @@
                     })
                 });
 
-                const responseData = await response.json();
-                const newMerchantUid = responseData.data;
+                const result = await response.json();
+                const newMerchantUid = result.data;  // 주문 번호
 
-                // 2. Iamport 결제 창 띄우기
+                // 결제 프로세스
                 if (newMerchantUid) {
                     const { IMP } = window;
                     IMP.init('imp25057626'); // Iamport 식별 코드
@@ -162,11 +164,10 @@
                             amount: totalAmount,
                             buyer_email: email,
                             buyer_name: document.getElementById('name').value,
-                            buyer_tel: '01042424242', // 예시 전화번호, 실제 사용자 정보로 변경 필요
+                            buyer_tel: '01042424242', // 예시 전화번호
                         },
                         async (rsp) => {
                             if (rsp.success) {
-                                // 결제 성공 시 검증 요청
                                 const validateResponse = await fetch(`https://ludorium.store/api/user/payment/validate/${rsp.imp_uid}`, {
                                     method: 'POST',
                                     headers: {
@@ -177,30 +178,14 @@
 
                                 const validateData = await validateResponse.json();
 
-                                if (validateData.status !== 200) {
-                                    // 결제 검증 실패 시 주문 취소
-                                    await fetch(`https://ludorium.store/api/user/order/cancel/${newMerchantUid}`, {
-                                        method: 'DELETE',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'Authorization': `Bearer ${localStorage.getItem('token')}`
-                                        }
-                                    });
-                                    alert('결제에 실패하였습니다. 주문이 취소되었습니다.');
-                                } else {
+                                if (validateData.status === 200) {
                                     alert('결제가 성공적으로 완료되었습니다.');
                                     localStorage.removeItem('cart'); // 결제 완료 후 장바구니 비우기
                                     window.location.href = 'store.html'; // 결제 후 상점으로 이동
+                                } else {
+                                    alert('결제 검증 실패. 주문이 취소되었습니다.');
                                 }
                             } else {
-                                // 결제 실패 시 주문 취소
-                                await fetch(`https://ludorium.store/api/user/order/cancel/${newMerchantUid}`, {
-                                    method: 'DELETE',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                                    }
-                                });
                                 alert('결제가 취소되었습니다.');
                             }
                         }
