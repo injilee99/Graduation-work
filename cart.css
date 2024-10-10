@@ -121,7 +121,7 @@
 
 /* 게임 이미지 스타일 */
 .game-image {
-    width: 30px; /* 이미지 크기를 25px로 설정 */
+    width: 100px; /* 이미지 크기를 100px로 설정 */
     height: auto; /* 비율 유지 */
     margin-right: 10px; /* 이미지와 텍스트 사이 간격 */
     vertical-align: middle; /* 텍스트와 중앙 정렬 */
