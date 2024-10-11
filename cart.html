@@ -89,7 +89,7 @@
         }
       }
 
-      // 유저 포인트 불러오기
+      // 유저 적립금 불러오기
       async function loadUserRewards() {
         try {
           const token = localStorage.getItem('token');
@@ -113,10 +113,6 @@
           }
         } catch (error) {
           console.error('Error loading user rewards:', error);
-        }
-      }
-        } catch (error) {
-          console.error('Error loading user points:', error);
         }
       }
 
@@ -170,14 +166,14 @@
         updateFinalPrice();
       }
 
-      // 사용 포인트를 반영한 최종 결제 금액 업데이트
+      // 사용 적립금을 반영한 최종 결제 금액 업데이트
       function updateFinalPrice() {
         const totalPrice = parseFloat(document.getElementById("total-price").textContent);
         const pointsToUse = parseFloat(document.getElementById("points-to-use").value);
         const availableRewardPoints = parseFloat(document.getElementById("available-reward-points").textContent);
 
         if (pointsToUse > availableRewardPoints) {
-          alert('사용할 수 있는 포인트를 초과했습니다.');
+          alert('사용할 수 있는 적립금을 초과했습니다.');
           document.getElementById("points-to-use").value = availableRewardPoints;
           return;
         }
@@ -206,11 +202,11 @@
         }
 
         localStorage.setItem('cart', JSON.stringify(selectedItems)); // 선택된 항목만 로컬스토리지에 저장
-        localStorage.setItem('pointsToUse', pointsToUse); // 사용 포인트 저장
+        localStorage.setItem('pointsToUse', pointsToUse); // 사용 적립금 저장
         window.location.href = 'checkout.html'; // 결제 페이지로 이동
       }
 
-      // 포인트 입력 시 최종 결제 금액 업데이트
+      // 적립금 입력 시 최종 결제 금액 업데이트
       document.getElementById("points-to-use").addEventListener('input', updateFinalPrice);
 
       // 장바구니에서 선택된 항목 삭제
