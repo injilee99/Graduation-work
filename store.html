@@ -56,8 +56,15 @@
       <div class="pagination" id="pagination">
         <!-- 페이지네이션 버튼이 여기에 동적으로 추가됩니다 -->
       </div>
+
+      <!-- 최근 본 상품 섹션 -->
+      <h2>최근 본 상품</h2>
+      <div class="recent-games-grid" id="recent-games-grid">
+        <!-- 최근 본 상품이 여기에 동적으로 추가됩니다 -->
+      </div>
     </div>
   </div>
+
   <footer>
     <div class="footer-content">
       <p>&copy; 대진대학교 벤처 졸업작품.</p>
@@ -80,7 +87,6 @@
         let allGames = [];
         let totalPages = 0;
 
-        // 단일 API 호출로 전체 게임을 가져옴
         const response = await fetch(
           `${serverUrl}/api/user/game/${categoryId}/list?page=${page}&size=${pageSize}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}`
         );
@@ -91,12 +97,9 @@
 
         const result = await response.json();
 
-        console.log('API 응답:', result);
-
-        // 응답에서 게임 배열 추출
         if (result.data && Array.isArray(result.data.content)) {
           allGames = result.data.content;
-          totalPages = result.data.totalPages; // 서버에서 받은 전체 페이지 수 사용
+          totalPages = result.data.totalPages;
         } else {
           console.error('Error: 응답의 data 필드가 올바른 배열이 아닙니다.', result);
           return;
@@ -180,14 +183,13 @@
       const paginationContainer = document.getElementById('pagination');
       paginationContainer.innerHTML = '';
 
-      // 이전 버튼
       if (startPage > 1) {
         const prevButton = document.createElement('button');
         prevButton.textContent = '<';
         prevButton.addEventListener('click', () => {
           startPage -= maxButtons;
           endPage -= maxButtons;
-          currentPage = startPage; // 현재 페이지를 첫 번째 페이지로 설정
+          currentPage = startPage;
           const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
           const orderBy = document.getElementById('sortOrder').value;
           const searchKeyword = document.getElementById('searchKeyword').value;
@@ -197,7 +199,6 @@
         paginationContainer.appendChild(prevButton);
       }
 
-      // 페이지 버튼 만들기
       for (let i = startPage; i <= Math.min(endPage, totalPages); i++) {
         const button = document.createElement('button');
         button.textContent = i;
@@ -214,14 +215,13 @@
         paginationContainer.appendChild(button);
       }
 
-      // 다음 버튼
       if (endPage < totalPages) {
         const nextButton = document.createElement('button');
         nextButton.textContent = '>';
         nextButton.addEventListener('click', () => {
           startPage += maxButtons;
           endPage += maxButtons;
-          currentPage = startPage; // 현재 페이지를 시작 페이지로 설정
+          currentPage = startPage;
           const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
           const orderBy = document.getElementById('sortOrder').value;
           const searchKeyword = document.getElementById('searchKeyword').value;
@@ -229,6 +229,46 @@
           updatePagination(totalPages);
         });
         paginationContainer.appendChild(nextButton);
+      }
+    }
+
+    // 최근 본 게임을 로컬 스토리지에서 불러와 렌더링
+    async function loadRecentGames() {
+      const recentGameIds = JSON.parse(localStorage.getItem('recentGames')) || [];
+
+      if (recentGameIds.length === 0) {
+        document.getElementById('recent-games-grid').innerHTML = '<p>최근 본 상품이 없습니다.</p>';
+        return;
+      }
+
+      const recentGamesGrid = document.getElementById('recent-games-grid');
+      recentGamesGrid.innerHTML = '';
+
+      // 최근 본 게임의 상세 정보를 서버에서 가져옴
+      for (const gameId of recentGameIds) {
+        try {
+          const response = await fetch(`${serverUrl}/api/user/game/detail/${gameId}`);
+          if (!response.ok) {
+            throw new Error('게임 정보를 불러오는 중 문제가 발생했습니다.');
+          }
+
+          const game = await response.json();
+          const gameCard = `
+            <div class="product-card">
+              <a href="gameDetail.html?gameId=${gameId}" class="game-title-link">
+                <img src="${game.data.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.data.gameName || '게임 이미지'}" />
+                <p class="product-title">${game.data.gameName || '제목 없음'}</p>
+              </a>
+              <p class="sale-price" style="color: #4865dc">₩ ${game.data.discountPrice}</p>
+              <div class="rating">
+                <i class="material-icons">star</i><span>${game.data.rating || 0}</span>
+              </div>
+            </div>
+          `;
+          recentGamesGrid.innerHTML += gameCard;
+        } catch (error) {
+          console.error('최근 본 게임을 불러오는 중 오류 발생:', error);
+        }
       }
     }
 
@@ -270,6 +310,7 @@
         .catch(error => console.error("헤더 로드 중 오류 발생:", error));
 
       fetchGamesByCategory(0); // 페이지 로드 시 전체 카테고리로 초기 게임 목록 가져오기
+      loadRecentGames(); // 최근 본 게임 목록 로드
     });
   </script>
 </body>
