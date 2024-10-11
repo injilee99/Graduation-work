@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>장바구니 - game forge</title>
+    <link rel="stylesheet" href="cart.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+  </head>
+  <body>
+    <!-- 헤더 자리 표시자 -->
+    <div id="header-placeholder"></div>
+
+    <main>
+      <section class="cart-container">
+        <div id="empty-cart-icon">
+          <span class="material-symbols-outlined">add_shopping_cart</span>
+        </div>
+        <div id="cart-items"></div>
+        <div class="cart-summary">
+          <h3>총 결제 금액:</h3>
+          <span id="total-price"></span>₩
+          <button id="btn-primary" onclick="goToCheckout()">결제하기</button>
+          <button id="btn-delete" onclick="removeSelectedItems()">선택 삭제</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 대진대학교 벤처 졸업작품.</p>
+      </div>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script>
+      const API_BASE_URL = 'https://ludorium.store';
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // 헤더를 동적으로 로드
+        fetch("header.html")
+          .then((response) => response.text())
+          .then((data) => {
+            document.getElementById("header-placeholder").innerHTML = data;
+            checkLoginStatus();
+          })
+          .catch((error) => console.error("헤더 로드 중 오류 발생:", error));
+
+        loadCartItemsFromAPI();
+      });
+
+      // 장바구니 목록을 서버에서 불러옴
+      async function loadCartItemsFromAPI() {
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch(`${API_BASE_URL}/api/user/cart/list`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error('장바구니 데이터를 불러오는 중 오류가 발생했습니다.');
+          }
+
+          const result = await response.json();
+          renderCartItems(result.data);
+        } catch (error) {
+          console.error('Error loading cart items:', error);
+        }
+      }
+
+      // 장바구니 항목 렌더링
+      function renderCartItems(cart) {
+        const cartItemsContainer = document.getElementById("cart-items");
+        const totalPriceEl = document.getElementById("total-price");
+        const emptyCartIcon = document.getElementById("empty-cart-icon");
+        let totalPrice = 0;
+
+        if (!cart || cart.length === 0) {
+          emptyCartIcon.style.display = "block"; // 아이콘 표시
+          cartItemsContainer.innerHTML = "<p>장바구니가 비어 있습니다.</p>";
+          totalPriceEl.textContent = "0";
+          return;
+        }
+
+        emptyCartIcon.style.display = "none"; // 아이콘 숨기기
+        cartItemsContainer.innerHTML = "";
+
+        cart.forEach((item) => {
+          const gamePrice = item.discountPrice !== undefined ? item.discountPrice : item.originalPrice;
+          const cartItem = document.createElement("div");
+          cartItem.classList.add("cart-item");
+          cartItem.innerHTML = `
+            <input type="checkbox" class="cart-item-checkbox" value="${item.cartId}" data-price="${gamePrice}">
+            <img src="${item.gameImageUrl}" alt="${item.gameName}" class="game-image">
+            <p class="game-name">${item.gameName}</p>
+            <p class="game-price">${gamePrice}원</p>
+          `;
+          cartItemsContainer.appendChild(cartItem);
+        });
+
+        // 체크박스 선택 시 가격 업데이트
+        document.querySelectorAll('.cart-item-checkbox').forEach(checkbox => {
+          checkbox.addEventListener('change', updateTotalPrice);
+        });
+      }
+
+      // 체크된 항목들의 가격만 합산하는 함수
+      function updateTotalPrice() {
+        const selectedCheckboxes = document.querySelectorAll('.cart-item-checkbox:checked');
+        let totalPrice = 0;
+        selectedCheckboxes.forEach(checkbox => {
+          const price = parseFloat(checkbox.getAttribute('data-price'));
+          totalPrice += price;
+        });
+        document.getElementById("total-price").textContent = totalPrice;
+      }
+
+      // 결제 페이지로 이동 및 선택된 항목 로컬스토리지에 저장
+      function goToCheckout() {
+        const selectedCheckboxes = document.querySelectorAll('.cart-item-checkbox:checked');
+        const selectedItems = Array.from(selectedCheckboxes).map(checkbox => {
+          const cartItem = checkbox.closest('.cart-item');
+          return {
+            id: checkbox.value,
+            title: cartItem.querySelector('.game-name').textContent,
+            price: parseFloat(cartItem.querySelector('.game-price').textContent.replace('원', ''))
+          };
+        });
+
+        if (selectedItems.length === 0) {
+          alert('결제할 항목을 선택해주세요.');
+          return;
+        }
+
+        localStorage.setItem('cart', JSON.stringify(selectedItems)); // 선택된 항목만 로컬스토리지에 저장
+        window.location.href = 'checkout.html'; // 결제 페이지로 이동
+      }
+
+      // 장바구니에서 선택된 항목 삭제
+      async function removeSelectedItems() {
+        const selectedCheckboxes = document.querySelectorAll('.cart-item-checkbox:checked');
+        const selectedIds = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
+
+        if (selectedIds.length === 0) {
+          alert('삭제할 항목을 선택해주세요.');
+          return;
+        }
+
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch(`${API_BASE_URL}/api/user/cart`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ cartIdList: selectedIds })
+          });
+
+          if (!response.ok) {
+            throw new Error('장바구니에서 아이템을 삭제하는 중 오류가 발생했습니다.');
+          }
+
+          loadCartItemsFromAPI();  // 목록 다시 불러오기
+        } catch (error) {
+          console.error('Error removing items from cart:', error);
+          alert('장바구니에서 아이템을 삭제하는 데 실패했습니다. 다시 시도해주세요.');
+        }
+      }
+    </script>
+  </body>
+</html>
