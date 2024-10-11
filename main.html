@@ -73,7 +73,7 @@
         // 이달의 탑4 인기게임 가져오기
         async function fetchTopPopularGames() {
             try {
-                const response = await fetch(`${serverUrl}/api/user/game/new`);
+                const response = await fetch(`${serverUrl}/api/user/game/popular`);
                 if (!response.ok) {
                     throw new Error('네트워크 응답에 문제가 있습니다.');
                 }
