@@ -3,34 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Game Forge - 게임 상세</title>
-  <link rel="stylesheet" href="gameDetail.css">
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const gameId = new URLSearchParams(window.location.search).get('gameId');
-      if (gameId) {
-        addRecentGame(gameId);
-      }
-    });
-
-    function addRecentGame(gameId) {
-      const recentGames = JSON.parse(localStorage.getItem('recentGames')) || [];
-      if (!recentGames.includes(gameId)) {
-        recentGames.push(gameId);
-        if (recentGames.length > 5) recentGames.shift(); // 최대 5개의 게임만 저장
-        localStorage.setItem('recentGames', JSON.stringify(recentGames));
-        console.log('로컬 스토리지에 저장된 recentGames:', recentGames);
-      }
-    }
-  </script>
+  <title>Game Forge - 최근 본 게임</title>
+  <link rel="stylesheet" href="recentGames.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Material+Icons&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>게임 상세 페이지</h1>
-  <!-- 게임 상세 정보 -->
-  <div class="game-detail">
-    <h2 id="game-title">게임 제목</h2>
-    <img id="game-image" src="game_image_url" alt="게임 이미지" />
-    <p id="game-description">게임 설명...</p>
+  <!-- 헤더 자리 표시자 -->
+  <div id="header-placeholder"></div>
+
+  <div class="container">
+    <h2>최근 본 게임</h2>
+    <div class="recent-games-list" id="recent-games-list">
+      <!-- 최근 본 게임 리스트가 여기에 동적으로 추가됩니다 -->
+    </div>
   </div>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 대진대학교 벤처 졸업작품.</p>
+    </div>
+  </footer>
+
+  <script src="auth.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      fetch("header.html")
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById("header-placeholder").innerHTML = data;
+          checkLoginStatus();
+        })
+        .catch(error => console.error("헤더 로드 중 오류 발생:", error));
+
+      showRecentGames(); // 최근 본 게임 목록 표시
+    });
+
+    function showRecentGames() {
+      const recentGames = JSON.parse(localStorage.getItem('recentGames')) || [];
+      const recentGamesList = document.getElementById('recent-games-list');
+
+      if (recentGames.length === 0) {
+        recentGamesList.innerHTML = '<p>최근 본 게임이 없습니다.</p>';
+        return;
+      }
+
+      recentGamesList.innerHTML = '';
+      recentGames.forEach(game => {
+        const gameCard = `
+          <div class="recent-game-card">
+            <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" class="recent-game-image" />
+            <div class="recent-game-info">
+              <h3 class="recent-game-title">${game.gameName || '제목 없음'}</h3>
+              <p class="recent-game-price">${game.gamePrice === 0 ? '무료' : '₩ ' + game.gamePrice}</p>
+              <a href="gameDetail.html?gameId=${game.gameId}" class="recent-game-link">상세 보기</a>
+            </div>
+          </div>
+        `;
+        recentGamesList.innerHTML += gameCard;
+      });
+    }
+  </script>
 </body>
 </html>
