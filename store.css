@@ -192,7 +192,7 @@ footer {
   position: relative;
   bottom: 0;
   width: 100%;
-     /* 우측 하단에 최근 본 게임 이미지를 표시하는 스타일 */
+  
     #recent-game-icon {
       position: fixed;
       right: 20px;
@@ -203,7 +203,12 @@ footer {
       overflow: hidden;
       cursor: pointer;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s;
       display: none; /* 기본은 보이지 않도록 설정 */
+    }
+
+    #recent-game-icon:hover {
+      transform: translateY(-5px);
     }
 
     #recent-game-icon img {
