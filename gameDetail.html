@@ -91,6 +91,9 @@
               gameName: game.gameName,
               gamePrice: game.discountPrice,
             };
+
+            // Add this game to recent games list
+            addRecentGame(gameId, game.gameName, game.discountPrice, game.gameImageList[0] || '');
           } else {
             console.error('Error: 응답의 data 필드가 비어 있습니다.', result);
           }
@@ -120,6 +123,29 @@
 
         localStorage.setItem('cartItems', JSON.stringify(cartItems));
         alert('장바구니에 추가되었습니다.');
+      }
+
+      // Function to add a game to the recent games list in localStorage
+      function addRecentGame(gameId, gameName, gamePrice, gameImageUrl) {
+        let recentGames = JSON.parse(localStorage.getItem('recentGames')) || [];
+
+        // 중복 추가 방지
+        if (!recentGames.find((game) => game.gameId === gameId)) {
+          recentGames.push({
+            gameId,
+            gameName,
+            gamePrice,
+            gameImageUrl
+          });
+
+          // 최대 5개의 게임만 유지
+          if (recentGames.length > 5) {
+            recentGames.shift();
+          }
+
+          localStorage.setItem('recentGames', JSON.stringify(recentGames));
+          console.log('로컬 스토리지에 저장된 recentGames:', recentGames);
+        }
       }
 
       // Get gameId from URL parameters
