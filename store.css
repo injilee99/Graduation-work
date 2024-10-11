@@ -192,7 +192,7 @@ footer {
   position: relative;
   bottom: 0;
   width: 100%;
-  /* 우측 하단에 최근 본 게임 이미지를 표시하는 스타일 */
+      /* 우측 하단에 최근 본 게임 이미지를 표시하는 스타일 */
     #recent-game-icon {
       position: fixed;
       right: 20px;
