@@ -2,13 +2,14 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Game Forge - 상점</title>
   <link rel="stylesheet" href="store.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Material+Icons&display=swap" rel="stylesheet">
-  </head>
+ </head>
 <body>
   <!-- 헤더 자리 표시자 -->
   <div id="header-placeholder"></div>
@@ -234,6 +235,8 @@
     async function showRecentGameIcon() {
       const recentGameIds = JSON.parse(localStorage.getItem('recentGames')) || [];
 
+      console.log('로컬 스토리지에 저장된 recentGames:', recentGameIds);
+
       if (recentGameIds.length === 0) {
         // 최근 본 게임이 없으면 아이콘 숨기기
         document.getElementById('recent-game-icon').style.display = 'none';
@@ -241,6 +244,8 @@
       }
 
       const mostRecentGameId = recentGameIds[recentGameIds.length - 1]; // 가장 최근에 본 게임 ID
+      console.log('가장 최근에 본 게임 ID:', mostRecentGameId);
+
       try {
         const response = await fetch(`${serverUrl}/api/user/game/detail/${mostRecentGameId}`);
         if (!response.ok) {
@@ -249,6 +254,8 @@
 
         const game = await response.json();
         const gameImageUrl = game.data.gameImageUrl || 'https://via.placeholder.com/150';
+
+        console.log('가져온 게임 이미지 URL:', gameImageUrl);
 
         // 최근 본 게임 이미지를 아이콘에 표시
         const recentGameImage = document.getElementById('recent-game-image');
