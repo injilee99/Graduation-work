@@ -109,7 +109,7 @@
                 console.log('서버로부터 받은 사용자 정보:', data);
                 document.getElementById('user-nickname').innerText = `${data.data.nickname} 님 안녕하세요!`;
                 document.getElementById('user-email').innerText = data.data.email || '정보 없음';
-                document.getElementById('user-social').innerText = data.data.socialType || '정보 없음';
+                document.getElementById('user-social').innerText = data.data.socialType || localStorage.getItem('socialType') || '정보 없음';
                 document.getElementById('user-birthdate').innerText = data.data.birthDate || '정보 없음';
                 document.getElementById('user-tel').innerText = data.data.tel || '정보 없음';
                 document.getElementById('user-gender').innerText = data.data.gender === 'M' ? '남자' : (data.data.gender === 'W' ? '여자' : '정보 없음');
