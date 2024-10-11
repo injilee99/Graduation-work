@@ -60,7 +60,7 @@
   </div>
 
   <!-- 우측 하단에 최근 본 게임 아이콘 -->
-  <div id="recent-game-icon" style="position: fixed; bottom: 20px; right: 20px; display: none;">
+  <div id="recent-game-icon" style="position: fixed; bottom: 20px; right: 20px; display: none; cursor: pointer;">
     <img id="recent-game-image" src="" alt="최근 본 게임" style="width: 50px; height: 50px;">
   </div>
 
@@ -186,7 +186,7 @@
       recentGameImage.alt = mostRecentGame.gameName || '최근 본 게임';
 
       document.getElementById('recent-game-icon').onclick = () => {
-        window.location.href = `gameDetail.html?gameId=${mostRecentGame.gameId}`;
+        window.location.href = 'recentGames.html'; // 최근 본 게임 페이지로 이동
       };
 
       document.getElementById('recent-game-icon').style.display = 'block';
