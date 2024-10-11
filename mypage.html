@@ -59,6 +59,10 @@
                         <span class="label">성별</span>
                         <span class="value" id="user-gender">성별 정보 없음</span>
                     </div>
+                    <div class="profile-row">
+                        <span class="label">적립금</span>
+                        <span class="value" id="user-reward-points">적립금 정보 없음</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -85,47 +89,6 @@
             // 사용자 정보를 채우기 위한 함수 호출
             fetchUserInfo();
         });
-
-        function fetchUserInfo() {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                console.error('사용자 토큰이 없습니다.');
-                return;
-            }
-
-            fetch('https://ludorium.store/api/user/mypage', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('서버 응답이 좋지 않습니다.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('서버로부터 받은 사용자 정보:', data);
-                
-                // 서버에서 받은 정보를 기반으로 사용자 정보를 설정합니다.
-                document.getElementById('user-nickname').innerText = `${data.data.nickname} 님 안녕하세요!`;
-                document.getElementById('user-email').innerText = data.data.email || '정보 없음';
-                
-                // 로컬스토리지의 provider 값을 사용하여 소셜 로그인 정보를 표시합니다.
-                const provider = localStorage.getItem('provider');
-                if (provider) {
-                    document.getElementById('user-social').innerText = provider === 'kakao' ? '카카오 로그인' : provider === 'naver' ? '네이버 로그인' : provider;
-                } else {
-                    document.getElementById('user-social').innerText = '정보 없음';
-                }
-
-                document.getElementById('user-birthdate').innerText = data.data.birthDate || '정보 없음';
-                document.getElementById('user-tel').innerText = data.data.tel || '정보 없음';
-                document.getElementById('user-gender').innerText = data.data.gender === 'M' ? '남자' : (data.data.gender === 'W' ? '여자' : '정보 없음');
-            })
-            .catch(error => console.error('사용자 정보 가져오는 중 오류 발생:', error));
-        }
     </script>
 </body>
 </html>
