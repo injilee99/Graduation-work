@@ -2,14 +2,34 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Game Forge - 상점</title>
   <link rel="stylesheet" href="store.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Material+Icons&display=swap" rel="stylesheet">
- </head>
+  <style>
+    /* 우측 하단에 최근 본 게임 이미지를 표시하는 스타일 */
+    #recent-game-icon {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      display: none; /* 기본은 보이지 않도록 설정 */
+    }
+
+    #recent-game-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
 <body>
   <!-- 헤더 자리 표시자 -->
   <div id="header-placeholder"></div>
@@ -235,8 +255,6 @@
     async function showRecentGameIcon() {
       const recentGameIds = JSON.parse(localStorage.getItem('recentGames')) || [];
 
-      console.log('로컬 스토리지에 저장된 recentGames:', recentGameIds);
-
       if (recentGameIds.length === 0) {
         // 최근 본 게임이 없으면 아이콘 숨기기
         document.getElementById('recent-game-icon').style.display = 'none';
@@ -244,8 +262,6 @@
       }
 
       const mostRecentGameId = recentGameIds[recentGameIds.length - 1]; // 가장 최근에 본 게임 ID
-      console.log('가장 최근에 본 게임 ID:', mostRecentGameId);
-
       try {
         const response = await fetch(`${serverUrl}/api/user/game/detail/${mostRecentGameId}`);
         if (!response.ok) {
@@ -254,8 +270,6 @@
 
         const game = await response.json();
         const gameImageUrl = game.data.gameImageUrl || 'https://via.placeholder.com/150';
-
-        console.log('가져온 게임 이미지 URL:', gameImageUrl);
 
         // 최근 본 게임 이미지를 아이콘에 표시
         const recentGameImage = document.getElementById('recent-game-image');
@@ -272,33 +286,6 @@
         console.error('최근 본 게임을 불러오는 중 오류 발생:', error);
       }
     }
-
-    // 장르 필터 변경 이벤트 리스너
-    document.querySelectorAll('.genre-filter input[type="radio"]').forEach((radio) => {
-      radio.addEventListener('change', function () {
-        const categoryId = this.value;
-        currentPage = 1;
-        const orderBy = document.getElementById('sortOrder').value;
-        const searchKeyword = document.getElementById('searchKeyword').value;
-        fetchGamesByCategory(categoryId, currentPage - 1, orderBy, searchKeyword);
-      });
-    });
-
-    // 정렬 순서 변경 이벤트 리스너
-    document.getElementById('sortOrder').addEventListener('change', function () {
-      const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
-      const orderBy = this.value;
-      const searchKeyword = document.getElementById('searchKeyword').value;
-      fetchGamesByCategory(categoryId, currentPage - 1, orderBy, searchKeyword);
-    });
-
-    // 검색 입력 이벤트 리스너
-    document.getElementById('searchKeyword').addEventListener('input', function () {
-      const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
-      const orderBy = document.getElementById('sortOrder').value;
-      const searchKeyword = this.value;
-      fetchGamesByCategory(categoryId, currentPage - 1, orderBy, searchKeyword);
-    });
 
     // 페이지 로드 시 기본 카테고리(전체)로 게임 목록 가져오기
     document.addEventListener("DOMContentLoaded", function() {
