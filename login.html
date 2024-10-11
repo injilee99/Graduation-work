@@ -73,11 +73,15 @@
                 console.log("Token detected and stored:", token);
                 localStorage.setItem('token', token); // 토큰을 localStorage에 저장
 
-                // JWT 토큰에서 닉네임 추출하여 저장
+                // JWT 토큰에서 닉네임 및 소셜 타입 추출하여 저장
                 const decodedToken = decodeJWT(token);
                 const nickname = decodedToken.nickname;
+                const socialType = decodedToken.socialType; // 소셜 타입 (카카오, 네이버 등)
+                
                 localStorage.setItem('nickname', nickname); // 닉네임을 localStorage에 저장
+                localStorage.setItem('socialType', socialType); // 소셜 타입을 localStorage에 저장
                 console.log("Nickname stored:", nickname);
+                console.log("Social Type stored:", socialType);
 
                 // 메인 페이지로 이동
                 window.location.href = '/Graduation-work/main.html';
