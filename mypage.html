@@ -107,9 +107,19 @@
             })
             .then(data => {
                 console.log('서버로부터 받은 사용자 정보:', data);
+                
+                // 서버에서 받은 정보를 기반으로 사용자 정보를 설정합니다.
                 document.getElementById('user-nickname').innerText = `${data.data.nickname} 님 안녕하세요!`;
                 document.getElementById('user-email').innerText = data.data.email || '정보 없음';
-                document.getElementById('user-social').innerText = data.data.socialType || localStorage.getItem('socialType') || '정보 없음';
+                
+                // 로컬스토리지의 provider 값을 사용하여 소셜 로그인 정보를 표시합니다.
+                const provider = localStorage.getItem('provider');
+                if (provider) {
+                    document.getElementById('user-social').innerText = provider === 'kakao' ? '카카오 로그인' : provider === 'naver' ? '네이버 로그인' : provider;
+                } else {
+                    document.getElementById('user-social').innerText = '정보 없음';
+                }
+
                 document.getElementById('user-birthdate').innerText = data.data.birthDate || '정보 없음';
                 document.getElementById('user-tel').innerText = data.data.tel || '정보 없음';
                 document.getElementById('user-gender').innerText = data.data.gender === 'M' ? '남자' : (data.data.gender === 'W' ? '여자' : '정보 없음');
