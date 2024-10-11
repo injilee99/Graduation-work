@@ -43,51 +43,17 @@
 
             <!-- 이달의 추천 게임 -->
             <section class="featured-games">
-                <h2>이달의 추천게임</h2>
-                <div class="game-grid">
-                    <div class="game-card">
-                        <a href="eternal_return.html">
-                            <img src="./images/eternal_return.jpg" alt="Eternal Return">
-                        <p>Eternal Return</p>
-                    </div>
-                    <div class="game-card">
-                        <a href="The_sims4.html">
-                            <img src="./images/sims.jpg" alt="The Sims4">
-                        <p>The Sims4</p>
-                    </div>
-                    <div class="game-card">
-                        <a href="stardew_valley.html">
-                            <img src="./images/stardew_valley.jpg" alt="Stardew Valley">
-                        <p>Stardew Valley</p>
-                    </div>
-                    <div class="game-card">
-                        <a href="core_keeper.html">
-                            <img src="./images/core_keeeper.jpg" alt="Core Keeper">
-                        <p>Core Keeper</p>
-                    </div>
+                <h2>이달의 탑4 인기게임</h2>
+                <div class="game-grid" id="top-popular-games">
+                    <!-- 게임 카드가 여기에 동적으로 추가됩니다 -->
                 </div>
             </section>
 
             <!-- 이달의 할인 게임 -->
             <section class="discounted-games">
-                <h2>이달의 할인게임</h2>
-                <div class="game-grid">
-                    <div class="game-card">
-                        <img src="./images/battlegrounds.jpg" alt="Battlegrounds">
-                        <p>Battlegrounds</p>
-                    </div>
-                    <div class="game-card">
-                        <img src="./images/astroneer.jpg" alt="Astroneer">
-                        <p>Astroneer</p>
-                    </div>
-                    <div class="game-card">
-                        <img src="./images/60_seconds.jpg" alt="60 Seconds">
-                        <p>60 Seconds!</p>
-                    </div>
-                    <div class="game-card">
-                        <img src="./images/once_human.jpg" alt="Once Human">
-                        <p>Once Human</p>
-                    </div>
+                <h2>이달의 탑4 신작게임</h2>
+                <div class="game-grid" id="top-new-games">
+                    <!-- 게임 카드가 여기에 동적으로 추가됩니다 -->
                 </div>
             </section>
         </section>
@@ -101,5 +67,59 @@
 
     <!-- auth.js 추가 - 페이지 로드 후 실행 -->
     <script src="auth.js"></script>
+    <script>
+        const serverUrl = 'https://ludorium.store';
+
+        // 이달의 탑4 인기게임 가져오기
+        async function fetchTopPopularGames() {
+            try {
+                const response = await fetch(`${serverUrl}/api/user/game/new`);
+                if (!response.ok) {
+                    throw new Error('네트워크 응답에 문제가 있습니다.');
+                }
+                const result = await response.json();
+                renderGames(result.data.slice(0, 4), 'top-popular-games');
+            } catch (error) {
+                console.error('이달의 인기 게임을 가져오는 중 오류 발생:', error);
+            }
+        }
+
+        // 이달의 탑4 신작게임 가져오기
+        async function fetchTopNewGames() {
+            try {
+                const response = await fetch(`${serverUrl}/api/user/game/new`);
+                if (!response.ok) {
+                    throw new Error('네트워크 응답에 문제가 있습니다.');
+                }
+                const result = await response.json();
+                renderGames(result.data.slice(0, 4), 'top-new-games');
+            } catch (error) {
+                console.error('이달의 신작 게임을 가져오는 중 오류 발생:', error);
+            }
+        }
+
+        // 게임 카드 렌더링 함수
+        function renderGames(games, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            games.forEach(game => {
+                const gameCard = document.createElement('div');
+                gameCard.className = 'game-card';
+                gameCard.innerHTML = `
+                    <a href="gameDetail.html?gameId=${game.gameId}">
+                        <img src="${game.gameImageUrl || './images/placeholder.jpg'}" alt="${game.gameName}">
+                        <p>${game.gameName}</p>
+                    </a>
+                `;
+                container.appendChild(gameCard);
+            });
+        }
+
+        // 페이지 로드 시 게임 목록 가져오기
+        document.addEventListener("DOMContentLoaded", function() {
+            fetchTopPopularGames();
+            fetchTopNewGames();
+        });
+    </script>
 </body>
 </html>
