@@ -1,0 +1,95 @@
+/* recentGames.css */
+
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.recent-games-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.recent-game-card {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.recent-game-card:hover {
+  transform: translateY(-5px);
+}
+
+.recent-game-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.recent-game-info {
+  flex: 1;
+}
+
+.recent-game-title {
+  font-size: 1.2rem;
+  margin: 0;
+  color: #333;
+}
+
+.recent-game-price {
+  font-size: 1rem;
+  color: #e74c3c;
+  margin: 5px 0;
+}
+
+.recent-game-link {
+  display: inline-block;
+  margin-top: 10px;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+  transition: color 0.2s;
+}
+
+.recent-game-link:hover {
+  color: #0056b3;
+}
+
+.footer-content {
+  text-align: center;
+  padding: 20px;
+  background-color: #333;
+  color: #fff;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+} 
+
+p {
+  margin: 0;
+}
