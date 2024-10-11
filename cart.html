@@ -106,8 +106,8 @@
           }
 
           const result = await response.json();
-          if (result.rewardPoints !== undefined && result.rewardPoints !== null) {
-            document.getElementById("available-reward-points").textContent = result.rewardPoints;
+          if (result.data && result.data.rewardPoints !== undefined && result.data.rewardPoints !== null) {
+            document.getElementById("available-reward-points").textContent = result.data.rewardPoints;
           } else {
             document.getElementById("available-reward-points").textContent = "0";
           }
