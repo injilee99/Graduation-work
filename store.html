@@ -60,7 +60,7 @@
   </div>
 
   <!-- 우측 하단에 최근 본 게임 아이콘 -->
-  <div id="recent-game-icon" style="position: fixed; bottom: 20px; right: 20px;">
+  <div id="recent-game-icon" style="position: fixed; bottom: 20px; right: 20px; display: none;">
     <img id="recent-game-image" src="" alt="최근 본 게임" style="width: 50px; height: 50px;">
   </div>
 
@@ -132,7 +132,7 @@
 
         const gameCard = `
           <div class="product-card">
-            <a href="gameDetail.html?gameId=${game.gameId}" class="game-title-link">
+            <a href="gameDetail.html?gameId=${game.gameId}" class="game-title-link" onclick="addRecentGame('${game.gameId}', '${game.gameName}', '${game.discountPrice}', '${game.gameImageUrl || 'https://via.placeholder.com/150'}')">
               <img src="${game.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.gameName || '게임 이미지'}" />
               <p class="product-title">${game.gameName || '제목 없음'}</p>
             </a>
@@ -147,119 +147,49 @@
       });
     }
 
-    // 게임을 장바구니에 추가하는 함수
-    async function addToCart(gameId) {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          alert('로그인이 필요합니다. 로그인 페이지로 이동합니다.');
-          window.location.href = 'login.html';
-          return;
-        }
+    // 최근 본 게임을 로컬 스토리지에 추가하는 함수
+    function addRecentGame(gameId, gameName, gamePrice, gameImageUrl) {
+      let recentGames = JSON.parse(localStorage.getItem('recentGames')) || [];
 
-        const response = await fetch(`${serverUrl}/api/user/cart/${gameId}`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
+      // 중복된 게임이 저장되지 않도록 필터링
+      recentGames = recentGames.filter(game => game.gameId !== gameId);
 
-        if (!response.ok) {
-          throw new Error('장바구니에 추가하는 중 오류가 발생했습니다.');
-        }
+      // 새로운 게임을 추가
+      recentGames.push({
+        gameId,
+        gameName,
+        gamePrice,
+        gameImageUrl
+      });
 
-        alert('장바구니에 추가되었습니다.');
-      } catch (error) {
-        console.error('장바구니에 게임 추가 중 오류 발생:', error);
-        alert('장바구니에 추가하는 데 실패했습니다. 다시 시도해주세요.');
-      }
-    }
-
-    // 페이지네이션 업데이트 함수
-    function updatePagination(totalPages) {
-      const paginationContainer = document.getElementById('pagination');
-      paginationContainer.innerHTML = '';
-
-      if (startPage > 1) {
-        const prevButton = document.createElement('button');
-        prevButton.textContent = '<';
-        prevButton.addEventListener('click', () => {
-          startPage -= maxButtons;
-          endPage -= maxButtons;
-          currentPage = startPage;
-          const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
-          const orderBy = document.getElementById('sortOrder').value;
-          const searchKeyword = document.getElementById('searchKeyword').value;
-          fetchGamesByCategory(categoryId, currentPage - 1, orderBy, searchKeyword);
-          updatePagination(totalPages);
-        });
-        paginationContainer.appendChild(prevButton);
+      // 최대 5개의 게임만 유지
+      if (recentGames.length > 5) {
+        recentGames.shift();
       }
 
-      for (let i = startPage; i <= Math.min(endPage, totalPages); i++) {
-        const button = document.createElement('button');
-        button.textContent = i;
-        button.className = i === currentPage ? 'active' : '';
-        button.disabled = i === currentPage;
-        button.addEventListener('click', () => {
-          currentPage = i;
-          const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
-          const orderBy = document.getElementById('sortOrder').value;
-          const searchKeyword = document.getElementById('searchKeyword').value;
-          fetchGamesByCategory(categoryId, currentPage - 1, orderBy, searchKeyword);
-          updatePagination(totalPages);
-        });
-        paginationContainer.appendChild(button);
-      }
-
-      if (endPage < totalPages) {
-        const nextButton = document.createElement('button');
-        nextButton.textContent = '>';
-        nextButton.addEventListener('click', () => {
-          startPage += maxButtons;
-          endPage += maxButtons;
-          currentPage = startPage;
-          const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
-          const orderBy = document.getElementById('sortOrder').value;
-          const searchKeyword = document.getElementById('searchKeyword').value;
-          fetchGamesByCategory(categoryId, currentPage - 1, orderBy, searchKeyword);
-          updatePagination(totalPages);
-        });
-        paginationContainer.appendChild(nextButton);
-      }
+      localStorage.setItem('recentGames', JSON.stringify(recentGames));
     }
 
     // 최근 본 게임을 로컬 스토리지에서 불러와서 우측 하단에 표시
-    async function showRecentGameIcon() {
-      const recentGameIds = JSON.parse(localStorage.getItem('recentGames')) || [];
+    function showRecentGameIcon() {
+      const recentGames = JSON.parse(localStorage.getItem('recentGames')) || [];
 
-      if (recentGameIds.length === 0) {
+      if (recentGames.length === 0) {
         document.getElementById('recent-game-icon').style.display = 'none';
         return;
       }
 
-      const mostRecentGameId = recentGameIds[recentGameIds.length - 1];
-      try {
-        const response = await fetch(`${serverUrl}/api/user/game/detail/${mostRecentGameId}`);
-        if (!response.ok) {
-          throw new Error('게임 정보를 불러오는 중 문제가 발생했습니다.');
-        }
+      const mostRecentGame = recentGames[recentGames.length - 1];
+      const recentGameImage = document.getElementById('recent-game-image');
 
-        const game = await response.json();
-        const gameImageUrl = game.data.gameImageUrl || 'https://via.placeholder.com/150';
+      recentGameImage.src = mostRecentGame.gameImageUrl;
+      recentGameImage.alt = mostRecentGame.gameName || '최근 본 게임';
 
-        const recentGameImage = document.getElementById('recent-game-image');
-        recentGameImage.src = gameImageUrl;
+      document.getElementById('recent-game-icon').onclick = () => {
+        window.location.href = `gameDetail.html?gameId=${mostRecentGame.gameId}`;
+      };
 
-        document.getElementById('recent-game-icon').onclick = () => {
-          window.location.href = 'recentGames.html';
-        };
-
-        document.getElementById('recent-game-icon').style.display = 'block';
-      } catch (error) {
-        console.error('최근 본 게임을 불러오는 중 오류 발생:', error);
-      }
+      document.getElementById('recent-game-icon').style.display = 'block';
     }
 
     // 페이지 로드 시 기본 카테고리(전체)로 게임 목록 가져오기
