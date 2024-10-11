@@ -49,7 +49,7 @@
 
     <!-- 상품 목록 섹션 -->
     <div class="product-list">
-      <h2>구름 님을 위한 추천 게임</h2>
+      <h2 id="game-list-title">구름 님을 위한 추천 게임</h2>
       <div class="product-grid">
         <!-- 게임 리스트가 여기에 동적으로 추가됩니다 -->
       </div>
@@ -281,6 +281,7 @@
         const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
         const orderBy = document.getElementById('sortOrder').value;
         const searchKeyword = document.getElementById('searchKeyword').value;
+        updateGameListTitle(orderBy);
         fetchGamesByCategory(categoryId, 0, orderBy, searchKeyword);
       });
     });
@@ -289,6 +290,7 @@
       const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
       const orderBy = document.getElementById('sortOrder').value;
       const searchKeyword = document.getElementById('searchKeyword').value;
+      updateGameListTitle(orderBy);
       fetchGamesByCategory(categoryId, 0, orderBy, searchKeyword);
     });
 
@@ -297,9 +299,34 @@
         const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
         const orderBy = document.getElementById('sortOrder').value;
         const searchKeyword = document.getElementById('searchKeyword').value;
+        updateGameListTitle(orderBy);
         fetchGamesByCategory(categoryId, 0, orderBy, searchKeyword);
       }
     });
+
+    // 게임 목록 제목 업데이트 함수
+    function updateGameListTitle(orderBy) {
+      const gameListTitle = document.getElementById('game-list-title');
+      switch (orderBy) {
+        case 'orderByPopular':
+          gameListTitle.textContent = '추천 게임';
+          break;
+        case 'orderByRecent':
+          gameListTitle.textContent = '최신 게임';
+          break;
+        case 'orderBySales':
+          gameListTitle.textContent = '구매 많은 게임';
+          break;
+        case 'orderByPriceAsc':
+          gameListTitle.textContent = '낮은 가격순 게임';
+          break;
+        case 'orderByPriceDesc':
+          gameListTitle.textContent = '높은 가격순 게임';
+          break;
+        default:
+          gameListTitle.textContent = '추천 게임';
+      }
+    }
 
     // 페이지 로드 시 기본 카테고리(전체)로 게임 목록 가져오기
     document.addEventListener("DOMContentLoaded", function() {
