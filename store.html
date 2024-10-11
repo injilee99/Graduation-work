@@ -8,6 +8,27 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Material+Icons&display=swap" rel="stylesheet">
+  <style>
+    /* 우측 하단에 최근 본 게임 이미지를 표시하는 스타일 */
+    #recent-game-icon {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      display: none; /* 기본은 보이지 않도록 설정 */
+    }
+
+    #recent-game-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
 </head>
 <body>
   <!-- 헤더 자리 표시자 -->
@@ -56,13 +77,12 @@
       <div class="pagination" id="pagination">
         <!-- 페이지네이션 버튼이 여기에 동적으로 추가됩니다 -->
       </div>
-
-      <!-- 최근 본 상품 섹션 -->
-      <h2>최근 본 상품</h2>
-      <div class="recent-games-grid" id="recent-games-grid">
-        <!-- 최근 본 상품이 여기에 동적으로 추가됩니다 -->
-      </div>
     </div>
+  </div>
+
+  <!-- 우측 하단에 최근 본 게임 아이콘 -->
+  <div id="recent-game-icon">
+    <img id="recent-game-image" src="" alt="최근 본 게임" />
   </div>
 
   <footer>
@@ -73,7 +93,6 @@
 
   <script src="auth.js"></script>
   <script>
-    // 서버 URL 저장
     const serverUrl = 'https://ludorium.store';
     let currentPage = 1; // 현재 페이지
     const maxButtons = 10; // 페이지 버튼의 최대 개수
@@ -232,43 +251,39 @@
       }
     }
 
-    // 최근 본 게임을 로컬 스토리지에서 불러와 렌더링
-    async function loadRecentGames() {
+    // 최근 본 게임을 로컬 스토리지에서 불러와서 우측 하단에 표시
+    async function showRecentGameIcon() {
       const recentGameIds = JSON.parse(localStorage.getItem('recentGames')) || [];
 
       if (recentGameIds.length === 0) {
-        document.getElementById('recent-games-grid').innerHTML = '<p>최근 본 상품이 없습니다.</p>';
+        // 최근 본 게임이 없으면 아이콘 숨기기
+        document.getElementById('recent-game-icon').style.display = 'none';
         return;
       }
 
-      const recentGamesGrid = document.getElementById('recent-games-grid');
-      recentGamesGrid.innerHTML = '';
-
-      // 최근 본 게임의 상세 정보를 서버에서 가져옴
-      for (const gameId of recentGameIds) {
-        try {
-          const response = await fetch(`${serverUrl}/api/user/game/detail/${gameId}`);
-          if (!response.ok) {
-            throw new Error('게임 정보를 불러오는 중 문제가 발생했습니다.');
-          }
-
-          const game = await response.json();
-          const gameCard = `
-            <div class="product-card">
-              <a href="gameDetail.html?gameId=${gameId}" class="game-title-link">
-                <img src="${game.data.gameImageUrl || 'https://via.placeholder.com/150'}" alt="${game.data.gameName || '게임 이미지'}" />
-                <p class="product-title">${game.data.gameName || '제목 없음'}</p>
-              </a>
-              <p class="sale-price" style="color: #4865dc">₩ ${game.data.discountPrice}</p>
-              <div class="rating">
-                <i class="material-icons">star</i><span>${game.data.rating || 0}</span>
-              </div>
-            </div>
-          `;
-          recentGamesGrid.innerHTML += gameCard;
-        } catch (error) {
-          console.error('최근 본 게임을 불러오는 중 오류 발생:', error);
+      const mostRecentGameId = recentGameIds[recentGameIds.length - 1]; // 가장 최근에 본 게임 ID
+      try {
+        const response = await fetch(`${serverUrl}/api/user/game/detail/${mostRecentGameId}`);
+        if (!response.ok) {
+          throw new Error('게임 정보를 불러오는 중 문제가 발생했습니다.');
         }
+
+        const game = await response.json();
+        const gameImageUrl = game.data.gameImageUrl || 'https://via.placeholder.com/150';
+
+        // 최근 본 게임 이미지를 아이콘에 표시
+        const recentGameImage = document.getElementById('recent-game-image');
+        recentGameImage.src = gameImageUrl;
+
+        // 아이콘을 클릭하면 최근 본 상품 페이지로 이동
+        document.getElementById('recent-game-icon').onclick = () => {
+          window.location.href = 'recentGames.html'; // 최근 본 게임 페이지로 이동
+        };
+
+        // 아이콘 표시
+        document.getElementById('recent-game-icon').style.display = 'block';
+      } catch (error) {
+        console.error('최근 본 게임을 불러오는 중 오류 발생:', error);
       }
     }
 
@@ -310,7 +325,7 @@
         .catch(error => console.error("헤더 로드 중 오류 발생:", error));
 
       fetchGamesByCategory(0); // 페이지 로드 시 전체 카테고리로 초기 게임 목록 가져오기
-      loadRecentGames(); // 최근 본 게임 목록 로드
+      showRecentGameIcon(); // 최근 본 게임 아이콘 표시
     });
   </script>
 </body>
