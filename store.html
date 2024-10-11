@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Material+Icons&display=swap" rel="stylesheet">
- </head>
+</head>
 <body>
   <!-- 헤더 자리 표시자 -->
   <div id="header-placeholder"></div>
@@ -60,8 +60,8 @@
   </div>
 
   <!-- 우측 하단에 최근 본 게임 아이콘 -->
-  <div id="recent-game-icon">
-    <img id="recent-game-image" src="" alt="최근 본 게임" />
+  <div id="recent-game-icon" style="position: fixed; bottom: 20px; right: 20px;">
+    <img id="recent-game-image" src="" alt="최근 본 게임" style="width: 50px; height: 50px;">
   </div>
 
   <footer>
@@ -235,12 +235,11 @@
       const recentGameIds = JSON.parse(localStorage.getItem('recentGames')) || [];
 
       if (recentGameIds.length === 0) {
-        // 최근 본 게임이 없으면 아이콘 숨기기
         document.getElementById('recent-game-icon').style.display = 'none';
         return;
       }
 
-      const mostRecentGameId = recentGameIds[recentGameIds.length - 1]; // 가장 최근에 본 게임 ID
+      const mostRecentGameId = recentGameIds[recentGameIds.length - 1];
       try {
         const response = await fetch(`${serverUrl}/api/user/game/detail/${mostRecentGameId}`);
         if (!response.ok) {
@@ -250,16 +249,13 @@
         const game = await response.json();
         const gameImageUrl = game.data.gameImageUrl || 'https://via.placeholder.com/150';
 
-        // 최근 본 게임 이미지를 아이콘에 표시
         const recentGameImage = document.getElementById('recent-game-image');
         recentGameImage.src = gameImageUrl;
 
-        // 아이콘을 클릭하면 최근 본 상품 페이지로 이동
         document.getElementById('recent-game-icon').onclick = () => {
-          window.location.href = 'recentGames.html'; // 최근 본 게임 페이지로 이동
+          window.location.href = 'recentGames.html';
         };
 
-        // 아이콘 표시
         document.getElementById('recent-game-icon').style.display = 'block';
       } catch (error) {
         console.error('최근 본 게임을 불러오는 중 오류 발생:', error);
