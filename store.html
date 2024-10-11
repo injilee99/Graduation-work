@@ -60,7 +60,7 @@
   </div>
 
   <!-- 우측 하단에 최근 본 게임 아이콘 -->
-  <div id="recent-game-icon" style="position: fixed; bottom: 20px; right: 20px; display: none; cursor: pointer;">
+  <div id="recent-game-icon" style="position: fixed; bottom: 20px; right: 20px;">
     <img id="recent-game-image" src="" alt="최근 본 게임" style="width: 50px; height: 50px; border-radius: 50%;">
   </div>
 
@@ -191,6 +191,7 @@
           const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
           const orderBy = document.getElementById('sortOrder').value;
           const searchKeyword = document.getElementById('searchKeyword').value;
+          updateGameListTitle(categoryId, orderBy);
           fetchGamesByCategory(categoryId, currentPage - 1, orderBy, searchKeyword);
           updatePagination(totalPages);
         });
@@ -207,6 +208,7 @@
           const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
           const orderBy = document.getElementById('sortOrder').value;
           const searchKeyword = document.getElementById('searchKeyword').value;
+          updateGameListTitle(categoryId, orderBy);
           fetchGamesByCategory(categoryId, currentPage - 1, orderBy, searchKeyword);
           updatePagination(totalPages);
         });
@@ -223,6 +225,7 @@
           const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
           const orderBy = document.getElementById('sortOrder').value;
           const searchKeyword = document.getElementById('searchKeyword').value;
+          updateGameListTitle(categoryId, orderBy);
           fetchGamesByCategory(categoryId, currentPage - 1, orderBy, searchKeyword);
           updatePagination(totalPages);
         });
@@ -281,7 +284,7 @@
         const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
         const orderBy = document.getElementById('sortOrder').value;
         const searchKeyword = document.getElementById('searchKeyword').value;
-        updateGameListTitle(orderBy);
+        updateGameListTitle(categoryId, orderBy);
         fetchGamesByCategory(categoryId, 0, orderBy, searchKeyword);
       });
     });
@@ -290,7 +293,7 @@
       const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
       const orderBy = document.getElementById('sortOrder').value;
       const searchKeyword = document.getElementById('searchKeyword').value;
-      updateGameListTitle(orderBy);
+      updateGameListTitle(categoryId, orderBy);
       fetchGamesByCategory(categoryId, 0, orderBy, searchKeyword);
     });
 
@@ -299,33 +302,79 @@
         const categoryId = document.querySelector('.genre-filter input[type="radio"]:checked').value;
         const orderBy = document.getElementById('sortOrder').value;
         const searchKeyword = document.getElementById('searchKeyword').value;
-        updateGameListTitle(orderBy);
+        updateGameListTitle(categoryId, orderBy);
         fetchGamesByCategory(categoryId, 0, orderBy, searchKeyword);
       }
     });
 
     // 게임 목록 제목 업데이트 함수
-    function updateGameListTitle(orderBy) {
+    function updateGameListTitle(categoryId, orderBy) {
       const gameListTitle = document.getElementById('game-list-title');
-      switch (orderBy) {
-        case 'orderByPopular':
-          gameListTitle.textContent = '추천 게임';
+      let genreText = '';
+
+      switch (categoryId) {
+        case '0':
+          genreText = '전체';
           break;
-        case 'orderByRecent':
-          gameListTitle.textContent = '최신 게임';
+        case '1':
+          genreText = '무료';
           break;
-        case 'orderBySales':
-          gameListTitle.textContent = '구매 많은 게임';
+        case '5':
+          genreText = 'MMO';
           break;
-        case 'orderByPriceAsc':
-          gameListTitle.textContent = '낮은 가격순 게임';
+        case '4':
+          genreText = 'RPG';
           break;
-        case 'orderByPriceDesc':
-          gameListTitle.textContent = '높은 가격순 게임';
+        case '6':
+          genreText = '레이싱';
+          break;
+        case '7':
+          genreText = '스포츠';
+          break;
+        case '9':
+          genreText = '시뮬레이션';
+          break;
+        case '2':
+          genreText = '액션';
+          break;
+        case '3':
+          genreText = '어드벤처';
+          break;
+        case '10':
+          genreText = '인디';
+          break;
+        case '8':
+          genreText = '전략';
+          break;
+        case '11':
+          genreText = '캐주얼';
           break;
         default:
-          gameListTitle.textContent = '추천 게임';
+          genreText = '전체';
       }
+
+      let orderText = '';
+      switch (orderBy) {
+        case 'orderByPopular':
+          orderText = '추천 게임';
+          break;
+        case 'orderByRecent':
+          orderText = '최신 게임';
+          break;
+        case 'orderBySales':
+          orderText = '구매 많은 게임';
+          break;
+        case 'orderByPriceAsc':
+          orderText = '낮은 가격순 게임';
+          break;
+        case 'orderByPriceDesc':
+          orderText = '높은 가격순 게임';
+          break;
+        default:
+          orderText = '추천 게임';
+      }
+
+      gameListTitle.textContent = `${genreText} - ${orderText}`;
     }
 
     // 페이지 로드 시 기본 카테고리(전체)로 게임 목록 가져오기
