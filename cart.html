@@ -106,7 +106,15 @@
           }
 
           const result = await response.json();
-          document.getElementById("available-reward-points").textContent = result.rewardPoints;
+          if (result.rewardPoints !== undefined && result.rewardPoints !== null) {
+            document.getElementById("available-reward-points").textContent = result.rewardPoints;
+          } else {
+            document.getElementById("available-reward-points").textContent = "0";
+          }
+        } catch (error) {
+          console.error('Error loading user rewards:', error);
+        }
+      }
         } catch (error) {
           console.error('Error loading user points:', error);
         }
