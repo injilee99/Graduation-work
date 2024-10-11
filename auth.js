@@ -51,6 +51,7 @@ function checkLoginStatus() {
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('nickname');
+    localStorage.removeItem('provider');
     console.log('로그아웃 완료');
     checkLoginStatus();
 }
@@ -59,6 +60,7 @@ function logout() {
 function getTokenFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('access');
+    const provider = urlParams.get('provider');
     if (token) {
         console.log('URL에서 토큰 추출:', token);
         localStorage.setItem('token', token);
@@ -67,6 +69,9 @@ function getTokenFromUrl() {
             console.log('디코딩된 토큰:', decodedToken);
             localStorage.setItem('nickname', decodedToken.nickname || '알 수 없는 사용자');
         }
+    }
+    if (provider) {
+        localStorage.setItem('provider', provider);
     }
 }
 
@@ -91,6 +96,9 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         })
         .catch(error => console.error("헤더 로드 중 오류 발생:", error));
+
+    // 사용자 정보를 채우기 위한 함수 호출
+    fetchUserInfo();
 });
 
 // 사용자 정보 가져오기
@@ -115,13 +123,33 @@ function fetchUserInfo() {
         })
         .then(data => {
             console.log('서버로부터 받은 사용자 정보:', data);
-            document.getElementById('user-email').innerText = data.email || '정보 없음';
-            document.getElementById('user-social').innerText = data.socialType || '정보 없음';
-            document.getElementById('user-birthdate').innerText = data.birthDate || '정보 없음';
-            document.getElementById('user-tel').innerText = data.tel || '정보 없음';
-            document.getElementById('user-gender').innerText = data.gender === 'M' ? '남자' : (data.gender === 'W' ? '여자' : '정보 없음');
+            document.getElementById('user-nickname').innerText = `${data.data.nickname} 님 안녕하세요!`;
+            document.getElementById('user-email').innerText = data.data.email || '정보 없음';
+
+            // 로컬스토리지의 provider 값을 사용하여 소셜 로그인 정보를 표시합니다.
+            const provider = localStorage.getItem('provider');
+            if (provider) {
+                document.getElementById('user-social').innerText = provider === 'kakao' ? '카카오 로그인' : provider === 'naver' ? '네이버 로그인' : provider;
+            } else {
+                document.getElementById('user-social').innerText = '정보 없음';
+            }
+
+            document.getElementById('user-birthdate').innerText = data.data.birthDate || '정보 없음';
+            document.getElementById('user-tel').innerText = data.data.tel || '정보 없음';
+            document.getElementById('user-gender').innerText = data.data.gender === 'M' ? '남자' : (data.data.gender === 'W' ? '여자' : '정보 없음');
+            document.getElementById('user-reward-points').innerText = `${data.data.rewardPoints} 원` || '정보 없음';
         })
         .catch(error => console.error('사용자 정보 가져오는 중 오류 발생:', error));
 }
 
-document.addEventListener("DOMContentLoaded", fetchUserInfo);
+// 프로필 이미지 업로드 처리 함수
+function uploadImage(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('profile-image').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+}
