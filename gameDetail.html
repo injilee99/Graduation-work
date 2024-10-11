@@ -45,10 +45,9 @@
 
     <script src="auth.js"></script>
     <script>
-      // Store the server URL
       const serverUrl = 'https://ludorium.store';
 
-      // Function to fetch game details by game ID
+      // 게임 상세 정보 불러오기
       async function fetchGameDetails(gameId) {
         try {
           const response = await fetch(`${serverUrl}/api/user/game/${gameId}`);
@@ -57,26 +56,19 @@
           }
           const result = await response.json();
 
-          // Log the result to understand the structure
-          console.log('API 응답:', result);
-
-          // Extract game details from the response
           if (result && result.data) {
             const game = result.data;
 
-            // Update game detail elements
             document.getElementById('gameName').innerText = game.gameName || '제목 없음';
             document.getElementById('categoryName').innerText = `카테고리: ${game.categoryName || '알 수 없음'}`;
             document.getElementById('gameDescription').innerHTML = game.gameDc || '게임 설명 없음';
 
-            // Set price information
             if (game.originalPrice !== game.discountPrice) {
               document.getElementById('gamePrice').innerHTML = `정상가: ₩ ${game.originalPrice}<br>판매가: ₩ ${game.discountPrice}`;
             } else {
               document.getElementById('gamePrice').innerText = game.discountPrice === 0 ? '무료' : `가격: ₩ ${game.discountPrice}`;
             }
 
-            // Set image and video
             if (game.gameImageList && game.gameImageList.length > 0) {
               document.getElementById('gameImage').src = game.gameImageList[0];
               if (game.gameImageList.length > 1) {
@@ -85,24 +77,21 @@
               }
             }
 
-            // Store game details for adding to cart
             window.currentGame = {
               gameId: gameId,
               gameName: game.gameName,
               gamePrice: game.discountPrice,
             };
 
-            // Add this game to recent games list
             addRecentGame(gameId, game.gameName, game.discountPrice, game.gameImageList[0] || '');
           } else {
             console.error('Error: 응답의 data 필드가 비어 있습니다.', result);
           }
         } catch (error) {
-          console.error('Error fetching game details:', error);
+          console.error('게임 데이터를 불러오는 중 오류 발생:', error);
         }
       }
 
-      // Function to add game to cart
       function addToCart() {
         if (!window.currentGame) {
           console.error('Error: 게임 정보가 없습니다.');
@@ -112,7 +101,6 @@
         const { gameId, gameName, gamePrice } = window.currentGame;
         let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 
-        // 중복 추가 방지
         if (!cartItems.find((item) => item.gameId === gameId)) {
           cartItems.push({
             gameId,
@@ -125,11 +113,9 @@
         alert('장바구니에 추가되었습니다.');
       }
 
-      // Function to add a game to the recent games list in localStorage
       function addRecentGame(gameId, gameName, gamePrice, gameImageUrl) {
         let recentGames = JSON.parse(localStorage.getItem('recentGames')) || [];
 
-        // 중복 추가 방지
         if (!recentGames.find((game) => game.gameId === gameId)) {
           recentGames.push({
             gameId,
@@ -138,7 +124,6 @@
             gameImageUrl
           });
 
-          // 최대 5개의 게임만 유지
           if (recentGames.length > 5) {
             recentGames.shift();
           }
@@ -148,11 +133,9 @@
         }
       }
 
-      // Get gameId from URL parameters
       const urlParams = new URLSearchParams(window.location.search);
       const gameId = urlParams.get('gameId');
 
-      // Fetch game details on page load
       document.addEventListener("DOMContentLoaded", function() {
         fetch("header.html")
           .then(response => response.text())
