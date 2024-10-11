@@ -29,13 +29,6 @@
         <div class="cart-summary">
           <h3>총 결제 금액:</h3>
           <span id="total-price"></span>₩
-          <div class="points-section">
-            <h4>현재 보유 적립금: <span id="available-reward-points"></span>₩</h4>
-            <label for="points-to-use">사용할 적립금: </label>
-            <input type="number" id="points-to-use" min="0" value="0" />₩
-          </div>
-          <h3>최종 결제 금액:</h3>
-          <span id="final-price"></span>₩
           <button id="btn-primary" onclick="goToCheckout()">결제하기</button>
           <button id="btn-delete" onclick="removeSelectedItems()">선택 삭제</button>
         </div>
@@ -59,7 +52,6 @@
           .then((data) => {
             document.getElementById("header-placeholder").innerHTML = data;
             checkLoginStatus();
-            loadUserRewards();
           })
           .catch((error) => console.error("헤더 로드 중 오류 발생:", error));
 
@@ -89,38 +81,10 @@
         }
       }
 
-      // 유저 적립금 불러오기
-      async function loadUserRewards() {
-        try {
-          const token = localStorage.getItem('token');
-          const response = await fetch(`${API_BASE_URL}/api/user/mypage`, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-          });
-
-          if (!response.ok) {
-            throw new Error('유저 정보를 불러오는 중 오류가 발생했습니다.');
-          }
-
-          const result = await response.json();
-          if (result.data && result.data.rewardPoints !== undefined && result.data.rewardPoints !== null) {
-            document.getElementById("available-reward-points").textContent = result.data.rewardPoints;
-          } else {
-            document.getElementById("available-reward-points").textContent = "0";
-          }
-        } catch (error) {
-          console.error('Error loading user rewards:', error);
-        }
-      }
-
       // 장바구니 항목 렌더링
       function renderCartItems(cart) {
         const cartItemsContainer = document.getElementById("cart-items");
         const totalPriceEl = document.getElementById("total-price");
-        const finalPriceEl = document.getElementById("final-price");
         const emptyCartIcon = document.getElementById("empty-cart-icon");
         let totalPrice = 0;
 
@@ -128,7 +92,6 @@
           emptyCartIcon.style.display = "block"; // 아이콘 표시
           cartItemsContainer.innerHTML = "<p>장바구니가 비어 있습니다.</p>";
           totalPriceEl.textContent = "0";
-          finalPriceEl.textContent = "0";
           return;
         }
 
@@ -163,23 +126,6 @@
           totalPrice += price;
         });
         document.getElementById("total-price").textContent = totalPrice;
-        updateFinalPrice();
-      }
-
-      // 사용 적립금을 반영한 최종 결제 금액 업데이트
-      function updateFinalPrice() {
-        const totalPrice = parseFloat(document.getElementById("total-price").textContent);
-        const pointsToUse = parseFloat(document.getElementById("points-to-use").value);
-        const availableRewardPoints = parseFloat(document.getElementById("available-reward-points").textContent);
-
-        if (pointsToUse > availableRewardPoints) {
-          alert('사용할 수 있는 적립금을 초과했습니다.');
-          document.getElementById("points-to-use").value = availableRewardPoints;
-          return;
-        }
-
-        const finalPrice = Math.max(totalPrice - pointsToUse, 0);
-        document.getElementById("final-price").textContent = finalPrice;
       }
 
       // 결제 페이지로 이동 및 선택된 항목 로컬스토리지에 저장
@@ -194,20 +140,14 @@
           };
         });
 
-        const pointsToUse = parseFloat(document.getElementById("points-to-use").value);
-
         if (selectedItems.length === 0) {
           alert('결제할 항목을 선택해주세요.');
           return;
         }
 
         localStorage.setItem('cart', JSON.stringify(selectedItems)); // 선택된 항목만 로컬스토리지에 저장
-        localStorage.setItem('pointsToUse', pointsToUse); // 사용 적립금 저장
         window.location.href = 'checkout.html'; // 결제 페이지로 이동
       }
-
-      // 적립금 입력 시 최종 결제 금액 업데이트
-      document.getElementById("points-to-use").addEventListener('input', updateFinalPrice);
 
       // 장바구니에서 선택된 항목 삭제
       async function removeSelectedItems() {
