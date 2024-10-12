@@ -29,14 +29,6 @@
         <div class="cart-summary">
           <h3>총 결제 금액:</h3>
           <span id="total-price"></span>₩
-          <div class="reward-points">
-            <h3>보유 적립금:</h3>
-            <span id="user-reward-points">0</span>₩
-            <div class="reward-input-container">
-              <label for="reward-points-usage">사용할 적립금:</label>
-              <input type="number" id="reward-points-usage" min="0" value="0" oninput="updateTotalPrice()" />₩
-            </div>
-          </div>
           <button id="btn-primary" onclick="goToCheckout()">결제하기</button>
           <button id="btn-delete" onclick="removeSelectedItems()">선택 삭제</button>
         </div>
@@ -64,31 +56,7 @@
           .catch((error) => console.error("헤더 로드 중 오류 발생:", error));
 
         loadCartItemsFromAPI();
-        loadUserRewardPoints();
       });
-
-      // 적립금 정보를 서버에서 불러옴
-      async function loadUserRewardPoints() {
-        try {
-          const token = localStorage.getItem('token');
-          const response = await fetch(`${API_BASE_URL}/api/user/mypage`, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-          });
-
-          if (!response.ok) {
-            throw new Error('적립금 데이터를 불러오는 중 오류가 발생했습니다.');
-          }
-
-          const result = await response.json();
-          document.getElementById("user-reward-points").textContent = result.data.rewardPoints;
-        } catch (error) {
-          console.error('Error loading reward points:', error);
-        }
-      }
 
       // 장바구니 목록을 서버에서 불러옴
       async function loadCartItemsFromAPI() {
@@ -157,14 +125,7 @@
           const price = parseFloat(checkbox.getAttribute('data-price'));
           totalPrice += price;
         });
-
-        const rewardPointsUsage = parseFloat(document.getElementById("reward-points-usage").value) || 0;
-        const availableRewardPoints = parseFloat(document.getElementById("user-reward-points").textContent) || 0;
-
-        // 사용한 적립금이 보유한 적립금보다 많으면 사용한 적립금을 보유한 적립금으로 제한
-        const actualRewardPointsUsage = Math.min(rewardPointsUsage, availableRewardPoints);
-
-        document.getElementById("total-price").textContent = Math.max(totalPrice - actualRewardPointsUsage, 0);
+        document.getElementById("total-price").textContent = totalPrice;
       }
 
       // 결제 페이지로 이동 및 선택된 항목 로컬스토리지에 저장
@@ -184,9 +145,7 @@
           return;
         }
 
-        const rewardPointsUsage = parseFloat(document.getElementById("reward-points-usage").value) || 0;
         localStorage.setItem('cart', JSON.stringify(selectedItems)); // 선택된 항목만 로컬스토리지에 저장
-        localStorage.setItem('rewardPointsUsage', rewardPointsUsage); // 사용한 적립금 저장
         window.location.href = 'checkout.html'; // 결제 페이지로 이동
       }
 
