@@ -42,7 +42,7 @@
 
                 <div class="reward-points">
                     <h3>사용할 적립금:</h3>
-                    <span id="reward-points-usage-display">0</span>원
+                    <input type="number" id="reward-points-usage" min="0" value="0" oninput="updateTotalPrice()" />원
                 </div>
 
                 <button type="button" class="checkout-btn" onclick="createOrderAndRequestPay()">결제하기</button>
@@ -71,7 +71,6 @@
 
             loadCheckoutItems();
             fetchUserInfo();
-            loadRewardPointsUsage();
         });
 
         // 장바구니 선택된 게임을 불러옴
@@ -101,9 +100,15 @@
                 totalPrice += item.price;
             });
 
-            const rewardPointsUsage = parseFloat(localStorage.getItem('rewardPointsUsage')) || 0;
-            document.getElementById('reward-points-usage-display').textContent = rewardPointsUsage;
-            totalPriceEl.textContent = Math.max(totalPrice - rewardPointsUsage, 0);
+            updateTotalPrice();
+        }
+
+        // 총 결제 금액 업데이트
+        function updateTotalPrice() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let totalPrice = cart.reduce((acc, item) => acc + item.price, 0);
+            const rewardPointsUsage = parseFloat(document.getElementById('reward-points-usage').value) || 0;
+            document.getElementById('total-price').textContent = Math.max(totalPrice - rewardPointsUsage, 0);
         }
 
         // 사용자 정보를 서버에서 가져와서 입력
@@ -140,7 +145,7 @@
                 const cartItems = JSON.parse(localStorage.getItem('cart'));
                 const totalAmount = parseInt(document.getElementById('total-price').textContent);
                 const email = document.getElementById('email').value;
-                const rewardPointsUsage = parseFloat(localStorage.getItem('rewardPointsUsage')) || 0;
+                const rewardPointsUsage = parseFloat(document.getElementById('reward-points-usage').value) || 0;
 
                 const response = await fetch('https://ludorium.store/api/user/order/create', {
                     method: 'POST',
@@ -206,12 +211,6 @@
             } catch (error) {
                 console.error('주문 생성 실패:', error);
             }
-        }
-
-        // 사용된 적립금 로드
-        function loadRewardPointsUsage() {
-            const rewardPointsUsage = parseFloat(localStorage.getItem('rewardPointsUsage')) || 0;
-            document.getElementById('reward-points-usage-display').textContent = rewardPointsUsage;
         }
     </script>
 </body>
