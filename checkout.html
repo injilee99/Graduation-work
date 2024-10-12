@@ -42,7 +42,7 @@
 
                 <div class="reward-points">
                     <h3>보유 적립금: <span id="available-reward-points">0</span>원</h3>
-                    <label for="reward-points-usage">사용할 적립금 (총 결제 금액의 30%만 사용 가능합니다):</label>
+                    <label for="reward-points-usage">사용할 적립금 (최대 총 결제 금액의 30%):</label>
                     <input type="number" id="reward-points-usage" min="0" value="0" oninput="updateTotalPrice()" />원
                     <p id="reward-points-warning" style="color: red; display: none;">사용할 수 있는 적립금을 초과했습니다.</p>
                 </div>
@@ -250,7 +250,7 @@
                                 alert('결제가 성공적으로 완료되었습니다.');
                                 localStorage.removeItem('cart'); // 결제 완료 후 장바구니 비우기
                                 localStorage.removeItem('rewardPointsUsage'); // 결제 완료 후 사용한 적립금 비우기
-                                window.location.href = 'store.html'; // 결제 후 상점으로 이동
+                                window.location.href = 'order.html'; // 결제 후 주문내역 페이지로 이동
                             } else {
                                 alert('결제가 취소되었습니다.');
                             }
