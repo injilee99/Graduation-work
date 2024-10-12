@@ -163,6 +163,13 @@
                 const totalAmount = parseInt(document.getElementById('total-price').textContent);
                 const email = document.getElementById('email').value;
                 const rewardPointsUsage = parseFloat(document.getElementById('reward-points-usage').value) || 0;
+                const availableRewardPoints = parseFloat(document.getElementById('available-reward-points').textContent) || 0;
+
+                // 보유 적립금이 사용하려는 적립금보다 적을 경우 예외 처리
+                if (rewardPointsUsage > availableRewardPoints) {
+                    alert('사용하려는 적립금이 보유한 적립금을 초과합니다.');
+                    return;
+                }
 
                 const response = await fetch('https://ludorium.store/api/user/order/create', {
                     method: 'POST',
@@ -182,7 +189,11 @@
                 if (!response.ok) {
                     const errorData = await response.json();
                     console.error('주문 생성 실패:', errorData);
-                    alert('주문 생성에 실패했습니다. 입력 정보를 다시 확인해주세요.');
+                    if (errorData.code === 'ORDERING_REWARD_POINTS_FAIL') {
+                        alert('적립금을 확인해주세요. 사용 가능한 적립금을 초과하거나 잘못된 값입니다.');
+                    } else {
+                        alert('주문 생성에 실패했습니다. 입력 정보를 다시 확인해주세요.');
+                    }
                     return;
                 }
 
