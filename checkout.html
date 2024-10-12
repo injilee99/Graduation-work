@@ -119,9 +119,7 @@
                 document.getElementById('reward-points-usage').value = rewardPointsUsage;
             }
 
-            const actualRewardPointsUsage = Math.min(rewardPointsUsage, maxUsablePoints);
-            document.getElementById('total-price').textContent = totalPrice;
-            document.getElementById('total-price').textContent = Math.max(totalPrice - actualRewardPointsUsage, 0);
+            document.getElementById('total-price').textContent = Math.max(totalPrice - rewardPointsUsage, 0);
         }
 
         // 사용자 정보를 서버에서 가져와서 입력
@@ -169,6 +167,13 @@
                 // 보유 적립금이 사용하려는 적립금보다 적을 경우 예외 처리
                 if (rewardPointsUsage > availableRewardPoints) {
                     alert('사용하려는 적립금이 보유한 적립금을 초과합니다.');
+                    return;
+                }
+
+                // 최대 사용 가능한 적립금은 총 결제 금액의 30% 또는 보유 적립금 중 작은 값
+                const maxUsablePoints = Math.min(totalAmount * 0.3, availableRewardPoints);
+                if (rewardPointsUsage > maxUsablePoints) {
+                    alert('사용할 적립금은 총 결제 금액의 30%를 초과할 수 없습니다.');
                     return;
                 }
 
