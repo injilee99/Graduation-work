@@ -156,6 +156,10 @@
         async function createOrderAndRequestPay() {
             try {
                 const cartItems = JSON.parse(localStorage.getItem('cart'));
+                if (!cartItems || cartItems.length === 0) {
+                    alert('결제할 항목이 없습니다.');
+                    return;
+                }
                 const totalAmount = parseInt(document.getElementById('total-price').textContent);
                 const email = document.getElementById('email').value;
                 const rewardPointsUsage = parseFloat(document.getElementById('reward-points-usage').value) || 0;
@@ -174,6 +178,13 @@
                         email
                     })
                 });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('주문 생성 실패:', errorData);
+                    alert('주문 생성에 실패했습니다. 입력 정보를 다시 확인해주세요.');
+                    return;
+                }
 
                 const result = await response.json();
                 const newMerchantUid = result.data;  // 주문 번호
@@ -204,17 +215,17 @@
                                     }
                                 });
 
-                                const validateData = await validateResponse.json();
-
-                                if (validateData.status === 200) {
-                                    alert('결제가 성공적으로 완료되었습니다.');
-                                    localStorage.removeItem('cart'); // 결제 완료 후 장바구니 비우기
-                                    localStorage.removeItem('rewardPointsUsage'); // 결제 완료 후 사용한 적립금 비우기
-                                    window.location.href = 'store.html'; // 결제 후 상점으로 이동
-                                } else {
-                                    alert('결제 검증 실패. 주문이 취소되었습니다.');
-                                    // 서버가 주문을 삭제하므로, 클라이언트 측에서는 오류 메시지만 표시
+                                if (!validateResponse.ok) {
+                                    const validateError = await validateResponse.json();
+                                    console.error('결제 검증 실패:', validateError);
+                                    alert('결제 검증에 실패했습니다. 주문이 취소되었습니다.');
+                                    return;
                                 }
+
+                                alert('결제가 성공적으로 완료되었습니다.');
+                                localStorage.removeItem('cart'); // 결제 완료 후 장바구니 비우기
+                                localStorage.removeItem('rewardPointsUsage'); // 결제 완료 후 사용한 적립금 비우기
+                                window.location.href = 'store.html'; // 결제 후 상점으로 이동
                             } else {
                                 alert('결제가 취소되었습니다.');
                             }
@@ -223,6 +234,7 @@
                 }
             } catch (error) {
                 console.error('주문 생성 실패:', error);
+                alert('주문 생성에 실패했습니다. 네트워크 상태를 확인해주세요.');
             }
         }
     </script>
