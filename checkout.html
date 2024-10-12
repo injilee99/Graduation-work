@@ -41,7 +41,8 @@
                 </div>
 
                 <div class="reward-points">
-                    <h3>사용할 적립금:</h3>
+                    <h3>보유 적립금: <span id="available-reward-points">0</span>원</h3>
+                    <label for="reward-points-usage">사용할 적립금:</label>
                     <input type="number" id="reward-points-usage" min="0" value="0" oninput="updateTotalPrice()" />원
                 </div>
 
@@ -108,7 +109,14 @@
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             let totalPrice = cart.reduce((acc, item) => acc + item.price, 0);
             const rewardPointsUsage = parseFloat(document.getElementById('reward-points-usage').value) || 0;
-            document.getElementById('total-price').textContent = Math.max(totalPrice - rewardPointsUsage, 0);
+            const availableRewardPoints = parseFloat(document.getElementById('available-reward-points').textContent) || 0;
+
+            if (rewardPointsUsage > availableRewardPoints) {
+                document.getElementById('reward-points-usage').value = availableRewardPoints;
+            }
+
+            const actualRewardPointsUsage = Math.min(rewardPointsUsage, availableRewardPoints);
+            document.getElementById('total-price').textContent = Math.max(totalPrice - actualRewardPointsUsage, 0);
         }
 
         // 사용자 정보를 서버에서 가져와서 입력
@@ -135,6 +143,7 @@
                 const userData = data.data;
                 document.getElementById('name').value = userData.name;
                 document.getElementById('email').value = userData.email;
+                document.getElementById('available-reward-points').textContent = userData.rewardPoints;
             })
             .catch(error => console.error('사용자 정보 가져오는 중 오류 발생:', error));
         }
