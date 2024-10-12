@@ -52,6 +52,42 @@
     right: 0;
 }
 
+/* 적립금 영역 스타일 */
+.reward-points {
+    width: 100%;
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: normal;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.reward-points h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.reward-input-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.reward-input-container label {
+    margin-right: 10px;
+    font-size: 16px;
+}
+
+#reward-points-usage {
+    width: 100px;
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
 /* 결제하기 버튼 스타일 */
 #btn-primary {
     background-color: #889491;
