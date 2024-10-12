@@ -120,6 +120,7 @@
             }
 
             const actualRewardPointsUsage = Math.min(rewardPointsUsage, maxUsablePoints);
+            document.getElementById('total-price').textContent = totalPrice;
             document.getElementById('total-price').textContent = Math.max(totalPrice - actualRewardPointsUsage, 0);
         }
 
