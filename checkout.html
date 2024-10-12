@@ -164,7 +164,7 @@
                     alert('결제할 항목이 없습니다.');
                     return;
                 }
-                const totalAmount = parseInt(document.getElementById('total-price').textContent);
+                const originalAmount = cartItems.reduce((acc, item) => acc + item.price, 0);
                 const email = document.getElementById('email').value;
                 const rewardPointsUsage = parseFloat(document.getElementById('reward-points-usage').value) || 0;
                 const availableRewardPoints = parseFloat(document.getElementById('available-reward-points').textContent) || 0;
@@ -176,11 +176,13 @@
                 }
 
                 // 최대 사용 가능한 적립금은 총 결제 금액의 30% 또는 보유 적립금 중 작은 값
-                const maxUsablePoints = Math.min(totalAmount * 0.3, availableRewardPoints);
+                const maxUsablePoints = Math.min(originalAmount * 0.3, availableRewardPoints);
                 if (rewardPointsUsage > maxUsablePoints) {
                     alert('사용할 적립금은 총 결제 금액의 30%를 초과할 수 없습니다.');
                     return;
                 }
+
+                const totalAmount = originalAmount - rewardPointsUsage;
 
                 const response = await fetch('https://ludorium.store/api/user/order/create', {
                     method: 'POST',
@@ -191,8 +193,9 @@
                     body: JSON.stringify({
                         cartIdList: cartItems.map(item => item.id),
                         gamePriceList: cartItems.map(item => item.price),
+                        originalAmount,
                         totalAmount,
-                        rewardPointsUsage,
+                        rewardPoints: rewardPointsUsage,
                         email
                     })
                 });
