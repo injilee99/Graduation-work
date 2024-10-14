@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stardew Valley</title>
+    <link rel="stylesheet" href="gameDetail.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="game-container">
+      <h1 class="game-title">Stardew Valley</h1>
+      <p class="developer">ConcernedApe</p>
+
+      <div class="game-details">
+        <img
+          src="images/Stardew Valley2.jpg"
+          alt="Stardew Valley"
+          class="main-image"
+        />
+        <div class="price-info">
+          <img
+            src="images/Stardew Valley.jpg"
+            alt="Thumbnail"
+            class="thumbnail"
+          />
+          <p class="price">38000 ₩</p>
+          <button class="cart-btn">장바구니</button>
+        </div>
+      </div>
+
+      <p class="description">
+        You've inherited your grandfather's old farm plot in Stardew Valley.
+        Armed with hand-me-down tools and a few coins, you set out to begin your
+        new life. Can you learn to live off the land and turn these overgrown
+        fields into a thriving home?
+      </p>
+
+      <h2>시스템 요구사항</h2>
+      <div class="system-requirements">
+        <div class="tabs">
+          <button class="tab active" onclick="showRequirements('windows')">
+            Windows
+          </button>
+          <button class="tab" onclick="showRequirements('mac')">macOS</button>
+          <button class="tab" onclick="showRequirements('linux')">Linux</button>
+        </div>
+        <ul class="requirements" id="windows">
+          <li>운영 체제: Windows Vista or greater</li>
+          <li>프로세서: 2 Ghz</li>
+          <li>메모리: 2 GB RAM</li>
+          <li>그래픽: 256 mb video memory, shader model 3.0+</li>
+          <li>DirectX: 버전 10</li>
+          <li>저장공간: 500 MB 사용 가능 공간</li>
+        </ul>
+        <ul class="requirements" id="mac" style="display: none">
+          <li>운영 체제: macOS 10.10 or greater</li>
+          <li>프로세서: 2.5 Ghz Intel Core i3</li>
+          <li>메모리: 4 GB RAM</li>
+          <li>그래픽: OpenGL 2.0 compatible</li>
+          <li>저장공간: 500 MB 사용 가능 공간</li>
+        </ul>
+        <ul class="requirements" id="linux" style="display: none">
+          <li>운영 체제: Ubuntu 16.04 or greater</li>
+          <li>프로세서: 2 Ghz</li>
+          <li>메모리: 2 GB RAM</li>
+          <li>그래픽: OpenGL 2.0 compatible</li>
+          <li>저장공간: 500 MB 사용 가능 공간</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>리뷰</h2>
+    <div class="reviews">
+      <p class="average-rating">
+        평균 평점 <span class="rating">4.7</span>
+        <span class="review-count">(56)</span>
+      </p>
+
+      <div class="review-item">
+        <img src="image-placeholder.png" alt="User" class="review-image" />
+        <div class="review-content">
+          <p class="review-rating">⭐ 4.7</p>
+          <div class="review-text-container">
+            <p class="review-name">구름</p>
+            <p class="review-text">스타듀밸리는 정말 최고의 게임입니다!</p>
+          </div>
+        </div>
+        <div class="review-footer">
+          <p class="review-date">2024-10-10</p>
+          <div class="review-actions">
+            <button class="edit-btn">수정</button>
+            <button class="delete-btn">삭제</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-item">
+        <img src="image-placeholder.png" alt="User" class="review-image" />
+        <div class="review-content">
+          <p class="review-rating">⭐ 4.8</p>
+          <div class="review-text-container">
+            <p class="review-name">하늘</p>
+            <p class="review-text">스타듀 밸리 화이팅!</p>
+          </div>
+        </div>
+        <div class="review-footer">
+          <p class="review-date">2024-10-10</p>
+          <!-- <div class="review-actions">
+            <button class="edit-btn">수정</button>
+            <button class="delete-btn">삭제</button>
+          </div> -->
+        </div>
+      </div>
+    </div>
+
+    <script src="gameDetail.js"></script>
+  </body>
+</html>
