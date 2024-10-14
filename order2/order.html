@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Confirmation</title>
+    <link rel="stylesheet" href="order.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="order-container">
+      <div class="order-header">2024.10.10</div>
+      <div class="order-number">주문번호 12345678</div>
+
+      <div class="product-item">
+        <img src="image-placeholder.png" alt="Stardew Valley" />
+        <div class="product-info">
+          <p class="product-name">Stardew Valley</p>
+          <p class="product-price">38000 ₩</p>
+        </div>
+      </div>
+
+      <div class="product-item">
+        <img src="image-placeholder.png" alt="BattleGround" />
+        <div class="product-info">
+          <p class="product-name">BattleGround</p>
+          <p class="product-price">19000 ₩</p>
+        </div>
+      </div>
+
+      <div class="button-container" id="action-buttons">
+        <button class="confirm-btn" onclick="confirmPurchase()">
+          구매확정
+        </button>
+        <button class="cancel-btn">주문취소</button>
+      </div>
+    </div>
+
+    <script src="order.js"></script>
+  </body>
+</html>
