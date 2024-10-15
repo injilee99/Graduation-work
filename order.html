@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Game forge - 주문목록</title>
+    <title>Order Confirmation</title>
     <link rel="stylesheet" href="order.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -129,7 +129,7 @@
         const token = localStorage.getItem('token');
 
         try {
-          const response = await fetch(`https://ludorium.store/api/user/order/user-confirm/${orderId}`.replace(/undefined/g, '')), {
+          const response = await fetch(`https://ludorium.store/api/user/order/user-confirm/${orderId}`, {
             method: 'PATCH',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -157,7 +157,7 @@
         const token = localStorage.getItem('token');
 
         try {
-          const response = await fetch(`https://ludorium.store/api/user/order/user-cancel/${orderId}`.replace(/undefined/g, '')), {
+          const response = await fetch(`https://ludorium.store/api/user/order/user-cancel/${orderId}`, {
             method: 'PATCH',
             headers: {
               'Authorization': `Bearer ${token}`,
