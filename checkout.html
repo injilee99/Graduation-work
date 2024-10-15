@@ -6,7 +6,7 @@
     <title>게임 결제 - game forge</title>
     <link rel="stylesheet" href="checkout.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
       rel="stylesheet"
@@ -237,6 +237,7 @@
                         },
                         async (rsp) => {
                             if (rsp.success) {
+                                // 결제 검증 및 완료 처리
                                 const validateResponse = await fetch(`https://ludorium.store/api/user/payment/validate/${rsp.imp_uid}`, {
                                     method: 'POST',
                                     headers: {
@@ -257,7 +258,25 @@
                                 localStorage.removeItem('rewardPointsUsage'); // 결제 완료 후 사용한 적립금 비우기
                                 window.location.href = 'order.html'; // 결제 후 주문내역 페이지로 이동
                             } else {
-                                alert('결제가 취소되었습니다.');
+                                // 결제 실패 시 주문 취소 처리
+                                try {
+                                    const cancelResponse = await fetch(`https://ludorium.store/api/user/order/cancel/${newMerchantUid}`, {
+                                        method: 'DELETE',
+                                        headers: {
+                                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                        }
+                                    });
+
+                                    if (cancelResponse.ok) {
+                                        alert('결제가 취소되었습니다.');
+                                    } else {
+                                        console.error('주문 취소 실패:', await cancelResponse.json());
+                                        alert('주문 취소에 실패했습니다. 다시 시도해주세요.');
+                                    }
+                                } catch (error) {
+                                    console.error('주문 취소 오류:', error);
+                                    alert('주문 취소에 실패했습니다. 네트워크 상태를 확인해주세요.');
+                                }
                             }
                         }
                     );
