@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -60,10 +60,8 @@
           console.log('주문 목록 데이터:', data); // 서버에서 받은 주문 목록 데이터 콘솔에 출력
           const orderList = data.data;
 
-          // 'ORDER_COMPLETED' 상태인 주문만 필터링
-          const completedOrders = orderList.filter(order => order.status === 'ORDER_COMPLETED');
-
-          displayOrders(completedOrders); // 필터링된 데이터를 화면에 표시하는 함수 호출
+          // 모든 주문 상태 출력 (필터링을 제거하여 테스트)
+          displayOrders(orderList);
         } catch (error) {
           console.error('주문 목록 불러오기 실패:', error);
         }
@@ -96,6 +94,7 @@
           orderContainer.appendChild(dateHeader);
 
           ordersByDate[date].forEach(order => {
+            console.log('주문 데이터:', order); // 각 주문의 상태 확인
             // 주문 아이템을 생성합니다.
             const orderItem = document.createElement('div');
             orderItem.classList.add('order-item');
