@@ -49,7 +49,7 @@
                     <p id="reward-points-warning" style="color: red; display: none;">사용할 수 있는 적립금을 초과했습니다.</p>
                 </div>
 
-                <button type="button" class="checkout-btn" onclick="createOrderAndRequestPay()">결제하기</button>
+                <button type="button" class="checkout-btn" onclick="requestPaymentAndCreateOrder()">결제하기</button>
             </form>
         </section>
     </main>
@@ -161,8 +161,8 @@
             .catch(error => console.error('사용자 정보 가져오는 중 오류 발생:', error));
         }
 
-        // 주문 생성 및 결제 요청
-        async function createOrderAndRequestPay() {
+        // 결제 요청 및 주문 생성 로직
+        async function requestPaymentAndCreateOrder() {
             try {
                 const cartItems = JSON.parse(localStorage.getItem('cart'));
                 if (!cartItems || cartItems.length === 0) {
@@ -189,55 +189,25 @@
 
                 const totalAmount = originalAmount - rewardPointsUsage;
 
-                const response = await fetch('https://ludorium.store/api/user/order/create', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
-                    body: JSON.stringify({
-                        cartIdList: cartItems.map(item => item.id),
-                        gamePriceList: cartItems.map(item => item.price),
-                        originalAmount,
-                        totalAmount,
-                        rewardPoints: rewardPointsUsage,
-                        email
-                    })
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error('주문 생성 실패:', errorData);
-                    if (errorData.code === 'ORDERING_REWARD_POINTS_FAIL') {
-                        alert('적립금을 확인해주세요. 사용 가능한 적립금을 초과하거나 잘못된 값입니다.');
-                    } else {
-                        alert('주문 생성에 실패했습니다. 입력 정보를 다시 확인해주세요.');
-                    }
-                    return;
-                }
-
-                const result = await response.json();
-                const newMerchantUid = result.data;  // 주문 번호
-
                 // 결제 프로세스
-                if (newMerchantUid) {
-                    const { IMP } = window;
-                    IMP.init('imp25057626'); // Iamport 식별 코드
+                const { IMP } = window;
+                IMP.init('imp25057626'); // Iamport 식별 코드
 
-                    IMP.request_pay(
-                        {
-                            pg: 'html5_inicis',
-                            pay_method: 'card',
-                            merchant_uid: newMerchantUid,
-                            name: '게임 결제',
-                            amount: totalAmount,
-                            buyer_email: email,
-                            buyer_name: document.getElementById('name').value,
-                            buyer_tel: '01042424242', // 예시 전화번호
-                        },
-                        async (rsp) => {
-                            if (rsp.success) {
-                                // 결제 검증 및 완료 처리
+                IMP.request_pay(
+                    {
+                        pg: 'html5_inicis',
+                        pay_method: 'card',
+                        merchant_uid: `order_${new Date().getTime()}`, // 임시 주문 번호
+                        name: '게임 결제',
+                        amount: totalAmount,
+                        buyer_email: email,
+                        buyer_name: document.getElementById('name').value,
+                        buyer_tel: '01042424242', // 예시 전화번호
+                    },
+                    async (rsp) => {
+                        if (rsp.success) {
+                            // 결제 검증 및 주문 생성
+                            try {
                                 const validateResponse = await fetch(`https://ludorium.store/api/user/payment/validate/${rsp.imp_uid}`, {
                                     method: 'POST',
                                     headers: {
@@ -253,37 +223,49 @@
                                     return;
                                 }
 
+                                // 결제가 성공적으로 검증되었을 때만 주문을 생성
+                                const response = await fetch('https://ludorium.store/api/user/order/create', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                    },
+                                    body: JSON.stringify({
+                                        cartIdList: cartItems.map(item => item.id),
+                                        gamePriceList: cartItems.map(item => item.price),
+                                        originalAmount,
+                                        totalAmount,
+                                        rewardPoints: rewardPointsUsage,
+                                        email
+                                    })
+                                });
+
+                                if (!response.ok) {
+                                    const errorData = await response.json();
+                                    console.error('주문 생성 실패:', errorData);
+                                    alert('주문 생성에 실패했습니다. 입력 정보를 다시 확인해주세요.');
+                                    return;
+                                }
+
                                 alert('결제가 성공적으로 완료되었습니다.');
                                 localStorage.removeItem('cart'); // 결제 완료 후 장바구니 비우기
                                 localStorage.removeItem('rewardPointsUsage'); // 결제 완료 후 사용한 적립금 비우기
                                 window.location.href = 'order.html'; // 결제 후 주문내역 페이지로 이동
-                            } else {
-                                // 결제 실패 시 주문 취소 처리
-                                try {
-                                    const cancelResponse = await fetch(`https://ludorium.store/api/user/order/cancel/${orderId}`, {
-                                        method: 'DELETE',
-                                        headers: {
-                                            'Authorization': `Bearer ${localStorage.getItem('token')}`
-                                        }
-                                    });
 
-                                    if (cancelResponse.ok) {
-                                        alert('결제가 취소되었습니다.');
-                                    } else {
-                                        console.error('주문 취소 실패:', await cancelResponse.json());
-                                        alert('주문 취소에 실패했습니다. 다시 시도해주세요.');
-                                    }
-                                } catch (error) {
-                                    console.error('주문 취소 오류:', error);
-                                    alert('주문 취소에 실패했습니다. 네트워크 상태를 확인해주세요.');
-                                }
+                            } catch (error) {
+                                console.error('주문 생성 실패:', error);
+                                alert('주문 생성에 실패했습니다. 네트워크 상태를 확인해주세요.');
                             }
+
+                        } else {
+                            // 결제 실패 또는 취소 처리
+                            alert('결제가 취소되었습니다.');
                         }
-                    );
-                }
+                    }
+                );
             } catch (error) {
-                console.error('주문 생성 실패:', error);
-                alert('주문 생성에 실패했습니다. 네트워크 상태를 확인해주세요.');
+                console.error('결제 처리 오류:', error);
+                alert('결제 처리 중 오류가 발생했습니다. 네트워크 상태를 확인해주세요.');
             }
         }
     </script>
