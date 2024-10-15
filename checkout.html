@@ -197,7 +197,7 @@
                     {
                         pg: 'html5_inicis',
                         pay_method: 'card',
-                        merchant_uid: `order_${new Date().getTime()}`, // 임시 주문 번호
+                        // 임시 주문 번호
                         name: '게임 결제',
                         amount: totalAmount,
                         buyer_email: email,
@@ -205,6 +205,7 @@
                         buyer_tel: '01042424242', // 예시 전화번호
                     },
                     async (rsp) => {
+    console.log('imp_uid:', rsp.imp_uid);
                         if (rsp.success) {
                             // 결제 검증 및 주문 생성
                             try {
@@ -214,7 +215,7 @@
                                 // 타이밍 문제를 피하기 위해 잠시 대기 (3초)
                                 await new Promise(resolve => setTimeout(resolve, 3000));
 
-                                const validateResponse = await fetch(`https://ludorium.store/api/user/payment/validate/${rsp.merchant_uid}`, {
+                                const validateResponse = await fetch(`https://ludorium.store/api/user/payment/validate/${rsp.imp_uid}`, {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json',
