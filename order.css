@@ -15,7 +15,7 @@ body {
 }
 .order-number {
   text-align: left;
-  font-size: 1em;
+  font-size: 1.2em;
   margin-bottom: 20px;
   color: #666;
 }
@@ -63,7 +63,7 @@ body {
 .confirm-btn:hover {
   background-color: #778881;
 }
-.confirmcomplete-btn{
+.confirmcomplete-btn {
   width: 100%;
   background-color: #889491;
   border: none;
@@ -72,7 +72,6 @@ body {
   padding: 10px;
   font-size: 1em;
 }
-
 .cancel-btn {
   background-color: #889491;
 }
