@@ -202,33 +202,10 @@
 
                     if (rsp.success) {
                         // 결제가 성공한 경우
-                        try {
-                            console.log("검증할 imp_uid:", rsp.imp_uid);
-                            const validateResponse = await fetch(`https://ludorium.store/api/user/payment/validate/${rsp.imp_uid}`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                                }
-                            });
-
-                            if (!validateResponse.ok) {
-                                const validateError = await validateResponse.json();
-                                console.error('결제 검증 실패:', validateError);
-                                alert(`결제 검증에 실패했습니다. 주문이 취소되었습니다. 사유: ${validateError.message}`);
-                                await cancelOrder(merchantUid);
-                                return;
-                            }
-
-                            // 결제 검증이 성공했으므로, 서버에 주문 생성 요청
-                            await createOrder(originalAmount, totalAmount, rewardPointsUsage, email, cartItems, merchantUid);
-                            alert('결제가 성공적으로 완료되었습니다.');
-                            localStorage.removeItem('cart');
-                            window.location.href = 'order.html';
-                        } catch (error) {
-                            console.error('결제 검증 오류:', error);
-                            alert('결제 검증 중 오류가 발생했습니다.');
-                        }
+                        await createOrder(originalAmount, totalAmount, rewardPointsUsage, email, cartItems, merchantUid);
+                        alert('결제가 성공적으로 완료되었습니다.');
+                        localStorage.removeItem('cart');
+                        window.location.href = 'order.html';
                     } else if (rsp.error_msg) {
                         // 결제 실패의 경우
                         console.error('결제 실패:', rsp.error_msg);
