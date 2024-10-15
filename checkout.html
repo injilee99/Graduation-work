@@ -213,7 +213,7 @@
                                 console.log('결제 응답 객체:', rsp);
                                 
                                 // 타이밍 문제를 피하기 위해 잠시 대기 (3초)
-                                await new Promise(resolve => setTimeout(resolve, 3000));
+                                
 
                                 const validateResponse = await fetch(`https://ludorium.store/api/user/payment/validate/${rsp.imp_uid}`, {
                                     method: 'POST',
