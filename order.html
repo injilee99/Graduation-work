@@ -98,20 +98,22 @@
             orderItem.classList.add('order-item');
             orderItem.innerHTML = `
               <div class="order-header">주문번호 ${order.orderId}</div>
-              ${order.items.map(item => {
-                const name = item.gameName || '알 수 없는 게임';
-                const price = item.price ? `${item.price} ₩` : '가격 정보 없음';
-                const imageUrl = item.gameImage && item.gameImage !== 'undefined' ? item.gameImage : './images/default-image.png';
-                return `
-                  <div class="product-item">
-                    <img src="${imageUrl}" alt="${name}" />
-                    <div class="product-info">
-                      <p class="product-name">${name}</p>
-                      <p class="product-price">${price}</p>
+              <div class="products-container">
+                ${order.items.map(item => {
+                  const name = item.gameName || '알 수 없는 게임';
+                  const price = item.price ? `${item.price} ₩` : '가격 정보 없음';
+                  const imageUrl = item.gameImage && item.gameImage !== 'undefined' ? item.gameImage : './images/default-image.png';
+                  return `
+                    <div class="product-item">
+                      <img src="${imageUrl}" alt="${name}" />
+                      <div class="product-info">
+                        <p class="product-name">${name}</p>
+                        <p class="product-price">${price}</p>
+                      </div>
                     </div>
-                  </div>
-                `;
-              }).join('')}
+                  `;
+                }).join('')}
+              </div>
               <div class="button-container" id="action-buttons">
                 <button class="confirm-btn" onclick="confirmOrder(${order.orderId})">구매확정</button>
                 <button class="cancel-btn" onclick="cancelOrder(${order.orderId})">주문취소</button>
@@ -139,9 +141,11 @@
             throw new Error('구매 확정에 실패했습니다.');
           }
 
-          alert('구매가 확정되었습니다.');
+          alert('구매가 확정되었습니다. 리뷰를 작성하세요.');
           // 주문 목록을 다시 로드하거나 UI 업데이트
           loadOrderList();
+          // 리뷰 작성 페이지로 이동
+          location.href = `review.html?orderId=${orderId}`;
         } catch (error) {
           console.error('구매 확정 중 오류 발생:', error);
           alert('구매 확정 중 오류가 발생했습니다.');
