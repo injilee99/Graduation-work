@@ -267,6 +267,10 @@
 
                         } else {
                             // 결제 실패 또는 취소 처리
+                            if (rsp.error_msg) {
+                                console.error('결제 실패:', rsp.error_msg);
+                                alert(`결제가 실패하였습니다: ${rsp.error_msg}`);
+                            }
                             try {
                                 await fetch(`https://ludorium.store/api/user/order/cancel/${rsp.merchant_uid}`, {
                                     method: 'DELETE',
