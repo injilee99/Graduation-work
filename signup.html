@@ -226,6 +226,7 @@
 
       // 이메일 인증번호 검증
       function verifyCode() {
+        const email = document.getElementById("email").value.trim();
         const verificationCode = document.getElementById("verification-code").value.trim();
         const verificationStatus = document.getElementById("verification-status");
 
@@ -237,12 +238,15 @@
 
         verificationStatus.innerText = "인증번호 확인 중...";
 
-        fetch(`${API_BASE_URL}/user/auth/verify-code`, {
+        fetch(`${API_BASE_URL}/user/auth/check-authentication`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ code: verificationCode }),
+          body: JSON.stringify({
+            email: email,
+            authenticationCode: verificationCode
+          }),
         })
           .then((response) => {
             if (!response.ok) {
