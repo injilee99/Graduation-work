@@ -198,7 +198,8 @@
 
         verificationStatus.innerText = "인증 번호 전송 중...";
 
-        fetch(`${API_BASE_URL}/user/auth/send-verification`, {
+        // 올바른 API 경로로 수정
+        fetch(`${API_BASE_URL}/user/auth/email-authentication`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
