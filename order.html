@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Game forge - 주문목록</title>
+    <title>Order Confirmation</title>
     <link rel="stylesheet" href="order.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -95,15 +95,18 @@
             orderItem.classList.add('product-item');
             orderItem.innerHTML = `
               <div class="order-header">주문번호 ${order.orderId}</div>
-              ${order.items.map(item => `
-                <div class="product-item">
-                  <img src="${item.image || 'image-placeholder.png'}" alt="${item.name}" />
-                  <div class="product-info">
-                    <p class="product-name">${item.name}</p>
-                    <p class="product-price">${item.price} ₩</p>
+              ${order.items.map(item => {
+                const imageUrl = item.image && item.image !== 'undefined' ? item.image : 'default-image.png';
+                return `
+                  <div class="product-item">
+                    <img src="${imageUrl}" alt="${item.name}" />
+                    <div class="product-info">
+                      <p class="product-name">${item.name}</p>
+                      <p class="product-price">${item.price} ₩</p>
+                    </div>
                   </div>
-                </div>
-              `).join('')}
+                `;
+              }).join('')}
               <div class="button-container" id="action-buttons">
                 <button class="confirm-btn" onclick="confirmOrder(${order.orderId})">구매확정</button>
                 <button class="cancel-btn" onclick="cancelOrder(${order.orderId})">주문취소</button>
