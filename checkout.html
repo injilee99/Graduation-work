@@ -260,7 +260,7 @@
                             } else {
                                 // 결제 실패 시 주문 취소 처리
                                 try {
-                                    const cancelResponse = await fetch(`https://ludorium.store/api/user/order/cancel/${newMerchantUid}`, {
+                                    const cancelResponse = await fetch(`https://ludorium.store/api/user/order/cancel/${orderId}`, {
                                         method: 'DELETE',
                                         headers: {
                                             'Authorization': `Bearer ${localStorage.getItem('token')}`
