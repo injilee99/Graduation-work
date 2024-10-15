@@ -2,16 +2,16 @@ body {
   font-family: 'Noto Sans KR', sans-serif;
   color: #333;
   padding: 20px;
-  max-width: 1200px; /* 더 넓은 화면에 맞게 확장 */
+  max-width: 1200px;
   margin: auto;
-  background-color: #f9f9f9; /* 배경색 추가 */
+  background-color: #f9f9f9;
 }
 
 .container {
-  background-color: white; /* 배경 색상 흰색으로 */
+  background-color: white;
   padding: 20px;
   border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .game-header h1 {
