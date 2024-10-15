@@ -245,7 +245,8 @@
                                     return;
                                 }
 
-                                // 결제 검증이 성공했으므로, 주문 상태는 자동으로 업데이트됨
+                                // 결제 검증이 성공했으므로, 결제 완료 상태를 저장
+                                localStorage.setItem('paymentCompleted', 'true');
                                 alert('결제가 성공적으로 완료되었습니다.');
                                 localStorage.removeItem('cart');
                                 window.location.href = 'order.html';
@@ -261,10 +262,11 @@
             }
         }
 
-        // 결제 창 닫기 이벤트 발생 시 취소 API 호출
         window.onbeforeunload = function() {
             const newMerchantUid = localStorage.getItem('newMerchantUid');
-            if (newMerchantUid) {
+            const paymentCompleted = localStorage.getItem('paymentCompleted');
+
+            if (newMerchantUid && paymentCompleted !== 'true') {
                 fetch(`https://ludorium.store/api/user/order/cancel/${newMerchantUid}`, {
                     method: 'DELETE',
                     headers: {
