@@ -60,7 +60,10 @@
           console.log('주문 목록 데이터:', data); // 서버에서 받은 주문 목록 데이터 콘솔에 출력
           const orderList = data.data;
 
-          displayOrders(orderList); // 받은 데이터를 화면에 표시하는 함수 호출
+          // 'ORDER_COMPLETED' 상태인 주문만 필터링
+          const completedOrders = orderList.filter(order => order.status === 'ORDER_COMPLETED');
+
+          displayOrders(completedOrders); // 필터링된 데이터를 화면에 표시하는 함수 호출
         } catch (error) {
           console.error('주문 목록 불러오기 실패:', error);
         }
