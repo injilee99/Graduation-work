@@ -209,8 +209,8 @@
                             // 결제 검증 및 주문 생성
                             try {
                                 console.log('결제 성공, imp_uid:', rsp.imp_uid);
-                                // 타이밍 문제를 피하기 위해 잠시 대기
-                                await new Promise(resolve => setTimeout(resolve, 1000));
+                                // 타이밍 문제를 피하기 위해 잠시 대기 (3초)
+                                await new Promise(resolve => setTimeout(resolve, 3000));
 
                                 const validateResponse = await fetch(`https://ludorium.store/api/user/payment/validate/${rsp.imp_uid}`, {
                                     method: 'POST',
@@ -222,7 +222,7 @@
 
                                 if (!validateResponse.ok) {
                                     const validateError = await validateResponse.json();
-                                    console.error('결제 검증 실패:', validateError);
+                                    console.error('결제 검증 실패:', validateError, 'imp_uid:', rsp.imp_uid);
                                     alert(`결제 검증에 실패했습니다: ${validateError.message || '알 수 없는 오류입니다.'}`);
                                     return;
                                 }
