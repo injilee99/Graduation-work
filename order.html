@@ -95,7 +95,7 @@
           ordersByDate[date].forEach(order => {
             // 주문 아이템을 생성합니다.
             const orderItem = document.createElement('div');
-            orderItem.classList.add('product-item');
+            orderItem.classList.add('order-item');
             orderItem.innerHTML = `
               <div class="order-header">주문번호 ${order.orderId}</div>
               ${order.items.map(item => {
