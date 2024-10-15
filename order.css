@@ -13,7 +13,9 @@ body {
   font-size: 1.5em;
   margin-bottom: 10px;
 }
-$10.9em$2
+.order-number {
+  text-align: left;
+  font-size: 1.2em;
   margin-bottom: 20px;
   color: #666;
 }
