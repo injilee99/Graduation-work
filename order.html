@@ -97,7 +97,7 @@
             const orderItem = document.createElement('div');
             orderItem.classList.add('order-item');
             orderItem.innerHTML = `
-              <div class="order-header">주문번호 ${order.orderId}</div>
+              <div class="order-header">주문번호 <span class="order-id">${order.orderId}</span></div>
               <div class="products-container">
                 ${order.items.map(item => {
                   const name = item.gameName || '알 수 없는 게임';
@@ -115,8 +115,8 @@
                 }).join('')}
               </div>
               <div class="button-container" id="action-buttons">
-                <button class="confirm-btn" onclick="confirmOrder(${order.orderId})">구매확정</button>
-                <button class="cancel-btn" onclick="cancelOrder(${order.orderId})">주문취소</button>
+                <button class="confirm-btn" onclick="confirmOrder('${order.orderId}')">구매확정</button>
+                <button class="cancel-btn" onclick="cancelOrder('${order.orderId}')">주문취소</button>
               </div>
             `;
             orderContainer.appendChild(orderItem);
