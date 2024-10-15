@@ -1,0 +1,95 @@
+body {
+  font-family: "Noto Sans KR";
+  color: #333;
+  text-align: center;
+}
+.order-container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+}
+.order-header {
+  text-align: left;
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+.order-number {
+  text-align: left;
+  font-size: 1em;
+  margin-bottom: 20px;
+  color: #666;
+}
+.product-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.product-item img {
+  width: 60px;
+  height: 60px;
+  border-radius: 4px;
+  background-color: #ddd;
+}
+.product-info {
+  flex-grow: 1;
+  margin-left: 15px;
+  text-align: left;
+}
+.product-name {
+  font-size: 1.1em;
+  margin: 0;
+}
+.product-price {
+  color: #333;
+  margin: 5px 0;
+}
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+.confirm-btn, .cancel-btn {
+  width: 48%;
+  padding: 10px;
+  border: none;
+  border-radius: 15px;
+  color: #fff;
+  font-size: 1em;
+  cursor: pointer;
+}
+.confirm-btn {
+  background-color: #889491;
+}
+.confirm-btn:hover {
+  background-color: #778881;
+}
+.confirmcomplete-btn{
+  width: 100%;
+  background-color: #889491;
+  border: none;
+  border-radius: 15px;
+  color: #fff;
+  padding: 10px;
+  font-size: 1em;
+}
+
+.cancel-btn {
+  background-color: #889491;
+}
+.cancel-btn:hover {
+  background-color: #778881;
+}
+.review-btn {
+  width: 24%;
+  padding: 10px;
+  background-color: #889491;
+  border: none;
+  border-radius: 15px;
+  color: #fff;
+  font-size: 1em;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.review-btn:hover {
+  background-color: #778881;
+}
