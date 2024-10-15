@@ -126,6 +126,7 @@
 
       // 구매 확정
       async function confirmOrder(orderId) {
+        console.log('Confirming order with orderId:', orderId);
         const token = localStorage.getItem('token');
 
         try {
@@ -138,7 +139,7 @@
           });
 
           if (!response.ok) {
-            throw new Error('구매 확정에 실패했습니다.');
+            throw new Error(`구매 확정에 실패했습니다. orderId: ${orderId}`);
           }
 
           alert('구매가 확정되었습니다. 리뷰를 작성하세요.');
@@ -154,6 +155,7 @@
 
       // 주문 취소
       async function cancelOrder(orderId) {
+        console.log('Cancelling order with orderId:', orderId);
         const token = localStorage.getItem('token');
 
         try {
@@ -166,7 +168,7 @@
           });
 
           if (!response.ok) {
-            throw new Error('주문 취소에 실패했습니다.');
+            throw new Error(`주문 취소에 실패했습니다. orderId: ${orderId}`);
           }
 
           alert('주문이 취소되었습니다.');
