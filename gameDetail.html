@@ -72,8 +72,12 @@
             if (game.gameImageList && game.gameImageList.length > 0) {
               document.getElementById('gameImage').src = game.gameImageList[0];
               if (game.gameImageList.length > 1) {
-                document.getElementById('gameVideo').style.display = 'block';
-                document.getElementById('videoSource').src = game.gameImageList[1];
+                const videoElement = document.getElementById('gameVideo');
+                const videoSourceElement = document.getElementById('videoSource');
+
+                videoElement.style.display = 'block';
+                videoSourceElement.src = game.gameImageList[1];
+                videoElement.load(); // 비디오 요소에 새 소스를 로드하여 적용
               }
             }
 
