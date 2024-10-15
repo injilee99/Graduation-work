@@ -228,53 +228,61 @@
                 },
                 async (rsp) => {
                     if (rsp.success) {
-                        // 결제 검증 로직
-                        const validateResponse = await fetch(`https://ludorium.store/api/user/payment/validate/${rsp.imp_uid}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${localStorage.getItem('token')}`
-                            }
-                        });
+                        console.log('결제 응답:', rsp); // 결제 응답 확인
 
-                        if (!validateResponse.ok) {
-                            const validateError = await validateResponse.json();
-                            console.error('결제 검증 실패:', validateError);
-                            alert('결제 검증에 실패했습니다. 주문이 취소되었습니다.');
-                            return;
-                        }
-
-                        // 결제 검증이 성공했으므로, 서버에 주문 생성 요청
+                        // 결제 검증 API 호출
+                        const validateUrl = `https://ludorium.store/api/user/payment/validate/${rsp.imp_uid}`;
                         try {
-                            const response = await fetch('https://ludorium.store/api/user/order/create', {
+                            const validateResponse = await fetch(validateUrl, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
                                     'Authorization': `Bearer ${localStorage.getItem('token')}`
-                                },
-                                body: JSON.stringify({
-                                    cartIdList: cartItems.map(item => item.id),
-                                    gamePriceList: cartItems.map(item => item.price),
-                                    originalAmount,
-                                    totalAmount,
-                                    rewardPoints: rewardPointsUsage,
-                                    email
-                                })
+                                }
                             });
 
-                            if (!response.ok) {
-                                const errorData = await response.json();
-                                console.error('주문 생성 실패:', errorData);
-                                alert('주문 생성에 실패했습니다. 입력 정보를 다시 확인해주세요.');
+                            if (!validateResponse.ok) {
+                                const validateError = await validateResponse.json();
+                                console.error('결제 검증 실패:', validateError);
+                                alert('결제 검증에 실패했습니다. 주문이 취소되었습니다.');
                                 return;
                             }
 
-                            alert('결제가 성공적으로 완료되었습니다.');
-                            localStorage.removeItem('cart');
-                            window.location.href = 'order.html';
+                            // 결제 검증이 성공했으므로, 서버에 주문 생성 요청
+                            try {
+                                const response = await fetch('https://ludorium.store/api/user/order/create', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                                    },
+                                    body: JSON.stringify({
+                                        cartIdList: cartItems.map(item => item.id),
+                                        gamePriceList: cartItems.map(item => item.price),
+                                        originalAmount,
+                                        totalAmount,
+                                        rewardPoints: rewardPointsUsage,
+                                        email
+                                    })
+                                });
+
+                                if (!response.ok) {
+                                    const errorData = await response.json();
+                                    console.error('주문 생성 실패:', errorData);
+                                    alert('주문 생성에 실패했습니다. 입력 정보를 다시 확인해주세요.');
+                                    return;
+                                }
+
+                                alert('결제가 성공적으로 완료되었습니다.');
+                                localStorage.removeItem('cart');
+                                window.location.href = 'order.html';
+                            } catch (error) {
+                                console.error('주문 생성 실패:', error);
+                                alert('주문 생성에 실패했습니다. 네트워크 상태를 확인해주세요.');
+                            }
                         } catch (error) {
-                            console.error('주문 생성 실패:', error);
-                            alert('주문 생성에 실패했습니다. 네트워크 상태를 확인해주세요.');
+                            console.error('결제 검증 API 호출 중 오류 발생:', error);
+                            alert('결제 검증 중 오류가 발생했습니다.');
                         }
                     } else {
                         alert('결제가 취소되었습니다.');
