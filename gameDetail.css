@@ -4,7 +4,7 @@ body {
   padding: 20px;
   max-width: 1200px;
   margin: auto;
-  background-color: #f9f9f9;
+  background-color: #f9f9f9; /* 배경 색 추가 */
 }
 
 .container {
@@ -30,47 +30,161 @@ body {
   display: flex;
   gap: 20px;
   margin-top: 20px;
+  align-items: flex-start;
 }
 
 .game-left img {
   width: 100%;
-  max-width: 400px;
+  max-width: 700px;
   border-radius: 10px;
   object-fit: cover;
   background-color: #ddd;
 }
 
-.game-left video {
-  width: 100%;
-  border-radius: 10px;
+.game-left .thumbnail {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
   margin-top: 10px;
 }
 
 .game-right {
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-.game-right p {
-  font-size: 1.2em;
-  line-height: 1.5;
+.game-right .game-price {
+  font-size: 2em;
+  margin: 20px 0;
+  font-weight: bold;
+  color: #333;
 }
 
 .game-right .cart-btn {
-  background-color: #4caf50;
+  background-color: #889491;
   color: white;
-  padding: 12px 20px;
+  padding: 10px 20px;
   border: none;
   border-radius: 15px;
   font-size: 1.2em;
   cursor: pointer;
-  margin-top: 20px;
 }
 
 .game-right .cart-btn:hover {
-  background-color: #45a049;
+  background-color: #778881;
+}
+
+.system-requirements {
+  margin-top: 40px;
+}
+
+.system-requirements h3 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.requirements-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.requirements-tab {
+  background-color: #f0f0f0;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.requirements-tab.active {
+  background-color: #ddd;
+  font-weight: bold;
+}
+
+.requirements-content {
+  font-size: 1.1em;
+  line-height: 1.5;
+}
+
+.reviews {
+  margin-top: 40px;
+}
+
+.reviews h3 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.review-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.review-item .user-image {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background-color: #ddd;
+  margin-right: 15px;
+}
+
+.review-content {
+  flex-grow: 1;
+}
+
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.review-name {
+  font-weight: bold;
+  color: #333;
+}
+
+.review-rating {
+  color: #f0c419;
+  font-size: 1.2em;
+}
+
+.review-text {
+  margin-top: 10px;
+  color: #666;
+}
+
+.review-footer {
+  text-align: right;
+  font-size: 0.9em;
+  color: #666;
+}
+
+.review-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.review-actions button {
+  background-color: #889491;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.review-actions button:hover {
+  background-color: #778881;
 }
 
 footer {
@@ -90,9 +204,11 @@ footer .footer-content {
     flex-direction: column;
   }
 
-  .game-left img,
-  .game-left video {
-    max-width: 100%;
-    margin-bottom: 20px;
+  .game-left img {
+    width: 100%;
+  }
+
+  .game-right {
+    margin-top: 20px;
   }
 }
