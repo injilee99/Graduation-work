@@ -2,7 +2,7 @@ body {
   font-family: 'Noto Sans KR', sans-serif;
   color: #333;
   padding: 20px;
-  max-width: 1200px;
+  max-width: 1200px; 
   margin: auto;
   background-color: #f9f9f9;
 }
@@ -12,6 +12,7 @@ body {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px; 
 }
 
 .game-header h1 {
@@ -28,24 +29,19 @@ body {
 
 .game-content {
   display: flex;
+  flex-direction: column;
   gap: 20px;
   margin-top: 20px;
-  align-items: flex-start;
 }
 
-.game-left img {
+.game-left img, .game-left video {
   width: 100%;
-  max-width: 700px;
   border-radius: 10px;
-  object-fit: cover;
-  background-color: #ddd;
 }
 
-.game-left .thumbnail {
-  width: 120px;
-  height: 120px;
-  border-radius: 8px;
-  margin-top: 10px;
+.game-left video {
+  margin-top: 20px;
+  display: block; 
 }
 
 .game-right {
@@ -71,6 +67,7 @@ body {
   border-radius: 15px;
   font-size: 1.2em;
   cursor: pointer;
+  margin-top: 10px; 
 }
 
 .game-right .cart-btn:hover {
@@ -204,8 +201,10 @@ footer .footer-content {
     flex-direction: column;
   }
 
-  .game-left img {
-    width: 100%;
+  .game-left img,
+  .game-left video {
+    max-width: 100%;
+    margin-bottom: 20px;
   }
 
   .game-right {
