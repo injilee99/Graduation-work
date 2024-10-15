@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>game forge - 주문목록</title>
+    <title>Game forge - 주문목록</title>
     <link rel="stylesheet" href="order.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -73,28 +73,44 @@
           return;
         }
 
-        orderList.forEach(order => {
-          // 주문 아이템을 생성합니다.
-          const orderItem = document.createElement('div');
-          orderItem.classList.add('product-item');
-          orderItem.innerHTML = `
-            <div class="order-header">${order.orderDate}</div>
-            <div class="order-number">주문번호 ${order.orderId}</div>
-            ${order.items.map(item => `
-              <div class="product-item">
-                <img src="${item.image || 'image-placeholder.png'}" alt="${item.name}" />
-                <div class="product-info">
-                  <p class="product-name">${item.name}</p>
-                  <p class="product-price">${item.price} ₩</p>
+        // 주문 내역을 날짜별로 그룹화
+        const ordersByDate = orderList.reduce((acc, order) => {
+          const date = new Date(order.orderDate).toLocaleDateString();
+          if (!acc[date]) {
+            acc[date] = [];
+          }
+          acc[date].push(order);
+          return acc;
+        }, {});
+
+        // 날짜별로 주문 내역을 표시
+        Object.keys(ordersByDate).forEach(date => {
+          const dateHeader = document.createElement('h2');
+          dateHeader.textContent = date;
+          orderContainer.appendChild(dateHeader);
+
+          ordersByDate[date].forEach(order => {
+            // 주문 아이템을 생성합니다.
+            const orderItem = document.createElement('div');
+            orderItem.classList.add('product-item');
+            orderItem.innerHTML = `
+              <div class="order-header">주문번호 ${order.orderId}</div>
+              ${order.items.map(item => `
+                <div class="product-item">
+                  <img src="${item.image || 'image-placeholder.png'}" alt="${item.name}" />
+                  <div class="product-info">
+                    <p class="product-name">${item.name}</p>
+                    <p class="product-price">${item.price} ₩</p>
+                  </div>
                 </div>
+              `).join('')}
+              <div class="button-container" id="action-buttons">
+                <button class="confirm-btn" onclick="confirmOrder(${order.orderId})">구매확정</button>
+                <button class="cancel-btn" onclick="cancelOrder(${order.orderId})">주문취소</button>
               </div>
-            `).join('')}
-            <div class="button-container" id="action-buttons">
-              <button class="confirm-btn" onclick="confirmOrder(${order.orderId})">구매확정</button>
-              <button class="cancel-btn" onclick="cancelOrder(${order.orderId})">주문취소</button>
-            </div>
-          `;
-          orderContainer.appendChild(orderItem);
+            `;
+            orderContainer.appendChild(orderItem);
+          });
         });
       }
 
