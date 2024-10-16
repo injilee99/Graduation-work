@@ -98,12 +98,12 @@
               </div>
             `).join('');
           } else {
-            reviewSection.innerHTML = `<div class="review-form" id="review-form-${orderDetailId}">
+            reviewSection.innerHTML = `<button class="review-btn" onclick="toggleReviewForm('${orderDetailId}')">리뷰 작성</button>
+              <div class="review-form" id="review-form-${orderDetailId}" style="display: none;">
                 <textarea id="review-text-${orderDetailId}" placeholder="리뷰를 작성하세요..."></textarea>
                 <input type="number" id="review-rating-${orderDetailId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" />
                 <button onclick="submitReview('${orderDetailId}')">리뷰 제출</button>
-              </div>
-              <button class="review-btn" onclick="toggleReviewForm('${orderDetailId}')">리뷰 작성</button>`;
+              </div>`;
           }
         } catch (error) {
           console.error('리뷰 불러오기 실패:', error);
@@ -195,9 +195,11 @@
             orderContainer.appendChild(orderItem);
 
             // 주문 아이템을 추가한 후 리뷰를 불러옵니다
-            order.items.forEach(item => {
-              loadReviews(item.gameId, item.orderDetailId);
-            });
+            if (order.orderStatus !== 'CANCEL_COMPLETED') {
+              order.items.forEach(item => {
+                loadReviews(item.gameId, item.orderDetailId);
+              });
+            }
           });
         });
       }
