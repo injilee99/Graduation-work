@@ -157,10 +157,10 @@
       async function submitReview(orderDetailId) {
         const token = localStorage.getItem('token');
         const reviewText = document.getElementById(`review-text-${orderDetailId}`).value;
-        const reviewRating = document.getElementById(`review-rating-${orderDetailId}`).value;
+        const reviewRating = parseInt(document.getElementById(`review-rating-${orderDetailId}`).value, 10); // 정수로 변환
 
-        if (!reviewText || !reviewRating) {
-          alert('리뷰 내용과 평점을 입력해주세요.');
+        if (!reviewText || isNaN(reviewRating) || reviewRating < 1 || reviewRating > 5) {
+          alert('리뷰 내용과 평점을 정확히 입력해주세요. 평점은 1에서 5 사이여야 합니다.');
           return;
         }
 
@@ -173,8 +173,8 @@
             },
             body: JSON.stringify({
               content: reviewText,
-              rating: parseInt(reviewRating),
-              orderDetailId: parseInt(orderDetailId)
+              rating: reviewRating,
+              orderDetailId: parseInt(orderDetailId, 10) // 정수로 변환
             })
           });
 
