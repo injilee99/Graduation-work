@@ -131,8 +131,8 @@
               buttonContainer.innerHTML = '<p>취소된 주문입니다.</p>';
             } else {
               buttonContainer.innerHTML = `
-                ${order.orderStatus !== 'ORDER_COMPLETED' ? `<button class="confirm-btn" onclick="confirmOrder('${order.orderId}')">구매확정</button>` : ''}
-                ${order.orderStatus !== 'ORDER_COMPLETED' ? `<button class="cancel-btn" onclick="cancelOrder('${order.orderId}')">주문취소</button>` : ''}
+                <button class="confirm-btn" onclick="confirmOrder('${order.orderId}')">구매확정</button>
+                <button class="cancel-btn" onclick="cancelOrder('${order.orderId}')">주문취소</button>
               `;
             }
 
@@ -209,7 +209,7 @@
 
           alert('구매가 확정되었습니다. 리뷰를 작성하세요.');
           // 주문 목록을 다시 로드하거나 UI 업데이트
-          await loadOrderList();
+          loadOrderList();
         } catch (error) {
           console.error('구매 확정 중 오류 발생:', error);
           alert('구매 확정 중 오류가 발생했습니다.');
@@ -236,7 +236,7 @@
 
           alert('주문이 취소되었습니다.');
           // 주문 목록을 다시 로드하거나 UI 업데이트
-          await loadOrderList();
+          loadOrderList();
         } catch (error) {
           console.error('주문 취소 중 오류 발생:', error);
           alert('주문 취소 중 오류가 발생했습니다.');
