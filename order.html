@@ -96,9 +96,6 @@
           ordersByDate[date].forEach(order => {
             console.log('주문 데이터:', order); // 각 주문의 상태 확인
 
-            // orderDetailId가 있는지 확인하기 위해 로그 추가
-            console.log('Order Detail ID:', order.orderDetailId);
-
             // 주문 아이템을 생성합니다.
             const orderItem = document.createElement('div');
             orderItem.classList.add('order-item');
@@ -109,6 +106,8 @@
                   const name = item.gameName || '알 수 없는 게임';
                   const price = item.price ? `${item.price} ₩` : '가격 정보 없음';
                   const imageUrl = item.gameImage && item.gameImage !== 'undefined' ? item.gameImage : './images/default-image.png';
+                  const orderDetailId = item.orderDetailId;
+                  console.log('Order Detail ID:', orderDetailId); // orderDetailId 확인
                   return `
                     <div class="product-item">
                       <img src="${imageUrl}" alt="${name}" />
@@ -116,14 +115,15 @@
                         <p class="product-name">${name}</p>
                         <p class="product-price">${price}</p>
                       </div>
+                      <div class="review-form" id="review-form-${orderDetailId}" style="display: none;">
+                        <textarea id="review-text-${orderDetailId}" placeholder="리뷰를 작성하세요..."></textarea>
+                        <input type="number" id="review-rating-${orderDetailId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" />
+                        <button onclick="submitReview('${orderDetailId}')">리뷰 제출</button>
+                      </div>
+                      ${order.orderStatus === 'PURCHASE_CONFIRMED' ? `<button class="review-btn" onclick="toggleReviewForm('${orderDetailId}')">리뷰 작성</button>` : ''}
                     </div>
                   `;
                 }).join('')}
-              </div>
-              <div class="review-form" id="review-form-${order.orderDetailId}" style="display: none;">
-                <textarea id="review-text-${order.orderDetailId}" placeholder="리뷰를 작성하세요..."></textarea>
-                <input type="number" id="review-rating-${order.orderDetailId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" />
-                <button onclick="submitReview('${order.orderDetailId}')">리뷰 제출</button>
               </div>
             `;
 
@@ -132,9 +132,7 @@
             buttonContainer.classList.add('button-container');
             if (order.orderStatus === 'CANCEL_COMPLETED') {
               buttonContainer.innerHTML = '<p>취소된 주문입니다.</p>';
-            } else if (order.orderStatus === 'PURCHASE_CONFIRMED') {
-              buttonContainer.innerHTML = `<button class="review-btn" onclick="toggleReviewForm('${order.orderDetailId}')">리뷰 작성</button>`;
-            } else {
+            } else if (order.orderStatus !== 'PURCHASE_CONFIRMED') {
               buttonContainer.innerHTML = `
                 <button class="confirm-btn" onclick="confirmOrder('${order.orderId}')">구매확정</button>
                 <button class="cancel-btn" onclick="cancelOrder('${order.orderId}')">주문취소</button>
