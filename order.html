@@ -88,8 +88,8 @@
           
           // 해당 리뷰를 화면에 표시합니다
           const reviewSection = document.getElementById(`review-section-${orderDetailId}`);
-          if (data.length > 0) {
-            reviewSection.innerHTML = data.map(review => `
+          if (data.responseDataList && data.responseDataList.length > 0) {
+            reviewSection.innerHTML = data.responseDataList.map(review => `
               <div class="existing-review">
                 <p>리뷰 내용: ${review.content}</p>
                 <p>평점: ${review.rating}</p>
