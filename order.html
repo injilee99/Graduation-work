@@ -111,7 +111,7 @@
                       <div class="product-info">
                         <p class="product-name">${name}</p>
                         <p class="product-price">${price}</p>
-                        ${order.orderStatus === 'ORDER_COMPLETED' && item.reviewStatus === 1 ? `<button class="review-btn" onclick="toggleReviewForm('${item.gameId}', '${order.orderId}')">리뷰 작성</button>` : ''}
+                        ${order.orderStatus === 'PURCHASE_CONFIRMED' && item.reviewStatus === 1 ? `<button class="review-btn" onclick="toggleReviewForm('${item.gameId}', '${order.orderId}')">리뷰 작성</button>` : ''}
                       </div>
                     </div>
                     <div class="review-form" id="review-form-${item.gameId}-${order.orderId}" style="display: none;">
@@ -129,6 +129,8 @@
             buttonContainer.classList.add('button-container');
             if (order.orderStatus === 'CANCEL_COMPLETED') {
               buttonContainer.innerHTML = '<p>취소된 주문입니다.</p>';
+            } else if (order.orderStatus === 'PURCHASE_CONFIRMED') {
+              buttonContainer.innerHTML = '';
             } else {
               buttonContainer.innerHTML = `
                 <button class="confirm-btn" onclick="confirmOrder('${order.orderId}')">구매확정</button>
