@@ -116,6 +116,11 @@
                   `;
                 }).join('')}
               </div>
+              <div class="review-form" id="review-form-${order.orderId}" style="display: none;">
+                <textarea id="review-text-${order.orderId}" placeholder="리뷰를 작성하세요..."></textarea>
+                <input type="number" id="review-rating-${order.orderId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" />
+                <button onclick="submitReview('${order.orderId}')">리뷰 제출</button>
+              </div>
             `;
 
             // 주문 상태에 따른 버튼 표시/숨김 처리
@@ -140,17 +145,19 @@
 
       // 리뷰 폼 표시/숨김 처리
       function toggleReviewForm(orderId) {
-        const reviewForm = document.getElementById(`review-form-${orderId}`);
-        if (reviewForm) {
-          reviewForm.style.display = (reviewForm.style.display === 'none') ? 'block' : 'none';
+        let reviewForm = document.getElementById(`review-form-${orderId}`);
+        if (!reviewForm) {
+          console.error('리뷰 폼을 찾을 수 없습니다:', orderId);
+          return;
         }
+        reviewForm.style.display = (reviewForm.style.display === 'none') ? 'block' : 'none';
       }
 
       // 리뷰 제출
-      async function submitReview(gameId, orderId) {
+      async function submitReview(orderId) {
         const token = localStorage.getItem('token');
-        const reviewText = document.getElementById(`review-text-${gameId}-${orderId}`).value;
-        const reviewRating = document.getElementById(`review-rating-${gameId}-${orderId}`).value;
+        const reviewText = document.getElementById(`review-text-${orderId}`).value;
+        const reviewRating = document.getElementById(`review-rating-${orderId}`).value;
 
         if (!reviewText || !reviewRating) {
           alert('리뷰 내용과 평점을 입력해주세요.');
@@ -176,7 +183,7 @@
           }
 
           alert('리뷰가 성공적으로 작성되었습니다.');
-          toggleReviewForm(gameId, orderId);
+          toggleReviewForm(orderId);
         } catch (error) {
           console.error('리뷰 작성 중 오류 발생:', error);
           alert('리뷰 작성 중 오류가 발생했습니다.');
