@@ -143,9 +143,6 @@
                   const price = item.price ? `${item.price} ₩` : '가격 정보 없음';
                   const imageUrl = item.gameImage && item.gameImage !== 'undefined' ? item.gameImage : './images/default-image.png';
                   const orderDetailId = item.orderDetailId;
-
-                  // 리뷰를 불러오도록 loadReviews 함수를 호출
-                  loadReviews(item.gameId, orderDetailId);
                   
                   return `
                     <div class="product-item">
@@ -177,6 +174,11 @@
 
             orderItem.appendChild(buttonContainer);
             orderContainer.appendChild(orderItem);
+
+            // 주문 아이템을 추가한 후 리뷰를 불러옵니다
+            order.items.forEach(item => {
+              loadReviews(item.gameId, item.orderDetailId);
+            });
           });
         });
       }
