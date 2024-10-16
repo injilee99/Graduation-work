@@ -123,14 +123,14 @@
                             <button onclick="editReview('${item.review.reviewId}', '${orderDetailId}')">리뷰 수정</button>
                             <button onclick="deleteReview('${item.review.reviewId}', '${orderDetailId}')">리뷰 삭제</button>
                           </div>
-                        ` : `
+                        ` : order.orderStatus === 'PURCHASE_CONFIRMED' ? `
                           <div class="review-form" id="review-form-${orderDetailId}">
                             <textarea id="review-text-${orderDetailId}" placeholder="리뷰를 작성하세요..."></textarea>
                             <input type="number" id="review-rating-${orderDetailId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" />
                             <button onclick="submitReview('${orderDetailId}')">리뷰 제출</button>
                           </div>
-                          ${order.orderStatus === 'PURCHASE_CONFIRMED' ? `<button class="review-btn" onclick="toggleReviewForm('${orderDetailId}')">리뷰 작성</button>` : ''}
-                        `}
+                          <button class="review-btn" onclick="toggleReviewForm('${orderDetailId}')">리뷰 작성</button>
+                        ` : ''}
                       </div>
                     </div>
                   `;
