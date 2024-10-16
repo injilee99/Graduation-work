@@ -95,6 +95,10 @@
 
           ordersByDate[date].forEach(order => {
             console.log('주문 데이터:', order); // 각 주문의 상태 확인
+
+            // orderDetailId가 있는지 확인하기 위해 로그 추가
+            console.log('Order Detail ID:', order.orderDetailId);
+
             // 주문 아이템을 생성합니다.
             const orderItem = document.createElement('div');
             orderItem.classList.add('order-item');
