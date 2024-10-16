@@ -111,13 +111,7 @@
                       <div class="product-info">
                         <p class="product-name">${name}</p>
                         <p class="product-price">${price}</p>
-                        ${order.orderStatus === 'PURCHASE_CONFIRMED' ? `<button class=\"review-btn\" onclick=\"toggleReviewForm('${item.gameId}', '${order.orderId}')\">리뷰 작성</button>` : ''}
                       </div>
-                    </div>
-                    <div class="review-form" id="review-form-${item.gameId}-${order.orderId}" style="display: none;">
-                      <textarea id="review-text-${item.gameId}-${order.orderId}" placeholder="리뷰를 작성하세요..."></textarea>
-                      <input type="number" id="review-rating-${item.gameId}-${order.orderId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" />
-                      <button onclick="submitReview('${item.gameId}', '${order.orderId}')">리뷰 제출</button>
                     </div>
                   `;
                 }).join('')}
@@ -130,7 +124,7 @@
             if (order.orderStatus === 'CANCEL_COMPLETED') {
               buttonContainer.innerHTML = '<p>취소된 주문입니다.</p>';
             } else if (order.orderStatus === 'PURCHASE_CONFIRMED') {
-              buttonContainer.innerHTML = `<button class=\"review-btn\" onclick=\"toggleReviewForm('${order.orderId}', '${order.orderId}')\">리뷰 작성</button>`;
+              buttonContainer.innerHTML = `<button class="review-btn" onclick="toggleReviewForm('${order.orderId}')">리뷰 작성</button>`;
             } else {
               buttonContainer.innerHTML = `
                 <button class="confirm-btn" onclick="confirmOrder('${order.orderId}')">구매확정</button>
@@ -145,12 +139,10 @@
       }
 
       // 리뷰 폼 표시/숨김 처리
-      function toggleReviewForm(gameId, orderId) {
-        const reviewForm = document.getElementById(`review-form-${gameId}-${orderId}`);
-        if (reviewForm.style.display === 'none') {
-          reviewForm.style.display = 'block';
-        } else {
-          reviewForm.style.display = 'none';
+      function toggleReviewForm(orderId) {
+        const reviewForm = document.getElementById(`review-form-${orderId}`);
+        if (reviewForm) {
+          reviewForm.style.display = (reviewForm.style.display === 'none') ? 'block' : 'none';
         }
       }
 
