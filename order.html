@@ -154,13 +154,14 @@
       }
 
       // 리뷰 제출
-      
-      console.log('Submitting review for orderDetailId:', orderDetailId);
+      async function submitReview(orderDetailId) {
+        console.log('Submitting review for orderDetailId:', orderDetailId);
         const token = localStorage.getItem('token');
+        const reviewText = document.getElementById(`review-text-${orderDetailId}`).value;
+        const reviewRating = Number(document.getElementById(`review-rating-${orderDetailId}`).value);
         
         console.log('Review Text:', reviewText);
-        
-        console.log('Review Rating:', reviewRating); // 정수로 변환
+        console.log('Review Rating:', reviewRating);
 
         if (!reviewText || isNaN(reviewRating) || reviewRating < 1 || reviewRating > 5) {
           alert('리뷰 내용과 평점을 정확히 입력해주세요. 평점은 1에서 5 사이여야 합니다.');
@@ -169,7 +170,6 @@
 
         try {
           const response = await fetch('https://ludorium.store/api/user/review', {
-              cache: 'no-cache',
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`,
@@ -178,7 +178,7 @@
             body: JSON.stringify({
               content: reviewText,
               rating: reviewRating,
-              orderDetailId: Number(orderDetailId) // 정수로 변환
+              orderDetailId: Number(orderDetailId)
             })
           });
 
