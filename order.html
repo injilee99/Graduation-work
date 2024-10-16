@@ -145,9 +145,9 @@
 
       // 리뷰 폼 표시/숨김 처리
       function toggleReviewForm(orderDetailId) {
-        let reviewForm = document.getElementById(`review-form-${orderId}`);
+        let reviewForm = document.getElementById(`review-form-${orderDetailId}`);
         if (!reviewForm) {
-          console.error('리뷰 폼을 찾을 수 없습니다:', orderId);
+          console.error('리뷰 폼을 찾을 수 없습니다:', orderDetailId);
           return;
         }
         reviewForm.style.display = (reviewForm.style.display === 'none') ? 'block' : 'none';
@@ -156,8 +156,8 @@
       // 리뷰 제출
       async function submitReview(orderDetailId) {
         const token = localStorage.getItem('token');
-        const reviewText = document.getElementById(`review-text-${orderId}`).value;
-        const reviewRating = document.getElementById(`review-rating-${orderId}`).value;
+        const reviewText = document.getElementById(`review-text-${orderDetailId}`).value;
+        const reviewRating = document.getElementById(`review-rating-${orderDetailId}`).value;
 
         if (!reviewText || !reviewRating) {
           alert('리뷰 내용과 평점을 입력해주세요.');
@@ -174,7 +174,7 @@
             body: JSON.stringify({
               content: reviewText,
               rating: parseInt(reviewRating),
-              orderDetailId: orderId
+              orderDetailId: orderDetailId
             })
           });
 
@@ -184,7 +184,7 @@
           }
 
           alert('리뷰가 성공적으로 작성되었습니다.');
-          toggleReviewForm(orderId);
+          toggleReviewForm(orderDetailId);
         } catch (error) {
           console.error('리뷰 작성 중 오류 발생:', error);
           alert(`리뷰 작성 중 오류가 발생했습니다: ${error.message}`);
