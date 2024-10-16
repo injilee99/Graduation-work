@@ -111,6 +111,254 @@
                       <div class="product-info">
                         <p class="product-name">${name}</p>
                         <p class="product-price">${price}</p>
+                        ${order.orderStatus === 'PURCHASE_CONFIRMED' ? `<button class="review-btn" onclick="toggleReviewForm('${item.gameId}', '${order.orderId}')">리뷰 작성</button>` : ''}
+                      </div>
+                    </div>
+                    <div class="review-form" id="review-form-${item.gameId}-${order.orderId}" style="display: none;">
+                      <textarea id="review-text-${item.gameId}-${order.orderId}" placeholder="리뷰를 작성하세요..."></textarea>
+                      <input type="number" id="review-rating-${item.gameId}-${order.orderId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" />
+                      <button onclick="submitReview('${item.gameId}', '${order.orderId}')">리뷰 제출</button>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            `;
+
+            // 주문 상태에 따른 버튼 표시/숨김 처리
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('button-container');
+            if (order.orderStatus === 'CANCEL_COMPLETED') {
+              buttonContainer.innerHTML = '<p>취소된 주문입니다.</p>';
+            } else if (order.orderStatus === 'PURCHASE_CONFIRMED') {
+              buttonContainer.innerHTML = '';
+            } else {
+              buttonContainer.innerHTML = `
+                <button class="confirm-btn" onclick="confirmOrder('${order.orderId}')">구매확정</button>
+                <button class="cancel-btn" onclick="cancelOrder('${order.orderId}')">주문취소</button>
+              `;
+            }
+
+            orderItem.appendChild(buttonContainer);
+            orderContainer.appendChild(orderItem);
+          });
+        });
+      }
+
+      // 리뷰 폼 표시/숨김 처리
+      function toggleReviewForm(gameId, orderId) {
+        const reviewForm = document.getElementById(`review-form-${gameId}-${orderId}`);
+        if (reviewForm.style.display === 'none') {
+          reviewForm.style.display = 'block';
+        } else {
+          reviewForm.style.display = 'none';
+        }
+      }
+
+      // 리뷰 제출
+      async function submitReview(gameId, orderId) {
+        const token = localStorage.getItem('token');
+        const reviewText = document.getElementById(`review-text-${gameId}-${orderId}`).value;
+        const reviewRating = document.getElementById(`review-rating-${gameId}-${orderId}`).value;
+
+        if (!reviewText || !reviewRating) {
+          alert('리뷰 내용과 평점을 입력해주세요.');
+          return;
+        }
+
+        try {
+          const response = await fetch('https://ludorium.store/api/user/review', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              content: reviewText,
+              rating: parseInt(reviewRating),
+              orderDetailId: orderId
+            })
+          });
+
+          if (!response.ok) {
+            throw new Error('리뷰 작성에 실패했습니다.');
+          }
+
+          alert('리뷰가 성공적으로 작성되었습니다.');
+          toggleReviewForm(gameId, orderId);
+        } catch (error) {
+          console.error('리뷰 작성 중 오류 발생:', error);
+          alert('리뷰 작성 중 오류가 발생했습니다.');
+        }
+      }
+
+      // 구매 확정
+      async function confirmOrder(orderId) {
+        console.log('Confirming order with orderId:', orderId);
+        const token = localStorage.getItem('token');
+
+        try {
+          const response = await fetch(`https://ludorium.store/api/user/order/user-confirm/${orderId}`, {
+            method: 'PATCH',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error(`구매 확정에 실패했습니다. orderId: ${orderId}`);
+          }
+
+          alert('구매가 확정되었습니다. 리뷰를 작성하세요.');
+          // 주문 목록을 다시 로드하거나 UI 업데이트
+          loadOrderList();
+        } catch (error) {
+          console.error('구매 확정 중 오류 발생:', error);
+          alert('구매 확정 중 오류가 발생했습니다.');
+        }
+      }
+
+      // 주문 취소
+      async function cancelOrder(orderId) {
+        console.log('Cancelling order with orderId:', orderId);
+        const token = localStorage.getItem('token');
+
+        try {
+          const response = await fetch(`https://ludorium.store/api/user/order/user-cancel/${orderId}`, {
+            method: 'PATCH',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error(`주문 취소에 실패했습니다. orderId: ${orderId}`);
+          }
+
+          alert('주문이 취소되었습니다.');
+          // 주문 목록을 다시 로드하거나 UI 업데이트
+          loadOrderList();
+        } catch (error) {
+          console.error('주문 취소 중 오류 발생:', error);
+          alert('주문 취소 중 오류가 발생했습니다.');
+        }
+      }
+    </script>
+  </body>
+</html><!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gameforge - 주문목록</title>
+    <link rel="stylesheet" href="order.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- 헤더 자리 표시자 -->
+    <div id="header-placeholder"></div>
+
+    <div class="order-container" id="order-container">
+      <!-- 주문 내역이 여기에 표시됩니다 -->
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // 헤더를 동적으로 로드
+        fetch("header.html")
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById("header-placeholder").innerHTML = data;
+            checkLoginStatus();
+          })
+          .catch(error => console.error("헤더 로드 중 오류 발생:", error));
+
+        // 주문 목록 불러오기
+        loadOrderList();
+      });
+
+      // 주문 목록을 API로 불러오기
+      async function loadOrderList() {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error('사용자 토큰이 없습니다.');
+          return;
+        }
+
+        try {
+          const response = await fetch('https://ludorium.store/api/user/order/list', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error('주문 목록을 불러오는 중 오류 발생');
+          }
+
+          const data = await response.json();
+          console.log('주문 목록 데이터:', data); // 서버에서 받은 주문 목록 데이터 콘솔에 출력
+          const orderList = data.data;
+
+          // 모든 주문 상태 출력 (필터링을 제거하여 테스트)
+          displayOrders(orderList);
+        } catch (error) {
+          console.error('주문 목록 불러오기 실패:', error);
+        }
+      }
+
+      // 주문 내역을 화면에 표시하기
+      function displayOrders(orderList) {
+        const orderContainer = document.getElementById('order-container');
+        orderContainer.innerHTML = ''; // 기존 내용을 지움
+
+        if (!orderList || orderList.length === 0) {
+          orderContainer.innerHTML = '<p>주문 내역이 없습니다.</p>';
+          return;
+        }
+
+        // 주문 내역을 날짜별로 그룹화
+        const ordersByDate = orderList.reduce((acc, order) => {
+          const date = new Date(order.orderDate).toLocaleDateString();
+          if (!acc[date]) {
+            acc[date] = [];
+          }
+          acc[date].push(order);
+          return acc;
+        }, {});
+
+        // 날짜별로 주문 내역을 표시
+        Object.keys(ordersByDate).forEach(date => {
+          const dateHeader = document.createElement('h2');
+          dateHeader.textContent = date;
+          orderContainer.appendChild(dateHeader);
+
+          ordersByDate[date].forEach(order => {
+            console.log('주문 데이터:', order); // 각 주문의 상태 확인
+            // 주문 아이템을 생성합니다.
+            const orderItem = document.createElement('div');
+            orderItem.classList.add('order-item');
+            orderItem.innerHTML = `
+              <div class="order-header">주문번호 <span class="order-id">${order.orderId}</span></div>
+              <div class="products-container">
+                ${order.items.map(item => {
+                  const name = item.gameName || '알 수 없는 게임';
+                  const price = item.price ? `${item.price} ₩` : '가격 정보 없음';
+                  const imageUrl = item.gameImage && item.gameImage !== 'undefined' ? item.gameImage : './images/default-image.png';
+                  return `
+                    <div class="product-item">
+                      <img src="${imageUrl}" alt="${name}" />
+                      <div class="product-info">
+                        <p class="product-name">${name}</p>
+                        <p class="product-price">${price}</p>
                         ${order.orderStatus === 'PURCHASE_CONFIRMED' && item.reviewStatus === 1 ? `<button class="review-btn" onclick="toggleReviewForm('${item.gameId}', '${order.orderId}')">리뷰 작성</button>` : ''}
                       </div>
                     </div>
