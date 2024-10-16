@@ -116,11 +116,21 @@
                   `;
                 }).join('')}
               </div>
-              <div class="button-container" id="action-buttons">
+            `;
+
+            // 주문 상태에 따른 버튼 표시/숨김 처리
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('button-container');
+            if (order.orderStatus === 'CANCEL_COMPLETED') {
+              buttonContainer.innerHTML = '<p>취소된 주문입니다.</p>';
+            } else {
+              buttonContainer.innerHTML = `
                 <button class="confirm-btn" onclick="confirmOrder('${order.orderId}')">구매확정</button>
                 <button class="cancel-btn" onclick="cancelOrder('${order.orderId}')">주문취소</button>
-              </div>
-            `;
+              `;
+            }
+
+            orderItem.appendChild(buttonContainer);
             orderContainer.appendChild(orderItem);
           });
         });
