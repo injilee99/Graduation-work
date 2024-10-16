@@ -116,9 +116,9 @@
                   `;
                 }).join('')}
               </div>
-              <div class="review-form" id="review-form-${order.orderId}" style="display: none;">
-                <textarea id="review-text-${order.orderId}" placeholder="리뷰를 작성하세요..."></textarea>
-                <input type="number" id="review-rating-${order.orderId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" />
+              <div class="review-form" id="review-form-${order.orderDetailId}" style="display: none;">
+                <textarea id="review-text-${order.orderDetailId}" placeholder="리뷰를 작성하세요..."></textarea>
+                <input type="number" id="review-rating-${order.orderDetailId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" />
                 <button onclick="submitReview('${order.orderId}')">리뷰 제출</button>
               </div>
             `;
@@ -144,7 +144,7 @@
       }
 
       // 리뷰 폼 표시/숨김 처리
-      function toggleReviewForm(orderId) {
+      function toggleReviewForm(orderDetailId) {
         let reviewForm = document.getElementById(`review-form-${orderId}`);
         if (!reviewForm) {
           console.error('리뷰 폼을 찾을 수 없습니다:', orderId);
@@ -154,7 +154,7 @@
       }
 
       // 리뷰 제출
-      async function submitReview(orderId) {
+      async function submitReview(orderDetailId) {
         const token = localStorage.getItem('token');
         const reviewText = document.getElementById(`review-text-${orderId}`).value;
         const reviewRating = document.getElementById(`review-rating-${orderId}`).value;
@@ -174,7 +174,7 @@
             body: JSON.stringify({
               content: reviewText,
               rating: parseInt(reviewRating),
-              orderId: orderId // orderDetailId 대신 orderId 사용
+              orderDetailId: orderId
             })
           });
 
