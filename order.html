@@ -115,12 +115,23 @@
                         <p class="product-name">${name}</p>
                         <p class="product-price">${price}</p>
                       </div>
-                      <div class="review-form" id="review-form-${orderDetailId}" style="display: none;">
-                        <textarea id="review-text-${orderDetailId}" placeholder="리뷰를 작성하세요..."></textarea>
-                        <input type="number" id="review-rating-${orderDetailId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" />
-                        <button onclick="submitReview('${orderDetailId}')">리뷰 제출</button>
+                      <div class="review-section" id="review-section-${orderDetailId}">
+                        ${item.review ? `
+                          <div class="existing-review">
+                            <p>리뷰 내용: ${item.review.content}</p>
+                            <p>평점: ${item.review.rating}</p>
+                            <button onclick="editReview('${item.review.reviewId}', '${orderDetailId}')">리뷰 수정</button>
+                            <button onclick="deleteReview('${item.review.reviewId}', '${orderDetailId}')">리뷰 삭제</button>
+                          </div>
+                        ` : `
+                          <div class="review-form" id="review-form-${orderDetailId}">
+                            <textarea id="review-text-${orderDetailId}" placeholder="리뷰를 작성하세요..."></textarea>
+                            <input type="number" id="review-rating-${orderDetailId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" />
+                            <button onclick="submitReview('${orderDetailId}')">리뷰 제출</button>
+                          </div>
+                          ${order.orderStatus === 'PURCHASE_CONFIRMED' ? `<button class="review-btn" onclick="toggleReviewForm('${orderDetailId}')">리뷰 작성</button>` : ''}
+                        `}
                       </div>
-                      ${order.orderStatus === 'PURCHASE_CONFIRMED' ? `<button class="review-btn" onclick="toggleReviewForm('${orderDetailId}')">리뷰 작성</button>` : ''}
                     </div>
                   `;
                 }).join('')}
@@ -190,10 +201,76 @@
           }
 
           alert('리뷰가 성공적으로 작성되었습니다.');
-          toggleReviewForm(orderDetailId);
+          loadOrderList(); // UI 업데이트를 위해 주문 목록 다시 로드
         } catch (error) {
           console.error('리뷰 작성 중 오류 발생:', error);
           alert(`리뷰 작성 중 오류가 발생했습니다: ${error.message}`);
+        }
+      }
+
+      // 리뷰 수정
+      async function editReview(reviewId, orderDetailId) {
+        const token = localStorage.getItem('token');
+        const newReviewText = prompt('수정할 리뷰 내용을 입력하세요:');
+        const newReviewRating = prompt('수정할 평점을 입력하세요 (1-5):');
+
+        if (!newReviewText || isNaN(newReviewRating) || newReviewRating < 1 || newReviewRating > 5) {
+          alert('리뷰 내용과 평점을 정확히 입력해주세요. 평점은 1에서 5 사이여야 합니다.');
+          return;
+        }
+
+        try {
+          const response = await fetch(`https://ludorium.store/api/user/review/${reviewId}`, {
+            method: 'PATCH',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              content: newReviewText,
+              rating: Number(newReviewRating)
+            })
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`리뷰 수정에 실패했습니다: ${errorData.message}`);
+          }
+
+          alert('리뷰가 성공적으로 수정되었습니다.');
+          loadOrderList();
+        } catch (error) {
+          console.error('리뷰 수정 중 오류 발생:', error);
+          alert(`리뷰 수정 중 오류가 발생했습니다: ${error.message}`);
+        }
+      }
+
+      // 리뷰 삭제
+      async function deleteReview(reviewId, orderDetailId) {
+        const token = localStorage.getItem('token');
+
+        if (!confirm('정말로 이 리뷰를 삭제하시겠습니까?')) {
+          return;
+        }
+
+        try {
+          const response = await fetch(`https://ludorium.store/api/user/review/${reviewId}`, {
+            method: 'DELETE',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`리뷰 삭제에 실패했습니다: ${errorData.message}`);
+          }
+
+          alert('리뷰가 성공적으로 삭제되었습니다.');
+          loadOrderList();
+        } catch (error) {
+          console.error('리뷰 삭제 중 오류 발생:', error);
+          alert(`리뷰 삭제 중 오류가 발생했습니다: ${error.message}`);
         }
       }
 
