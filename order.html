@@ -93,11 +93,15 @@
           dateHeader.textContent = date;
           orderContainer.appendChild(dateHeader);
 
-          
-              }
+          ordersByDate[date].forEach(order => {
+            console.log('주문 데이터:', order); // 각 주문의 상태 확인
+            // 주문 아이템을 생성합니다.
+            const orderItem = document.createElement('div');
+            orderItem.classList.add('order-item');
+            orderItem.innerHTML = `
               <div class="order-header">주문번호 <span class="order-id">${order.orderId}</span></div>
               <div class="products-container">
-                ${order.items.map((item, index) => {
+                ${order.items.map(item => {
                   const name = item.gameName || '알 수 없는 게임';
                   const price = item.price ? `${item.price} ₩` : '가격 정보 없음';
                   const imageUrl = item.gameImage && item.gameImage !== 'undefined' ? item.gameImage : './images/default-image.png';
@@ -107,7 +111,7 @@
                       <div class="product-info">
                         <p class="product-name">${name}</p>
                         <p class="product-price">${price}</p>
-                        ${index === 0 && order.orderStatus === 'PURCHASE_CONFIRMED' ? `<button class="review-btn" onclick="toggleReviewForm('${item.gameId}', '${order.orderId}')">리뷰 작성</button>` : ''}
+                        ${order.orderStatus === 'PURCHASE_CONFIRMED' ? `<button class=\"review-btn\" onclick=\"toggleReviewForm('${item.gameId}', '${order.orderId}')\">리뷰 작성</button>` : ''}
                       </div>
                     </div>
                     <div class="review-form" id="review-form-${item.gameId}-${order.orderId}" style="display: none;">
@@ -125,7 +129,8 @@
             buttonContainer.classList.add('button-container');
             if (order.orderStatus === 'CANCEL_COMPLETED') {
               buttonContainer.innerHTML = '<p>취소된 주문입니다.</p>';
-            } 
+            } else if (order.orderStatus === 'PURCHASE_CONFIRMED') {
+              buttonContainer.innerHTML = `<button class=\"review-btn\" onclick=\"toggleReviewForm('${order.orderId}', '${order.orderId}')\">리뷰 작성</button>`;
             } else {
               buttonContainer.innerHTML = `
                 <button class="confirm-btn" onclick="confirmOrder('${order.orderId}')">구매확정</button>
