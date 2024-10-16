@@ -93,8 +93,12 @@
           dateHeader.textContent = date;
           orderContainer.appendChild(dateHeader);
 
-          
-              }
+          ordersByDate[date].forEach(order => {
+            console.log('주문 데이터:', order); // 각 주문의 상태 확인
+            // 주문 아이템을 생성합니다.
+            const orderItem = document.createElement('div');
+            orderItem.classList.add('order-item');
+            orderItem.innerHTML = `
               <div class="order-header">주문번호 <span class="order-id">${order.orderId}</span></div>
               <div class="products-container">
                 ${order.items.map(item => {
@@ -126,7 +130,7 @@
             if (order.orderStatus === 'CANCEL_COMPLETED') {
               buttonContainer.innerHTML = '<p>취소된 주문입니다.</p>';
             } else if (order.orderStatus === 'PURCHASE_CONFIRMED') {
-              buttonContainer.innerHTML = `<button class="review-btn" onclick="toggleReviewForm('${order.orderId}', '${order.orderId}')">리뷰 작성</button>`;
+              buttonContainer.innerHTML = `<button class=\"review-btn\" onclick=\"toggleReviewForm('${order.orderId}', '${order.orderId}')\">리뷰 작성</button>`;
             } else {
               buttonContainer.innerHTML = `
                 <button class="confirm-btn" onclick="confirmOrder('${order.orderId}')">구매확정</button>
