@@ -97,10 +97,29 @@
                 <button onclick="deleteReview('${review.reviewId}', '${orderDetailId}')">리뷰 삭제</button>
               </div>
             `).join('');
+          } else {
+            reviewSection.innerHTML = `
+              <div class="review-form" id="review-form-${orderDetailId}">
+                <textarea id="review-text-${orderDetailId}" placeholder="리뷰를 작성하세요..."></textarea>
+                <input type="number" id="review-rating-${orderDetailId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" />
+                <button onclick="submitReview('${orderDetailId}')">리뷰 제출</button>
+              </div>
+              <button class="review-btn" onclick="toggleReviewForm('${orderDetailId}')">리뷰 작성</button>
+            `;
           }
         } catch (error) {
           console.error('리뷰 불러오기 실패:', error);
         }
+      }
+
+      // 리뷰 폼 표시/숨김 처리
+      function toggleReviewForm(orderDetailId) {
+        let reviewForm = document.getElementById(`review-form-${orderDetailId}`);
+        if (!reviewForm) {
+          console.error('리뷰 폼을 찾을 수 없습니다:', orderDetailId);
+          return;
+        }
+        reviewForm.style.display = (reviewForm.style.display === 'none') ? 'block' : 'none';
       }
 
       // 주문 내역을 화면에 표시하기
