@@ -172,7 +172,7 @@
                       <div class="review-section" id="review-section-${orderDetailId}">
                         <!-- 리뷰가 있으면 여기에 표시됩니다 -->
                       </div>
-                      ${order.orderStatus === 'PURCHASE_CONFIRMED' && !reviewStatus ? `<button class="review-btn" onclick="toggleReviewForm('${orderDetailId}')">리뷰 작성</button>` : ''}
+                      ${(order.orderStatus === 'PURCHASE_CONFIRMED' && !reviewStatus) ? `<button class="review-btn" onclick="toggleReviewForm('${orderDetailId}')">리뷰 작성</button>` : ''}
                     </div>
                   `;
                 }).join('')}
