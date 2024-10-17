@@ -15,27 +15,8 @@
   <body>
     <!-- 헤더 자리 표시자 -->
     <div id="header-placeholder"></div>
-    <div class="container">
-      <div class="game-detail">
-        <div class="game-header">
-          <h1 id="gameName">undefined</h1>
-          <p id="categoryName">카테고리: undefined</p>
-        </div>
-        <div class="game-content">
-          <div class="game-left">
-            <img id="gameImage" src="https://via.placeholder.com/150" alt="게임 이미지" />
-            <video id="gameVideo" controls style="display: none; max-width: 100%; height: auto;">
-              <source id="videoSource" src="" type="video/webm" />
-              동영상을 재생할 수 없습니다.
-            </video>
-          </div>
-          <div class="game-right">
-            <p id="gameDescription">undefined</p>
-            <p id="gamePrice">가격: ₩ undefined</p>
-            <button class="cart-btn" onclick="addToCart()">장바구니에 담기</button>
-          </div>
-        </div>
-      </div>
+    
+      <div id="reviewContainer" class="review-container"></div>
     </div>
     <footer>
       <div class="footer-content">
@@ -77,7 +58,7 @@
 
                 videoElement.style.display = 'block';
                 videoSourceElement.src = game.gameImageList[1];
-                videoElement.load(); // 비디오 요소에 새 소스를 로드하여 적용
+                videoElement.load();
               }
             }
 
@@ -137,6 +118,92 @@
         }
       }
 
+      // 게임 리뷰 조회
+      async function fetchReviews(gameId) {
+        try {
+          const response = await fetch(`${serverUrl}/api/user/review/${gameId}`);
+          if (!response.ok) {
+            throw new Error('리뷰 데이터를 불러오는 중 오류 발생');
+          }
+          const result = await response.json();
+          if (result && result.data) {
+            displayReviews(result.data);
+          } else {
+            console.error('Error: 리뷰 데이터가 비어 있습니다.', result);
+          }
+        } catch (error) {
+          console.error('리뷰를 불러오는 중 오류 발생:', error);
+        }
+      }
+
+      // 리뷰 표시
+      function displayReviews(reviews) {
+        const reviewContainer = document.getElementById('reviewContainer');
+        reviewContainer.innerHTML = '';
+
+        if (reviews.length === 0) {
+          reviewContainer.innerHTML = '<p>작성된 리뷰가 없습니다.</p>';
+          return;
+        }
+
+        reviews.forEach(review => {
+          const reviewElement = document.createElement('div');
+          reviewElement.className = 'review';
+          reviewElement.innerHTML = `
+            <p><strong>${review.username}</strong></p>
+            <p>${review.content}</p>
+            <button onclick="editReview(${review.reviewId}, '${review.content}')">수정</button>
+            <button onclick="deleteReview(${review.reviewId})">삭제</button>
+          `;
+          reviewContainer.appendChild(reviewElement);
+        });
+      }
+
+      // 리뷰 수정
+      async function editReview(reviewId, currentContent) {
+        const newContent = prompt('리뷰 내용을 수정하세요:', currentContent);
+        if (newContent && newContent !== currentContent) {
+          try {
+            const response = await fetch(`${serverUrl}/api/user/review/${reviewId}`, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ content: newContent }),
+            });
+
+            if (response.ok) {
+              alert('리뷰가 수정되었습니다.');
+              fetchReviews(gameId);
+            } else {
+              throw new Error('리뷰 수정에 실패했습니다.');
+            }
+          } catch (error) {
+            console.error('리뷰를 수정하는 중 오류 발생:', error);
+          }
+        }
+      }
+
+      // 리뷰 삭제
+      async function deleteReview(reviewId) {
+        if (confirm('정말로 이 리뷰를 삭제하시겠습니까?')) {
+          try {
+            const response = await fetch(`${serverUrl}/api/user/review/${reviewId}`, {
+              method: 'DELETE',
+            });
+
+            if (response.ok) {
+              alert('리뷰가 삭제되었습니다.');
+              fetchReviews(gameId);
+            } else {
+              throw new Error('리뷰 삭제에 실패했습니다.');
+            }
+          } catch (error) {
+            console.error('리뷰를 삭제하는 중 오류 발생:', error);
+          }
+        }
+      }
+
       const urlParams = new URLSearchParams(window.location.search);
       const gameId = urlParams.get('gameId');
 
@@ -151,6 +218,7 @@
 
         if (gameId) {
           fetchGameDetails(gameId);
+          fetchReviews(gameId);
         } else {
           console.error('Error: gameId가 URL에 없습니다.');
         }
