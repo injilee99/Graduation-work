@@ -92,7 +92,7 @@
             };
 
             addRecentGame(gameId, game.gameName, game.discountPrice, game.gameImageList[0] || '');
-            setTimeout(fetchReviews, 500); // 게임 상세 정보를 불러온 후, 일정 시간 후에 후기를 불러옴
+            fetchReviews(); // 게임 상세 정보를 불러온 후, 바로 후기를 불러옴
           } else {
             console.error('Error: 응답의 data 필드가 비어 있습니다.', result);
           }
