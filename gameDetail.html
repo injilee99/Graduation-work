@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>game forge - 게임 상세</title>
+    <title>Document</title>
     <link rel="stylesheet" href="gameDetail.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -218,30 +218,54 @@
           if (result && result.data) {
             const game = result.data;
 
-            document.getElementById("gameName").innerText = game.gameName || "제목 없음";
-            document.getElementById("categoryName").innerText = `카테고리: ${game.gameCategoryList.join(", ") || "알 수 없음"}`;
-            document.getElementById("gameDescription").innerHTML = game.gameDc || "게임 설명 없음";
+            const gameNameElement = document.getElementById("gameName");
+            if (gameNameElement) {
+              gameNameElement.innerText = game.gameName || "제목 없음";
+            }
+            const categoryNameElement = document.getElementById("categoryName");
+            if (categoryNameElement) {
+              categoryNameElement.innerText = `카테고리: ${game.gameCategoryList.join(", ") || "알 수 없음"}`;
+            }
+            const gameDescriptionElement = document.getElementById("gameDescription");
+            if (gameDescriptionElement) {
+              gameDescriptionElement.innerHTML = game.gameDc || "게임 설명 없음";
+            }
 
             if (game.originalPrice !== game.discountPrice) {
-              document.getElementById("gamePrice").innerHTML = `정상가: ₩ ${game.originalPrice}<br>판매가: ₩ ${game.discountPrice}`;
+              const gamePriceElement = document.getElementById("gamePrice");
+            if (gamePriceElement) {
+              gamePriceElement.innerHTML = `정상가: ₩ ${game.originalPrice}<br>판매가: ₩ ${game.discountPrice}`;
+            }
             } else {
-              document.getElementById("gamePrice").innerText = game.discountPrice === 0 ? "무료" : `가격: ₩ ${game.discountPrice}`;
+              if (gamePriceElement) {
+              gamePriceElement.innerText = game.discountPrice === 0 ? "무료" : `가격: ₩ ${game.discountPrice}`;
+            }
             }
 
             if (game.gameImageList && game.gameImageList.length > 0) {
-              document.getElementById("gameImage").src = game.gameImageList[0];
+              const gameImageElement = document.getElementById("gameImage");
+            if (gameImageElement) {
+              gameImageElement.src = game.gameImageList[0];
+            }
               if (game.gameImageList.length > 1) {
                 const videoElement = document.getElementById("gameVideo");
-                const videoSourceElement = document.getElementById("videoSource");
-
+              const videoSourceElement = document.getElementById("videoSource");
+              if (videoElement && videoSourceElement) {
                 videoElement.style.display = "block";
                 videoSourceElement.src = game.gameImageList[1];
                 videoElement.load(); // 비디오 요소에 새 소스를 로드하여 적용
+              } // 비디오 요소에 새 소스를 로드하여 적용
               }
             }
 
-            document.getElementById("windowsMinSpecifications").innerHTML = game.windowsMinSpecifications || "해당 사양 정보가 없습니다.";
-            document.getElementById("windowsMaxSpecifications").innerHTML = game.windowsMaxSpecifications || "해당 사양 정보가 없습니다.";
+            const windowsMinSpecificationsElement = document.getElementById("windowsMinSpecifications");
+            if (windowsMinSpecificationsElement) {
+              windowsMinSpecificationsElement.innerHTML = game.windowsMinSpecifications || "해당 사양 정보가 없습니다.";
+            }
+            const windowsMaxSpecificationsElement = document.getElementById("windowsMaxSpecifications");
+            if (windowsMaxSpecificationsElement) {
+              windowsMaxSpecificationsElement.innerHTML = game.windowsMaxSpecifications || "해당 사양 정보가 없습니다.";
+            }
 
             window.currentGame = {
               gameId: gameId,
