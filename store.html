@@ -79,7 +79,7 @@
     let endPage = maxButtons; // 끝 페이지
 
     // 카테고리 ID로 게임 목록을 가져오는 함수
-    async function fetchGamesByCategory(categoryId, page = 1, orderBy = 'orderByPopular', searchKeyword = '') {
+    async function fetchGamesByCategory(categoryId, page = 2, orderBy = 'orderByPopular', searchKeyword = '') {
       try {
         let allGames = [];
         let totalPages = 0;
