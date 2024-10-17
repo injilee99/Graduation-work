@@ -112,7 +112,7 @@
           console.error('리뷰 폼을 찾을 수 없습니다:', orderDetailId);
           return;
         }
-        reviewForm.style.display = (reviewForm.style.display === 'none') ? 'block' : 'none';
+        reviewForm.style.display = (reviewForm.style.display === 'none') ? 'flex' : 'none';
       }
 
       // 주문 내역을 화면에 표시하기
@@ -168,11 +168,11 @@
                         <!-- 리뷰가 있으면 여기에 표시됩니다 -->
                       </div>
                       ${(order.orderStatus === 'PURCHASE_CONFIRMED' && !reviewStatus) ? `
-                        <div class="review-form-container" style="display: flex; align-items: center;">
+                        <div class="review-form-container" style="display: flex; flex-direction: row; align-items: center;">
                           <button class="review-btn" onclick="toggleReviewForm('${orderDetailId}')" style="margin-right: 10px;">리뷰 작성</button>
-                          <div class="review-form" id="review-form-${orderDetailId}" style="display: none;">
-                            <textarea id="review-text-${orderDetailId}" placeholder="리뷰를 작성하세요..."></textarea>
-                            <input type="number" id="review-rating-${orderDetailId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" />
+                          <div class="review-form" id="review-form-${orderDetailId}" style="display: none; flex-direction: column;">
+                            <textarea id="review-text-${orderDetailId}" placeholder="리뷰를 작성하세요..." style="margin-bottom: 5px;"></textarea>
+                            <input type="number" id="review-rating-${orderDetailId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" style="margin-bottom: 5px;" />
                             <button onclick="submitReview('${orderDetailId}')">리뷰 제출</button>
                           </div>
                         </div>` : ''}
