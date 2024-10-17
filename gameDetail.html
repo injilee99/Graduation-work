@@ -158,8 +158,8 @@
           }
           const result = await response.json();
 
-          if (result && result.data) {
-            const reviews = result.data;
+          if (result && result.data && result.data.responseDtoList) {
+            const reviews = result.data.responseDtoList;
             const reviewsContainer = document.getElementById('reviewsContainer');
             reviewsContainer.innerHTML = '';
 
@@ -167,14 +167,14 @@
               const reviewDiv = document.createElement('div');
               reviewDiv.className = 'review';
               reviewDiv.innerHTML = `
-                <p><strong>${review.userName}</strong>: ${review.content}</p>
+                <p><strong>${review.nickname}</strong>: ${review.content}</p>
                 <button onclick="deleteReview(${review.reviewId})">삭제</button>
                 <button onclick="editReview(${review.reviewId}, '${review.content}')">수정</button>
               `;
               reviewsContainer.appendChild(reviewDiv);
             });
           } else {
-            console.error('Error: 응답의 data 필드가 배열이 아닙니다.', result);
+            console.error('Error: 응답의 data 필드가 올바른 형태가 아닙니다.', result);
           }
         } catch (error) {
           console.error('게임 후기를 불러오는 중 오류 발생:', error);
