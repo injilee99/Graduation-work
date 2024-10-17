@@ -6,41 +6,45 @@ body {
     margin: auto;
   }
   
-  .game-title {
+#gameName{
     font-size: 2.5em;
     margin: 0;
   }
   
-  .developer {
+#categoryName {
     color: #666;
     margin: 5px 0;
   }
   
-  .game-details {
+  .game-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* margin: 20px 0; */
+    
   }
   
-  .main-image {
+  .gmae-left {
     width: 70%;
     border-radius: 8px;
     background-color: #ddd;
   }
-  
-  .price-info {
+#gameVideo{
+    width: 600px;
+    height: 300px;
+}  
+  .game-right {
     text-align: center;
   }
   
-  .thumbnail {
+ #gameImage {
+    margin-left: 20px;
     width: 220px;
     height: 220px;
     border-radius: 8px;
     background-color: #ddd;
   }
   
-  .price {
+#gamePrice {
     font-size: 1.5em;
     margin: 10px 0;
   }
@@ -58,7 +62,7 @@ body {
     background-color: #778881;
   }
   
-  .description {
+  #gameDescription {
     font-size: 1em;
     margin: 20px 0;
   }
@@ -184,4 +188,15 @@ body {
   .edit-btn:hover, .delete-btn:hover {
     background-color: #778881;
   }
-  
+
+  footer {
+    margin-top: 40px;
+    padding: 20px;
+    text-align: center;
+    background-color: #333;
+    color: #fff;
+}
+
+.footer-content p {
+    margin: 0;
+}
