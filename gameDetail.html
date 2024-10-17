@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>game forge - 게임 상세</title>
     <link rel="stylesheet" href="gameDetail.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -44,41 +44,22 @@
         <h2>시스템 요구사항</h2>
         <div class="system-requirements">
           <div class="tabs">
-        <button class="tab active" onclick="showRequirements('windowsMin')">Windows 최소</button>
-        <button class="tab" onclick="showRequirements('windowsMax')">Windows 권장</button>
-      </div>
-      <ul class="requirements" id="windowsMin" style="display: block">
-        <li id="windowsMinSpecifications">불러오는 중...</li>
-      </ul>
-      <ul class="requirements" id="windowsMax" style="display: none">
-        <li id="windowsMaxSpecifications">불러오는 중...</li>
-      </ul>
-      <ul class="requirements" id="mac" style="display: none">
-        <li>macOS 최소/권장 사양 정보가 없습니다.</li>
-      </ul>
-      <ul class="requirements" id="linux" style="display: none">
-        <li>Linux 최소/권장 사양 정보가 없습니다.</li>
-      </ul>
-      <ul class="requirements" id="windowsMax" style="display: none">
-        <li id="windowsMaxSpecifications">불러오는 중...</li>
-      </ul>
-      <ul class="requirements" id="mac" style="display: none">
-        <li>운영 체제: macOS 10.10 or greater</li>
-        <li>프로세서: 2.5 Ghz Intel Core i3</li>
-        <li>메모리: 4 GB RAM</li>
-        <li>그래픽: OpenGL 2.0 compatible</li>
-        <li>저장공간: 500 MB 사용 가능 공간</li>
-      </ul>
-      <ul class="requirements" id="linux" style="display: none">
-        <li>운영 체제: Ubuntu 16.04 or greater</li>
-        <li>프로세서: 2 Ghz</li>
-        <li>메모리: 2 GB RAM</li>
-        <li>그래픽: OpenGL 2.0 compatible</li>
-        <li>저장공간: 500 MB 사용 가능 공간</li>
-      </ul>
-      <ul class="requirements" id="windowsMax" style="display: none">
-        <li id="windowsMaxSpecifications">불러오는 중...</li>
-      </ul>
+            <button class="tab active" onclick="showRequirements('windows')">
+              Windows
+            </button>
+            <button class="tab" onclick="showRequirements('mac')">macOS</button>
+            <button class="tab" onclick="showRequirements('linux')">
+              Linux
+            </button>
+          </div>
+          <ul class="requirements" id="windows">
+            <li>운영 체제: Windows Vista or greater</li>
+            <li>프로세서: 2 Ghz</li>
+            <li>메모리: 2 GB RAM</li>
+            <li>그래픽: 256 mb video memory, shader model 3.0+</li>
+            <li>DirectX: 버전 10</li>
+            <li>저장공간: 500 MB 사용 가능 공간</li>
+          </ul>
           <ul class="requirements" id="mac" style="display: none">
             <li>운영 체제: macOS 10.10 or greater</li>
             <li>프로세서: 2.5 Ghz Intel Core i3</li>
@@ -218,53 +199,36 @@
           if (result && result.data) {
             const game = result.data;
 
-            const gameNameElement = document.getElementById("gameName");
-            if (gameNameElement) {
-              gameNameElement.innerText = game.gameName || "제목 없음";
-            }
-            const categoryNameElement = document.getElementById("categoryName");
-            if (categoryNameElement) {
-              categoryNameElement.innerText = `카테고리: ${game.gameCategoryList.join(", ") || "알 수 없음"}`;
-            }
-            const gameDescriptionElement = document.getElementById("gameDescription");
-            if (gameDescriptionElement) {
-              gameDescriptionElement.innerHTML = game.gameDc || "게임 설명 없음";
-            }
+            document.getElementById("gameName").innerText =
+              game.gameName || "제목 없음";
+            document.getElementById("categoryName").innerText = `카테고리: ${
+              game.categoryName || "알 수 없음"
+            }`;
+            document.getElementById("gameDescription").innerHTML =
+              game.gameDc || "게임 설명 없음";
 
             if (game.originalPrice !== game.discountPrice) {
-              const gamePriceElement = document.getElementById("gamePrice");
-            if (gamePriceElement) {
-              gamePriceElement.innerHTML = `정상가: ₩ ${game.originalPrice}<br>판매가: ₩ ${game.discountPrice}`;
-            }
+              document.getElementById(
+                "gamePrice"
+              ).innerHTML = `정상가: ₩ ${game.originalPrice}<br>판매가: ₩ ${game.discountPrice}`;
             } else {
-              if (gamePriceElement) {
-              gamePriceElement.innerText = game.discountPrice === 0 ? "무료" : `가격: ₩ ${game.discountPrice}`;
-            }
+              document.getElementById("gamePrice").innerText =
+                game.discountPrice === 0
+                  ? "무료"
+                  : `가격: ₩ ${game.discountPrice}`;
             }
 
             if (game.gameImageList && game.gameImageList.length > 0) {
-              const gameImageElement = document.getElementById("gameImage");
-            if (gameImageElement) {
-              gameImageElement.src = game.gameImageList[0];
-            }
+              document.getElementById("gameImage").src = game.gameImageList[0];
               if (game.gameImageList.length > 1) {
                 const videoElement = document.getElementById("gameVideo");
-              const videoSourceElement = document.getElementById("videoSource");
-              if (videoElement && videoSourceElement) {
+                const videoSourceElement =
+                  document.getElementById("videoSource");
+
                 videoElement.style.display = "block";
                 videoSourceElement.src = game.gameImageList[1];
                 videoElement.load(); // 비디오 요소에 새 소스를 로드하여 적용
-              } // 비디오 요소에 새 소스를 로드하여 적용
               }
-            }
-
-            const windowsMinSpecificationsElement = document.getElementById("windowsMinSpecifications");
-            if (windowsMinSpecificationsElement) {
-              windowsMinSpecificationsElement.innerHTML = game.windowsMinSpecifications || "해당 사양 정보가 없습니다.";
-            }
-            const windowsMaxSpecificationsElement = document.getElementById("windowsMaxSpecifications");
-            if (windowsMaxSpecificationsElement) {
-              windowsMaxSpecificationsElement.innerHTML = game.windowsMaxSpecifications || "해당 사양 정보가 없습니다.";
             }
 
             window.currentGame = {
@@ -273,31 +237,12 @@
               gamePrice: game.discountPrice,
             };
 
-            addRecentGame(gameId, game.gameName, game.discountPrice, game.gameImageList[0] || "");
-            fetchReviews(gameId); // 게임 상세 정보를 불러온 후, 리뷰를 불러옴
-          } else {
-            console.error("Error: 응답의 data 필드가 비어 있습니다.", result);
-          }
-        } catch (error) {
-          console.error("게임 데이터를 불러오는 중 오류 발생:", error);
-        }
-      }
-            fetchReviews(gameId); // 게임 상세 정보를 불러온 후, 리뷰를 불러옴
-          } else {
-            console.error("Error: 응답의 data 필드가 비어 있습니다.", result);
-          }
-        } catch (error) {
-          console.error("게임 데이터를 불러오는 중 오류 발생:", error);
-        }
-      }
-            fetchReviews(gameId); // 게임 상세 정보를 불러온 후, 리뷰를 불러옴
-          } else {
-            console.error("Error: 응답의 data 필드가 비어 있습니다.", result);
-          }
-        } catch (error) {
-          console.error("게임 데이터를 불러오는 중 오류 발생:", error);
-        }
-      }
+            addRecentGame(
+              gameId,
+              game.gameName,
+              game.discountPrice,
+              game.gameImageList[0] || ""
+            );
             fetchReviews(gameId); // 게임 상세 정보를 불러온 후, 리뷰를 불러옴
           } else {
             console.error("Error: 응답의 data 필드가 비어 있습니다.", result);
@@ -366,32 +311,6 @@
           console.error("Error: gameId가 URL에 없습니다.");
         }
       });
-    <script>
-        function showRequirements(requirementsId) {
-          // 모든 요구사항 숨기기
-          const requirementElements = document.querySelectorAll('.requirements');
-          requirementElements.forEach(element => {
-            element.style.display = 'none';
-          });
-
-          // 선택된 요구사항만 보이기
-          const selectedElement = document.getElementById(requirementsId);
-          if (selectedElement) {
-            selectedElement.style.display = 'block';
-          }
-
-          // 모든 탭 비활성화
-          const tabElements = document.querySelectorAll('.tab');
-          tabElements.forEach(tab => {
-            tab.classList.remove('active');
-          });
-
-          // 선택된 탭 활성화
-          const selectedTab = Array.from(tabElements).find(tab => tab.textContent.includes(requirementsId.split('Min')[0]));
-          if (selectedTab) {
-            selectedTab.classList.add('active');
-          }
-        }
-      </script>
-    </body>
+    </script>
+  </body>
 </html>
