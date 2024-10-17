@@ -94,6 +94,9 @@
 
         const result = await response.json();
 
+        // 서버에서 받은 데이터 콘솔에 출력
+        console.log('서버에서 받은 데이터:', result);
+
         if (result.data && Array.isArray(result.data.content)) {
           allGames = result.data.content;
           totalPages = result.data.totalPages;
