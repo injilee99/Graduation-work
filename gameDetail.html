@@ -242,6 +242,7 @@
             const userData = await userResponse.json();
             if (userData && userData.data && userData.data.nickname) {
               window.currentUserNickname = userData.data.nickname;
+              console.log('로그인된 사용자 닉네임:', window.currentUserNickname);
             } else {
               console.error('사용자 닉네임을 가져오지 못했습니다.', userData);
             }
