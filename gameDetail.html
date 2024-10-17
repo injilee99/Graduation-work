@@ -158,8 +158,8 @@
           }
           const result = await response.json();
 
-          if (result && result.data && Array.isArray(result.data.reviews)) {
-            const reviews = result.data.reviews;
+          if (result && Array.isArray(result.data)) {
+            const reviews = result.data;
             const reviewsContainer = document.getElementById('reviewsContainer');
             reviewsContainer.innerHTML = '';
 
@@ -174,7 +174,7 @@
               reviewsContainer.appendChild(reviewDiv);
             });
           } else {
-            console.error('Error: 응답의 data 필드가 올바른 형태가 아닙니다.', result);
+            console.error('Error: 응답의 data 필드가 배열 형태가 아닙니다.', result);
           }
         } catch (error) {
           console.error('게임 후기를 불러오는 중 오류 발생:', error);
