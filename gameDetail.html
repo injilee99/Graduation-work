@@ -11,7 +11,6 @@
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&family=Material+Icons&display=swap"
       rel="stylesheet"
     />
-    
   </head>
   <body>
     <!-- 헤더 자리 표시자 -->
@@ -36,7 +35,6 @@
             <button class="cart-btn" onclick="addToCart()">장바구니에 담기</button>
           </div>
         </div>
-        <div id="reviewSection"></div>
       </div>
     </div>
     <footer>
@@ -98,45 +96,6 @@
         }
       }
 
-      // 리뷰 데이터 불러오기
-      async function fetchGameReview(gameId) {
-        try {
-          const response = await fetch(`${serverUrl}/api/user/review/${gameId}`);
-          if (!response.ok) {
-            if (response.status === 404) {
-              console.log('리뷰가 존재하지 않습니다.');
-              return null;
-            } else {
-              throw new Error('네트워크 응답에 문제가 있습니다.');
-            }
-          }
-          const result = await response.json();
-          return result; // 리뷰 데이터 반환
-        } catch (error) {
-          console.error('리뷰 데이터를 불러오는 중 오류 발생:', error);
-          return null;
-        }
-      }
-
-      // 리뷰 또는 리뷰 작성 폼 표시
-      async function displayReviewOrForm(gameId) {
-        const review = await fetchGameReview(gameId);
-        if (review) {
-          // 리뷰가 존재하는 경우
-          document.getElementById('reviewSection').innerHTML = `
-            <h3>작성된 리뷰</h3>
-            <p>${review.data.reviewText}</p>
-          `;
-        } else {
-          // 리뷰가 존재하지 않는 경우 - 리뷰 작성 폼 표시
-          document.getElementById('reviewSection').innerHTML = `
-            <h3>리뷰 작성하기</h3>
-            <textarea id="reviewText" placeholder="리뷰를 작성하세요..."></textarea>
-            <button onclick="submitReview(${gameId})">리뷰 제출</button>
-          `;
-        }
-      }
-
       function addToCart() {
         if (!window.currentGame) {
           console.error('Error: 게임 정보가 없습니다.');
@@ -192,7 +151,6 @@
 
         if (gameId) {
           fetchGameDetails(gameId);
-          displayReviewOrForm(gameId); // 리뷰 또는 리뷰 작성 폼 표시
         } else {
           console.error('Error: gameId가 URL에 없습니다.');
         }
