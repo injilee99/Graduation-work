@@ -194,7 +194,7 @@
           const orderBy = document.getElementById('sortOrder').value;
           const searchKeyword = document.getElementById('searchKeyword').value;
           updateGameListTitle(categoryId, orderBy);
-          fetchGamesByCategory(categoryId, currentPage - 1, orderBy, searchKeyword);
+          fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
           updatePagination(totalPages);
         });
         paginationContainer.appendChild(prevButton);
@@ -211,7 +211,7 @@
           const orderBy = document.getElementById('sortOrder').value;
           const searchKeyword = document.getElementById('searchKeyword').value;
           updateGameListTitle(categoryId, orderBy);
-          fetchGamesByCategory(categoryId, currentPage - 1, orderBy, searchKeyword);
+          fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
           updatePagination(totalPages);
         });
         paginationContainer.appendChild(button);
@@ -228,7 +228,7 @@
           const orderBy = document.getElementById('sortOrder').value;
           const searchKeyword = document.getElementById('searchKeyword').value;
           updateGameListTitle(categoryId, orderBy);
-          fetchGamesByCategory(categoryId, currentPage - 1, orderBy, searchKeyword);
+          fetchGamesByCategory(categoryId, currentPage, orderBy, searchKeyword);
           updatePagination(totalPages);
         });
         paginationContainer.appendChild(nextButton);
