@@ -36,6 +36,11 @@
           </div>
         </div>
       </div>
+      <div class="game-reviews">
+        <h2>게임 후기</h2>
+        <div id="reviewsContainer"></div>
+        <button onclick="fetchReviews()">후기 불러오기</button>
+      </div>
     </div>
     <footer>
       <div class="footer-content">
@@ -96,6 +101,7 @@
         }
       }
 
+      // 장바구니에 추가
       function addToCart() {
         if (!window.currentGame) {
           console.error('Error: 게임 정보가 없습니다.');
@@ -117,6 +123,7 @@
         alert('장바구니에 추가되었습니다.');
       }
 
+      // 최근 본 게임 추가
       function addRecentGame(gameId, gameName, gamePrice, gameImageUrl) {
         let recentGames = JSON.parse(localStorage.getItem('recentGames')) || [];
 
@@ -134,6 +141,78 @@
 
           localStorage.setItem('recentGames', JSON.stringify(recentGames));
           console.log('로컬 스토리지에 저장된 recentGames:', recentGames);
+        }
+      }
+
+      // 게임 후기 불러오기
+      async function fetchReviews() {
+        const gameId = window.currentGame.gameId;
+        try {
+          const response = await fetch(`${serverUrl}/api/user/review/${gameId}`);
+          if (!response.ok) {
+            throw new Error('후기 불러오기 실패');
+          }
+          const result = await response.json();
+
+          if (result && result.data) {
+            const reviews = result.data;
+            const reviewsContainer = document.getElementById('reviewsContainer');
+            reviewsContainer.innerHTML = '';
+
+            reviews.forEach((review) => {
+              const reviewDiv = document.createElement('div');
+              reviewDiv.className = 'review';
+              reviewDiv.innerHTML = `
+                <p><strong>${review.userName}</strong>: ${review.content}</p>
+                <button onclick="deleteReview(${review.reviewId})">삭제</button>
+                <button onclick="editReview(${review.reviewId}, '${review.content}')">수정</button>
+              `;
+              reviewsContainer.appendChild(reviewDiv);
+            });
+          } else {
+            console.error('Error: 응답의 data 필드가 비어 있습니다.', result);
+          }
+        } catch (error) {
+          console.error('게임 후기를 불러오는 중 오류 발생:', error);
+        }
+      }
+
+      // 게임 후기 삭제
+      async function deleteReview(reviewId) {
+        try {
+          const response = await fetch(`${serverUrl}/api/user/review/${reviewId}`, {
+            method: 'DELETE',
+          });
+          if (!response.ok) {
+            throw new Error('후기 삭제 실패');
+          }
+          alert('후기가 삭제되었습니다.');
+          fetchReviews();
+        } catch (error) {
+          console.error('게임 후기를 삭제하는 중 오류 발생:', error);
+        }
+      }
+
+      // 게임 후기 수정
+      async function editReview(reviewId, currentContent) {
+        const newContent = prompt('후기 내용을 수정하세요:', currentContent);
+        if (!newContent) return;
+
+        try {
+          const response = await fetch(`${serverUrl}/api/user/review/${reviewId}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ content: newContent }),
+          });
+          if (!response.ok) {
+            throw new Error('후기 수정 실패');
+          }
+          alert('후기가 수정되었습니다.');
+          fetchReviews();
+        } catch (error) {
+          console.error('게임 후기를 수정하는 중 오류 발생:', error);
         }
       }
 
