@@ -168,13 +168,13 @@
                         <!-- 리뷰가 있으면 여기에 표시됩니다 -->
                       </div>
                       ${(order.orderStatus === 'PURCHASE_CONFIRMED' && !reviewStatus) ? `
-                        <div class="review-form-container">
+                        <div class="review-form-container" style="display: flex; align-items: center;">
+                          <button class="review-btn" onclick="toggleReviewForm('${orderDetailId}')" style="margin-right: 10px;">리뷰 작성</button>
                           <div class="review-form" id="review-form-${orderDetailId}" style="display: none;">
                             <textarea id="review-text-${orderDetailId}" placeholder="리뷰를 작성하세요..."></textarea>
                             <input type="number" id="review-rating-${orderDetailId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" />
                             <button onclick="submitReview('${orderDetailId}')">리뷰 제출</button>
                           </div>
-                          <button class="review-btn" onclick="toggleReviewForm('${orderDetailId}')">리뷰 작성</button>
                         </div>` : ''}
                     </div>
                   `;
