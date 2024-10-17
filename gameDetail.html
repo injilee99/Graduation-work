@@ -17,7 +17,6 @@
     <div id="header-placeholder"></div>
     <div class="container">
       <div class="game-detail">
-      <div class="game-detail">
         <div class="game-header">
           <h1 id="gameName">undefined</h1>
           <p id="categoryName">카테고리: undefined</p>
@@ -37,21 +36,12 @@
           </div>
         </div>
       </div>
-      
-        
-      </div>
     </div>
-    <div class="reviews-container">
-        <h2>게임 리뷰</h2>
-        <div id="reviews-section">
-          <!-- 리뷰가 여기에 표시됩니다 -->
-        </div>
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 대진대학교 벤처 졸업작품.</p>
       </div>
-      <footer>
-        <div class="footer-content">
-          <p>&copy; 대진대학교 벤처 졸업작품.</p>
-        </div>
-      </footer>
+    </footer>
 
     <script src="auth.js"></script>
     <script>
@@ -98,115 +88,11 @@
             };
 
             addRecentGame(gameId, game.gameName, game.discountPrice, game.gameImageList[0] || '');
-            loadReviews(gameId);
           } else {
             console.error('Error: 응답의 data 필드가 비어 있습니다.', result);
           }
         } catch (error) {
           console.error('게임 데이터를 불러오는 중 오류 발생:', error);
-        }
-      }
-
-      // 리뷰 불러오기
-      async function loadReviews(gameId) {
-        try {
-          const response = await fetch(`${serverUrl}/api/user/review/${gameId}`);
-          if (!response.ok) {
-            throw new Error('리뷰 데이터를 불러오는 중 오류 발생');
-          }
-
-          const result = await response.json();
-          const reviewsSection = document.getElementById('reviews-section');
-
-          if (result && result.responseDataList && result.responseDataList.length > 0) {$1} else {reviewsSection.innerHTML = '<p>작성된 리뷰가 없습니다.</p>';}
-        } catch (error) {
-          console.error('리뷰 데이터를 불러오는 중 오류 발생:', error);
-        }
-      }
-
-      // 리뷰 제출
-      
-
-        try {
-          const response = await fetch(`${serverUrl}/api/user/review`, {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              content: reviewText,
-              rating: reviewRating,
-              gameId: gameId
-            })
-          });
-
-          if (!response.ok) {
-            throw new Error('리뷰 작성에 실패했습니다.');
-          }
-
-          alert('리뷰가 성공적으로 작성되었습니다.');
-          loadReviews(gameId);
-        } catch (error) {
-          console.error('리뷰 작성 중 오류 발생:', error);
-          alert('리뷰 작성 중 오류가 발생했습니다. 다시 시도해 주세요.');
-        }
-      }
-
-      // 리뷰 수정
-      async function editReview(reviewId) {
-        const newReviewText = prompt('수정할 리뷰 내용을 입력하세요:');
-        const newReviewRating = prompt('수정할 평점을 입력하세요 (1-5):');
-
-        if (!newReviewText || isNaN(newReviewRating) || newReviewRating < 1 || newReviewRating > 5) {
-          alert('리뷰 내용과 평점을 정확히 입력해주세요. 평점은 1에서 5 사이여야 합니다.');
-          return;
-        }
-
-        try {
-          const response = await fetch(`${serverUrl}/api/user/review/${reviewId}`, {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              content: newReviewText,
-              rating: Number(newReviewRating)
-            })
-          });
-
-          if (!response.ok) {
-            throw new Error('리뷰 수정에 실패했습니다.');
-          }
-
-          alert('리뷰가 성공적으로 수정되었습니다.');
-          loadReviews(window.currentGame.gameId);
-        } catch (error) {
-          console.error('리뷰 수정 중 오류 발생:', error);
-          alert('리뷰 수정 중 오류가 발생했습니다. 다시 시도해 주세요.');
-        }
-      }
-
-      // 리뷰 삭제
-      async function deleteReview(reviewId) {
-        if (!confirm('정말로 이 리뷰를 삭제하시겠습니까?')) {
-          return;
-        }
-
-        try {
-          const response = await fetch(`${serverUrl}/api/user/review/${reviewId}`, {
-            method: 'DELETE'
-          });
-
-          if (!response.ok) {
-            throw new Error('리뷰 삭제에 실패했습니다.');
-          }
-
-          alert('리뷰가 성공적으로 삭제되었습니다.');
-          loadReviews(window.currentGame.gameId);
-        } catch (error) {
-          console.error('리뷰 삭제 중 오류 발생:', error);
-          alert('리뷰 삭제 중 오류가 발생했습니다. 다시 시도해 주세요.');
         }
       }
 
