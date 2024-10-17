@@ -168,7 +168,8 @@
               reviewDiv.className = 'review';
               reviewDiv.innerHTML = `
                 <p><strong>${review.nickname}</strong>: ${review.content}</p>
-                ${review.nickname === window.currentUserNickname ? `
+                <p>별점: ${'⭐'.repeat(review.rating)}</p>
+                ${review.nickname.trim() === window.currentUserNickname.trim() ? `
                 <button onclick="deleteReview(${review.reviewId})">삭제</button>
                 <button onclick="editReview(${review.reviewId}, '${review.content}')">수정</button>
                 ` : ''}
@@ -236,7 +237,7 @@
           const userResponse = await fetch(`${serverUrl}/api/user/profile`);
           if (userResponse.ok) {
             const userData = await userResponse.json();
-            window.currentUserNickname = userData.nickname;
+            window.currentUserNickname = userData.data.nickname;
           }
         } catch (error) {
           console.error("헤더 로드 중 오류 발생:", error);
