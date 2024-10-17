@@ -234,10 +234,19 @@
           await checkLoginStatus();
 
           // 로그인된 사용자의 닉네임 가져오기
-          const userResponse = await fetch(`${serverUrl}/api/user/profile`);
+          const userResponse = await fetch(`${serverUrl}/api/user/profile`, {
+            method: 'GET',
+            credentials: 'include'
+          });
           if (userResponse.ok) {
             const userData = await userResponse.json();
-            window.currentUserNickname = userData.data.nickname;
+            if (userData && userData.data && userData.data.nickname) {
+              window.currentUserNickname = userData.data.nickname;
+            } else {
+              console.error('사용자 닉네임을 가져오지 못했습니다.', userData);
+            }
+          } else {
+            console.error('사용자 프로필을 가져오는 데 실패했습니다.');
           }
         } catch (error) {
           console.error("헤더 로드 중 오류 발생:", error);
