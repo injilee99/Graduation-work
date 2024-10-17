@@ -15,13 +15,14 @@ body {
 }
 .order-number {
   text-align: left;
-  font-size: 1em;
+  font-size: 1.2em;
   margin-bottom: 20px;
   color: #666;
 }
 .product-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 20px;
 }
 .product-item img {
@@ -63,7 +64,7 @@ body {
 .confirm-btn:hover {
   background-color: #778881;
 }
-.confirmcomplete-btn{
+.confirmcomplete-btn {
   width: 100%;
   background-color: #889491;
   border: none;
@@ -72,7 +73,6 @@ body {
   padding: 10px;
   font-size: 1em;
 }
-
 .cancel-btn {
   background-color: #889491;
 }
@@ -80,7 +80,7 @@ body {
   background-color: #778881;
 }
 .review-btn {
-  width: 24%;
+  display: inline-block;
   padding: 10px;
   background-color: #889491;
   border: none;
@@ -89,7 +89,18 @@ body {
   font-size: 1em;
   cursor: pointer;
   margin-top: 10px;
+  margin-right: 10px;
 }
 .review-btn:hover {
   background-color: #778881;
+}
+.review-form-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+.review-form {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
 }
