@@ -1,83 +1,202 @@
-<style>
-      body {
-        font-family: 'Noto Sans KR', sans-serif;
-        color: #333;
-        padding: 20px;
-        max-width: 800px;
-        margin: auto;
-      }
-      
-      #gameName{
-          font-size: 2.5em;
-          margin: 0;
-      }
-      
-      #categoryName {
-          color: #666;
-          margin: 5px 0;
-      }
-      
-      .game-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      
-      .game-left {
-        width: 70%;
-        border-radius: 8px;
-        background-color: #ddd;
-      }
-      
-      #gameVideo {
-        width: 600px;
-        height: 300px;
-      }
-      
-      .game-right {
-        text-align: center;
-      }
-      
-      #gameImage {
-        margin-left: 20px;
-        width: 220px;
-        height: 220px;
-        border-radius: 8px;
-        background-color: #ddd;
-      }
-      
-      #gamePrice {
-        font-size: 1.5em;
-        margin: 10px 0;
-      }
-      
-      .cart-btn {
-        background-color: #889491;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 15px;
-        cursor: pointer;
-      }
-      
-      .cart-btn:hover {
-        background-color: #778881;
-      }
-      
-      #gameDescription {
-        font-size: 1em;
-        margin: 20px 0;
-      }
-      
-      footer {
-        margin-top: 40px;
-        padding: 20px;
-        text-align: center;
-        background-color: #333;
-        color: #fff;
-      }
-      
-      .footer-content p {
-        margin: 0;
-      }
-    </style>
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    color: #333;
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+  }
+  
+#gameName{
+    font-size: 2.5em;
+    margin: 0;
+  }
+  
+#categoryName {
+    color: #666;
+    margin: 5px 0;
+  }
+  
+  .game-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+  }
+  
+  .gmae-left {
+    width: 70%;
+    border-radius: 8px;
+    background-color: #ddd;
+  }
+#gameVideo{
+    width: 600px;
+    height: 300px;
+}  
+  .game-right {
+    text-align: center;
+  }
+  
+ #gameImage {
+    margin-left: 20px;
+    width: 220px;
+    height: 220px;
+    border-radius: 8px;
+    background-color: #ddd;
+  }
+  
+#gamePrice {
+    font-size: 1.5em;
+    margin: 10px 0;
+  }
+  
+  .cart-btn {
+    background-color: #889491;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+  }
+  
+  .cart-btn:hover {
+    background-color: #778881;
+  }
+  
+  #gameDescription {
+    font-size: 1em;
+    margin: 20px 0;
+  }
+  
+  .system-requirements {
+    border-top: 1px solid #ccc;
+    margin-top: 20px;
+    padding-top: 20px;
+  }
+  
+  .tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .tab {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+  
+  .tab.active {
+    background-color: #ddd;
+    font-weight: bold;
+  }
+  
+  .requirements {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .requirements li {
+    margin: 5px 0;
+  }
+  
+  .reviews {
+    border-top: 1px solid #ccc;
+    margin-top: 20px;
+    padding-top: 20px;
+  }
+  
+  .average-rating {
+    font-size: 1.2em;
+  }
+  
+  .rating {
+    font-weight: bold;
+  }
+  
+  .review-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-top: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+  }
+  
+  .review-image {
+    width: 65px;
+    height: 65px;
+    border-radius: 4px;
+    background-color: #ddd;
+    margin-right: 15px;
+  }
+  
+  .review-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  
+  .review-rating {
+    color: #f0c419;
+    font-size: 1em;
+    margin: 0;
+  }
+  
+  .review-text-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .review-name {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .review-text {
+    color: #333;
+    margin-left: 5px;
+  }
+  
+  .review-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+  .review-date {
+    font-size: 0.9em;
+    color: #666;
+  }
+  
+  .review-actions {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
+  }
+  
+  .edit-btn, .delete-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #889491;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .edit-btn:hover, .delete-btn:hover {
+    background-color: #778881;
+  }
+
+  footer {
+    margin-top: 40px;
+    padding: 20px;
+    text-align: center;
+    background-color: #333;
+    color: #fff;
+}
+
+.footer-content p {
+    margin: 0;
+}
