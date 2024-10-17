@@ -77,7 +77,6 @@
     const maxButtons = 10; // 페이지 버튼의 최대 개수
     let startPage = 1; // 시작 페이지
     let endPage = maxButtons; // 끝 페이지
-    const pageSize = 8;
 
     // 카테고리 ID로 게임 목록을 가져오는 함수
     async function fetchGamesByCategory(categoryId, page = 1, orderBy = 'orderByPopular', searchKeyword = '') {
@@ -86,7 +85,7 @@
         let totalPages = 0;
 
         const response = await fetch(
-          `${serverUrl}/api/user/game/${categoryId}/list?page=${page}&size=${pageSize}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}`
+          `${serverUrl}/api/user/game/${categoryId}/list?page=${page}&orderBy=${orderBy}&searchKeyword=${encodeURIComponent(searchKeyword)}`
         );
 
         if (!response.ok) {
