@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="gameDetail.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="header-placeholder"></div>
+    <div class="container">
+      <div class="game-detail">
+        <div class="game-header">
+          <h1 id="gameName">undefined</h1>
+          <p id="categoryName">카테고리: undefined</p>
+        </div>
+        <div class="game-content">
+          <div class="game-left">
+            <video id="gameVideo" controls>
+              <source id="videoSource" src="" type="video/webm" />
+              동영상을 재생할 수 없습니다.
+            </video>
+          </div>
+          <div class="game-right">
+            <img
+              id="gameImage"
+              src="https://via.placeholder.com/150"
+              alt="게임 이미지"
+            />
+            <p id="gamePrice">가격: ₩ undefined</p>
+            <button class="cart-btn" onclick="addToCart()">
+              장바구니에 담기
+            </button>
+          </div>
+        </div>
+        <p id="gameDescription">undefined</p>
+
+        <h2>시스템 요구사항</h2>
+        <div class="system-requirements">
+          <div class="tabs">
+            <button class="tab active" onclick="showRequirements('windows')">
+              Windows
+            </button>
+            <button class="tab" onclick="showRequirements('mac')">macOS</button>
+            <button class="tab" onclick="showRequirements('linux')">
+              Linux
+            </button>
+          </div>
+          <ul class="requirements" id="windows">
+            <li>운영 체제: Windows Vista or greater</li>
+            <li>프로세서: 2 Ghz</li>
+            <li>메모리: 2 GB RAM</li>
+            <li>그래픽: 256 mb video memory, shader model 3.0+</li>
+            <li>DirectX: 버전 10</li>
+            <li>저장공간: 500 MB 사용 가능 공간</li>
+          </ul>
+          <ul class="requirements" id="mac" style="display: none">
+            <li>운영 체제: macOS 10.10 or greater</li>
+            <li>프로세서: 2.5 Ghz Intel Core i3</li>
+            <li>메모리: 4 GB RAM</li>
+            <li>그래픽: OpenGL 2.0 compatible</li>
+            <li>저장공간: 500 MB 사용 가능 공간</li>
+          </ul>
+          <ul class="requirements" id="linux" style="display: none">
+            <li>운영 체제: Ubuntu 16.04 or greater</li>
+            <li>프로세서: 2 Ghz</li>
+            <li>메모리: 2 GB RAM</li>
+            <li>그래픽: OpenGL 2.0 compatible</li>
+            <li>저장공간: 500 MB 사용 가능 공간</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>리뷰</h2>
+      <div class="reviews">
+        <p class="average-rating">
+          평균 평점 <span class="rating">4.7</span>
+          <span class="review-count">(56)</span>
+        </p>
+
+        <div class="review-item">
+          <img src="image-placeholder.png" alt="User" class="review-image" />
+          <div class="review-content">
+            <p class="review-rating">⭐ 4.7</p>
+            <div class="review-text-container">
+              <p class="review-name">구름</p>
+              <p class="review-text">스타듀밸리는 정말 최고의 게임입니다!</p>
+            </div>
+          </div>
+          <div class="review-footer">
+            <p class="review-date">2024-10-10</p>
+            <div class="review-actions">
+              <button class="edit-btn">수정</button>
+              <button class="delete-btn">삭제</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-item">
+          <img src="image-placeholder.png" alt="User" class="review-image" />
+          <div class="review-content">
+            <p class="review-rating">⭐ 4.8</p>
+            <div class="review-text-container">
+              <p class="review-name">하늘</p>
+              <p class="review-text">스타듀 밸리 화이팅!</p>
+            </div>
+          </div>
+          <div class="review-footer">
+            <p class="review-date">2024-10-10</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer>
+      <div class="footer-content">
+        <p>&copy; 대진대학교 벤처 졸업작품.</p>
+      </div>
+    </footer>
+    <script src="gameDetail.js"></script>
+    <script src="auth.js"></script>
+    <script>
+      const serverUrl = "https://ludorium.store";
+
+      // 게임 상세 정보 불러오기
+      async function fetchGameDetails(gameId) {
+        try {
+          const response = await fetch(`${serverUrl}/api/user/game/${gameId}`);
+          if (!response.ok) {
+            throw new Error("네트워크 응답에 문제가 있습니다.");
+          }
+          const result = await response.json();
+
+          if (result && result.data) {
+            const game = result.data;
+
+            document.getElementById("gameName").innerText =
+              game.gameName || "제목 없음";
+            document.getElementById("categoryName").innerText = `카테고리: ${
+              game.categoryName || "알 수 없음"
+            }`;
+            document.getElementById("gameDescription").innerHTML =
+              game.gameDc || "게임 설명 없음";
+
+            if (game.originalPrice !== game.discountPrice) {
+              document.getElementById(
+                "gamePrice"
+              ).innerHTML = `정상가: ₩ ${game.originalPrice}<br>판매가: ₩ ${game.discountPrice}`;
+            } else {
+              document.getElementById("gamePrice").innerText =
+                game.discountPrice === 0
+                  ? "무료"
+                  : `가격: ₩ ${game.discountPrice}`;
+            }
+
+            if (game.gameImageList && game.gameImageList.length > 0) {
+              document.getElementById("gameImage").src = game.gameImageList[0];
+              if (game.gameImageList.length > 1) {
+                const videoElement = document.getElementById("gameVideo");
+                const videoSourceElement =
+                  document.getElementById("videoSource");
+
+                videoElement.style.display = "block";
+                videoSourceElement.src = game.gameImageList[1];
+                videoElement.load(); // 비디오 요소에 새 소스를 로드하여 적용
+              }
+            }
+
+            window.currentGame = {
+              gameId: gameId,
+              gameName: game.gameName,
+              gamePrice: game.discountPrice,
+            };
+
+            addRecentGame(
+              gameId,
+              game.gameName,
+              game.discountPrice,
+              game.gameImageList[0] || ""
+            );
+          } else {
+            console.error("Error: 응답의 data 필드가 비어 있습니다.", result);
+          }
+        } catch (error) {
+          console.error("게임 데이터를 불러오는 중 오류 발생:", error);
+        }
+      }
+
+      function addToCart() {
+        if (!window.currentGame) {
+          console.error("Error: 게임 정보가 없습니다.");
+          return;
+        }
+
+        const { gameId, gameName, gamePrice } = window.currentGame;
+        let cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+
+        if (!cartItems.find((item) => item.gameId === gameId)) {
+          cartItems.push({
+            gameId,
+            gameName,
+            gamePrice,
+          });
+        }
+
+        localStorage.setItem("cartItems", JSON.stringify(cartItems));
+        alert("장바구니에 추가되었습니다.");
+      }
+
+      function addRecentGame(gameId, gameName, gamePrice, gameImageUrl) {
+        let recentGames = JSON.parse(localStorage.getItem("recentGames")) || [];
+
+        if (!recentGames.find((game) => game.gameId === gameId)) {
+          recentGames.push({
+            gameId,
+            gameName,
+            gamePrice,
+            gameImageUrl,
+          });
+
+          if (recentGames.length > 5) {
+            recentGames.shift();
+          }
+
+          localStorage.setItem("recentGames", JSON.stringify(recentGames));
+          console.log("로컬 스토리지에 저장된 recentGames:", recentGames);
+        }
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const gameId = urlParams.get("gameId");
+
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("header.html")
+          .then((response) => response.text())
+          .then((data) => {
+            document.getElementById("header-placeholder").innerHTML = data;
+            checkLoginStatus();
+          })
+          .catch((error) => console.error("헤더 로드 중 오류 발생:", error));
+
+        if (gameId) {
+          fetchGameDetails(gameId);
+        } else {
+          console.error("Error: gameId가 URL에 없습니다.");
+        }
+      });
+    </script>
+  </body>
+</html>
