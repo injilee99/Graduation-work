@@ -169,7 +169,7 @@
               reviewDiv.innerHTML = `
                 <p><strong>${review.nickname}</strong>: ${review.content}</p>
                 <p>별점: ${'⭐'.repeat(review.rating)}</p>
-                ${review.nickname.trim() === window.currentUserNickname.trim() ? `
+                ${(review.nickname ? review.nickname.trim() : '') === (window.currentUserNickname ? window.currentUserNickname.trim() : '') ? `
                 <button onclick="deleteReview(${review.reviewId})">삭제</button>
                 <button onclick="editReview(${review.reviewId}, '${review.content}')">수정</button>
                 ` : ''}
