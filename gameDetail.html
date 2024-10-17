@@ -39,7 +39,6 @@
       <div class="game-reviews">
         <h2>게임 후기</h2>
         <div id="reviewsContainer"></div>
-        <button onclick="fetchReviews()">후기 불러오기</button>
       </div>
     </div>
     <footer>
@@ -93,6 +92,7 @@
             };
 
             addRecentGame(gameId, game.gameName, game.discountPrice, game.gameImageList[0] || '');
+            fetchReviews(); // 게임 상세 정보를 불러온 후, 바로 후기를 불러옴
           } else {
             console.error('Error: 응답의 data 필드가 비어 있습니다.', result);
           }
