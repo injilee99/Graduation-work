@@ -169,7 +169,7 @@
                       </div>
                       ${(order.orderStatus === 'PURCHASE_CONFIRMED' && !reviewStatus) ? `
                         <div class="review-form-container" style="display: flex; align-items: center;">
-                          <button class="review-btn" onclick="toggleReviewForm('${orderDetailId}')" style="margin-right: 10px;">리뷰 작성</button>
+                          <button class="review-btn" onclick="toggleReviewForm('${orderDetailId}')" style="margin-left: 10px;">리뷰 작성</button>
                           <div class="review-form" id="review-form-${orderDetailId}" style="display: none; flex-direction: column;">
                             <textarea id="review-text-${orderDetailId}" placeholder="리뷰를 작성하세요..." style="margin-bottom: 5px;"></textarea>
                             <input type="number" id="review-rating-${orderDetailId}" placeholder="평점을 입력하세요 (1-5)" min="1" max="5" style="margin-bottom: 5px;" />
