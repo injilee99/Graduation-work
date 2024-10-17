@@ -168,8 +168,10 @@
               reviewDiv.className = 'review';
               reviewDiv.innerHTML = `
                 <p><strong>${review.nickname}</strong>: ${review.content}</p>
+                ${review.nickname === window.currentUserNickname ? `
                 <button onclick="deleteReview(${review.reviewId})">삭제</button>
                 <button onclick="editReview(${review.reviewId}, '${review.content}')">수정</button>
+                ` : ''}
               `;
               reviewsContainer.appendChild(reviewDiv);
             });
@@ -223,14 +225,22 @@
       const urlParams = new URLSearchParams(window.location.search);
       const gameId = urlParams.get('gameId');
 
-      document.addEventListener("DOMContentLoaded", function() {
-        fetch("header.html")
-          .then(response => response.text())
-          .then(data => {
-            document.getElementById("header-placeholder").innerHTML = data;
-            checkLoginStatus();
-          })
-          .catch(error => console.error("헤더 로드 중 오류 발생:", error));
+      document.addEventListener("DOMContentLoaded", async function() {
+        try {
+          const headerResponse = await fetch("header.html");
+          const headerData = await headerResponse.text();
+          document.getElementById("header-placeholder").innerHTML = headerData;
+          await checkLoginStatus();
+
+          // 로그인된 사용자의 닉네임 가져오기
+          const userResponse = await fetch(`${serverUrl}/api/user/profile`);
+          if (userResponse.ok) {
+            const userData = await userResponse.json();
+            window.currentUserNickname = userData.nickname;
+          }
+        } catch (error) {
+          console.error("헤더 로드 중 오류 발생:", error);
+        }
 
         if (gameId) {
           fetchGameDetails(gameId);
