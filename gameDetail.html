@@ -2,8 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="game foege - 게임 상세" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>game forge - 게임 상세</title>
     <link rel="stylesheet" href="gameDetail.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -342,6 +342,32 @@
           console.error("Error: gameId가 URL에 없습니다.");
         }
       });
-    </script>
-  </body>
+    <script>
+        function showRequirements(requirementsId) {
+          // 모든 요구사항 숨기기
+          const requirementElements = document.querySelectorAll('.requirements');
+          requirementElements.forEach(element => {
+            element.style.display = 'none';
+          });
+
+          // 선택된 요구사항만 보이기
+          const selectedElement = document.getElementById(requirementsId);
+          if (selectedElement) {
+            selectedElement.style.display = 'block';
+          }
+
+          // 모든 탭 비활성화
+          const tabElements = document.querySelectorAll('.tab');
+          tabElements.forEach(tab => {
+            tab.classList.remove('active');
+          });
+
+          // 선택된 탭 활성화
+          const selectedTab = Array.from(tabElements).find(tab => tab.textContent.includes(requirementsId.split('Min')[0]));
+          if (selectedTab) {
+            selectedTab.classList.add('active');
+          }
+        }
+      </script>
+    </body>
 </html>
