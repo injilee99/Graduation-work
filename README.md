@@ -1,6 +1,6 @@
-# Graduation Work - Daejin University Venture Academy
+# Graduation Work - University Venture Academy
 
-이 프로젝트는 대진대학교 컴퓨터공학과 벤처아카데미 졸업작품으로서, React를 사용하여 웹 애플리케이션을 개발하는 것을 목표로 합니다. 이 프로젝트는 [Create React App](https://github.com/facebook/create-react-app)을 기반으로 시작되었습니다.
+이 프로젝트는 컴퓨터공학과 벤처아카데미 졸업작품으로서, React를 사용하여 웹 애플리케이션을 개발하는 것을 목표로 합니다. 이 프로젝트는 [Create React App](https://github.com/facebook/create-react-app)을 기반으로 시작되었습니다.
 
 ## 프로젝트 설명
 
